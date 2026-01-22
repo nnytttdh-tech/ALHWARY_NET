@@ -1,11 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="ar">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ALHWARY NET | الدليل الكامل</title>
+    <title>ALHWARY NET | دليل الأكواد الشامل</title>
     <style>
         body { 
             background-color: #050510; 
@@ -16,78 +15,122 @@
             margin: 0; padding: 10px;
         }
         canvas { position: fixed; top: 0; left: 0; z-index: -1; }
-        header { padding: 30px 0; }
-        h1 { color: #00d4ff; text-shadow: 0 0 15px #00d4ff; font-size: 2.5rem; margin: 0; }
+        header { padding: 20px 0; }
+        h1 { color: #00d4ff; text-shadow: 0 0 15px #00d4ff; font-size: 2.2rem; margin: 0; }
         
-        .tab-menu { display: flex; justify-content: center; gap: 8px; margin: 20px 0; flex-wrap: wrap; }
+        .tab-menu { display: flex; justify-content: center; gap: 5px; margin: 15px 0; flex-wrap: wrap; }
         .tab-btn { 
-            padding: 12px 20px; border: 1px solid #00d4ff; background: rgba(0, 212, 255, 0.1); 
-            color: #00d4ff; cursor: pointer; border-radius: 8px; font-weight: bold; transition: 0.3s;
+            padding: 10px 15px; border: 1px solid #00d4ff; background: rgba(0, 212, 255, 0.1); 
+            color: #00d4ff; cursor: pointer; border-radius: 8px; font-weight: bold; font-size: 0.9rem;
         }
-        .tab-btn.active { background: #00d4ff; color: #050510; box-shadow: 0 0 15px #00d4ff; }
+        .tab-btn.active { background: #00d4ff; color: #050510; box-shadow: 0 0 10px #00d4ff; }
 
         .code-box { 
             background: rgba(255,255,255,0.05); border-radius: 15px; 
             padding: 15px; margin: 10px auto; max-width: 600px; 
             display: none; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1);
         }
-        .active { display: block; animation: fadeIn 0.5s; }
+        .active-box { display: block; animation: fadeIn 0.4s; }
 
         .item { 
             display: flex; justify-content: space-between; align-items: center;
-            padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding: 8px; border-bottom: 1px solid rgba(255,255,255,0.1);
         }
-        .service { color: #ccc; font-size: 0.95rem; }
-        .code-text { color: #00ffcc; font-weight: bold; font-family: monospace; font-size: 1.1rem; direction: ltr; }
+        .service { color: #ccc; font-size: 0.85rem; text-align: right; flex: 1; }
+        .code-text { color: #00ffcc; font-weight: bold; font-family: monospace; font-size: 1rem; direction: ltr; margin-right: 10px; }
 
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
     <canvas id="c"></canvas>
     <header>
         <h1>ALHWARY NET</h1>
-        <p>دليل أكواد الشبكات الشامل</p>
+        <p style="color: #888; font-size: 0.9rem;">دليل جميع أكواد شبكات مصر</p>
     </header>
 
     <div class="tab-menu">
-        <button class="tab-btn active" onclick="show(this, 'v')">فودافون</button>
-        <button class="tab-btn" onclick="show(this, 'e')">اتصالات</button>
-        <button class="tab-btn" onclick="show(this, 'o')">أورانج</button>
-        <button class="tab-btn" onclick="show(this, 'w')">WE</button>
+        <button class="tab-btn active" onclick="showTab(this, 'voda-box')">فودافون</button>
+        <button class="tab-btn" onclick="showTab(this, 'eti-box')">اتصالات</button>
+        <button class="tab-btn" onclick="showTab(this, 'ora-box')">أورانج</button>
+        <button class="tab-btn" onclick="showTab(this, 'we-box')">WE</button>
     </div>
 
-    <div id="w" class="code-box">
-        <h2 style="color: #4c2c92;">شركة وي - WE</h2>
-        <div class="item"><span class="service">معرفة رقمك</span><span class="code-text">*688#</span></div>
-        <div class="item"><span class="service">معرفة الرصيد</span><span class="code-text">*322#</span></div>
-        <div class="item"><span class="service">شحن الرصيد</span><span class="code-text">*555*الرقم#</span></div>
-        <div class="item"><span class="service">خدمة سلفني</span><span class="code-text">*504#</span></div>
-        <div class="item"><span class="service">خدمة كلمني</span><span class="code-text">#الرقم*515#</span></div>
-        <div class="item"><span class="service">تحويل الرصيد</span><span class="code-text">#المبلغ*الرقم*551#</span></div>
-        <div class="item"><span class="service">باقات الإنترنت</span><span class="code-text">*999#</span></div>
-        <div class="item"><span class="service">خدمة العملاء</span><span class="code-text">111</span></div>
-    </div>
-
-    <div id="v" class="code-box active">
-        <h2 style="color: #e60000;">فودافون - Vodafone</h2>
+    <div id="voda-box" class="code-box active-box">
+        <h2 style="color: #e60000;">فودافون</h2>
         <div class="item"><span class="service">الاحتفاظ بالمكالمات</span><span class="code-text">*888*3#</span></div>
-        <div class="item"><span class="service">معرفة الوقت والتاريخ</span><span class="code-text">*100#</span></div>
-        <div class="item"><span class="service">معرفة آخر مكالمة</span><span class="code-text">*#150</span></div>
+        <div class="item"><span class="service">معرفة رقم PUK</span><span class="code-text">*888*رقمك#</span></div>
         <div class="item"><span class="service">شحن الكارت</span><span class="code-text">*888*الرقم#</span></div>
+        <div class="item"><span class="service">تحويل الرصيد</span><span class="code-text">*888*2*الرقم*المبلغ#</span></div>
         <div class="item"><span class="service">سلفني شكراً</span><span class="code-text">*#3</span></div>
-        <div class="item"><span class="service">باقات الإنترنت</span><span class="code-text">*#2000</span></div>
+        <div class="item"><span class="service">باقات الإنترنت</span><span class="code-text">*2000#</span></div>
+        <div class="item"><span class="service">باقة فليكس 20</span><span class="code-text">*020#</span></div>
     </div>
 
-    <div id="e" class="code-box">
-        <h2 style="color: #7ab800;">اتصالات - Etisalat</h2>
+    <div id="eti-box" class="code-box">
+        <h2 style="color: #7ab800;">اتصالات</h2>
         <div class="item"><span class="service">معرفة الرقم</span><span class="code-text">*947#</span></div>
         <div class="item"><span class="service">الاستعلام عن الرصيد</span><span class="code-text">*555#</span></div>
         <div class="item"><span class="service">باقات الإنترنت</span><span class="code-text">*566#</span></div>
+        <div class="item"><span class="service">تجديد باقة حكاية</span><span class="code-text">*807#</span></div>
         <div class="item"><span class="service">سلفني شكراً</span><span class="code-text">*911#</span></div>
         <div class="item"><span class="service">اتصالات كاش</span><span class="code-text">*777#</span></div>
     </div>
 
-    <div id="o" class="code-box">
-        <h2 style="color: #ff6600;">أورانج - Orange</h2>
-        <div class="item"><span class="service">شحن الكارت</span><span class="code-text">#الرقم*102#</span>
+    <div id="ora-box" class="code-box">
+        <h2 style="color: #ff6600;">أورانج</h2>
+        <div class="item"><span class="service">معرفة الرصيد</span><span class="code-text">#100#3#</span></div>
+        <div class="item"><span class="service">شحن الكارت</span><span class="code-text">#الرقم*102#</span></div>
+        <div class="item"><span class="service">سلفني شكراً</span><span class="code-text">#100#2#</span></div>
+        <div class="item"><span class="service">كلمني شكراً</span><span class="code-text">#الرقم*121#</span></div>
+        <div class="item"><span class="service">معرفة رقمك</span><span class="code-text">#119#</span></div>
+    </div>
+
+    <div id="we-box" class="code-box">
+        <h2 style="color: #4c2c92;">وي - WE</h2>
+        <div class="item"><span class="service">معرفة رقمك</span><span class="code-text">*688#</span></div>
+        <div class="item"><span class="service">معرفة الرصيد</span><span class="code-text">*322#</span></div>
+        <div class="item"><span class="service">سلفني</span><span class="code-text">*504#</span></div>
+        <div class="item"><span class="service">كلمني</span><span class="code-text">#الرقم*515#</span></div>
+        <div class="item"><span class="service">باقات الإنترنت</span><span class="code-text">*999#</span></div>
+    </div>
+
+    <script>
+        // وظيفة التنقل الصحيحة
+        function showTab(btn, boxId) {
+            // إخفاء كل الصناديق
+            var boxes = document.getElementsByClassName("code-box");
+            for (var i = 0; i < boxes.length; i++) {
+                boxes[i].classList.remove("active-box");
+            }
+            // إزالة نشاط الأزرار
+            var btns = document.getElementsByClassName("tab-btn");
+            for (var i = 0; i < btns.length; i++) {
+                btns[i].classList.remove("active");
+            }
+            // إظهار الصندوق المطلوب
+            document.getElementById(boxId).classList.add("active-box");
+            btn.classList.add("active");
+        }
+
+        // تفعيلة الخلفية
+        const canvas = document.getElementById('c');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+        let p = [];
+        for(let i=0; i<50; i++) p.push({x: Math.random()*canvas.width, y: Math.random()*canvas.height, vx: Math.random()-0.5, vy: Math.random()-0.5});
+        function draw() {
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            ctx.fillStyle = '#00d4ff';
+            p.forEach(i => {
+                i.x += i.vx; i.y += i.vy;
+                if(i.x<0 || i.x>canvas.width) i.vx *= -1;
+                if(i.y<0 || i.y>canvas.height) i.vy *= -1;
+                ctx.beginPath(); ctx.arc(i.x, i.y, 2, 0, Math.PI*2); ctx.fill();
+            });
+            requestAnimationFrame(draw);
+        }
+        draw();
+    </script>
+</body>
+</html>
