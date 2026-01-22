@@ -1,206 +1,93 @@
+
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ALHWARY NET | ÇáÏáíá ÇáßÇãá</title>
+    <title>ALHWARY NET</title>
     <style>
-        body, html {
-            margin: 0; padding: 0;
-            background-color: #050510;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: white;
-            overflow-x: hidden;
+        body { 
+            background-color: #050510; 
+            color: white; 
+            font-family: sans-serif; 
+            direction: rtl; 
+            text-align: center;
+            margin: 0; padding: 20px;
         }
-
-        #net-canvas {
-            position: fixed;
-            top: 0; left: 0;
-            z-index: 1;
+        h1 { color: #00d4ff; text-shadow: 0 0 10px #00d4ff; }
+        .tab-menu { display: flex; justify-content: center; gap: 10px; margin: 20px 0; }
+        .tab-btn { 
+            padding: 10px; border: 1px solid #00d4ff; background: none; 
+            color: #00d4ff; cursor: pointer; border-radius: 5px;
         }
-
-        .main-content {
-            position: relative;
-            z-index: 2;
-            padding: 20px;
-            max-width: 900px;
-            margin: auto;
+        .code-box { 
+            background: rgba(255,255,255,0.05); border-radius: 10px; 
+            padding: 20px; margin-top: 20px; display: none;
         }
-
-        header { text-align: center; padding: 40px 0; }
-        header h1 { font-size: 3rem; color: #00d4ff; text-shadow: 0 0 20px #00d4ff; margin: 0; }
-        header p { color: #888; margin-top: 10px; }
-
-        .tabs-menu {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 25px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .tab-link {
-            padding: 10px 20px;
-            border: 1px solid rgba(0, 212, 255, 0.4);
-            background: rgba(0, 212, 255, 0.1);
-            color: #00d4ff;
-            cursor: pointer;
-            border-radius: 8px;
-            transition: 0.3s;
-            font-weight: bold;
-        }
-
-        .tab-link.active {
-            background: #00d4ff;
-            color: #050510;
-            box-shadow: 0 0 15px #00d4ff;
-        }
-
-        .codes-table {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(15px);
-            border-radius: 15px;
-            padding: 20px;
-            border: 1px solid rgba(255,255,255,0.1);
-            display: none;
-            margin-bottom: 50px;
-        }
-
-        .codes-table.active { display: block; animation: fadeIn 0.5s ease; }
-
-        h3 { color: #00d4ff; border-bottom: 2px solid #00d4ff; padding-bottom: 10px; }
-
-        table { width: 100%; border-collapse: collapse; }
-        td { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.95rem; }
-        .service-name { color: #eee; }
-        .code { 
-            color: #00ffcc; 
-            font-family: 'Courier New', Courier, monospace; 
-            font-weight: bold; 
-            font-size: 1.1rem; 
-            direction: ltr; 
-            text-align: left;
-            white-space: nowrap;
-        }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .active { display: block; }
+        .code-text { color: #00ffcc; font-weight: bold; font-family: monospace; }
+        canvas { position: fixed; top: 0; left: 0; z-index: -1; }
     </style>
 </head>
 <body>
+    <canvas id="c"></canvas>
+    <h1>ALHWARY NET</h1>
+    <p>دليل أكواد الشركات في مصر</p>
 
-    <canvas id="net-canvas"></canvas>
+    <div class="tab-menu">
+        <button class="tab-btn" onclick="show('v')">فودافون</button>
+        <button class="tab-btn" onclick="show('e')">اتصالات</button>
+        <button class="tab-btn" onclick="show('o')">أورانج</button>
+        <button class="tab-btn" onclick="show('w')">WE</button>
+    </div>
 
-    <div class="main-content">
-        <header>
-            <h1>ALHWARY NET</h1>
-            <p>Ïáíá ÃßæÇÏ ÔÑßÇÊ ÇáÇÊÕÇáÇÊ Ýí ãÕÑ</p>
-        </header>
+    <div id="v" class="code-box active">
+        <h3>أكواد فودافون</h3>
+        <p>الاحتفاظ بالمكالمات: <span class="code-text">*888*3#</span></p>
+        <p>شحن الكارت: <span class="code-text">*888*الرقم#</span></p>
+    </div>
+    
+    <div id="e" class="code-box">
+        <h3>أكواد اتصالات</h3>
+        <p>الاستعلام عن الرصيد: <span class="code-text">*555#</span></p>
+    </div>
 
-        <div class="tabs-menu">
-            <div class="tab-link active" onclick="openTab(event, 'voda')">ÝæÏÇÝæä</div>
-            <div class="tab-link" onclick="openTab(event, 'eti')">ÇÊÕÇáÇÊ</div>
-            <div class="tab-link" onclick="openTab(event, 'ora')">ÃæÑÇäÌ</div>
-            <div class="tab-link" onclick="openTab(event, 'we')">WE</div>
-        </div>
+    <div id="o" class="code-box">
+        <h3>أكواد أورانج</h3>
+        <p>معرفة الرقم: <span class="code-text">#119#</span></p>
+    </div>
 
-        <div id="voda" class="codes-table active">
-            <h3>ÝæÏÇÝæä - Vodafone</h3>
-            <table>
-                <tr><td class="service-name">ÇáÇÍÊÝÇÙ ÈÇáãßÇáãÇÊ</td><td class="code">*888*3#</td></tr>
-                <tr><td class="service-name">ãÚÑÝÉ ÑÞã PUK</td><td class="code">*888*ÑÞã ÇáãæÈÇíá#</td></tr>
-                <tr><td class="service-name">ãÚÑÝÉ ÇáæÞÊ æÇáÊÇÑíÎ</td><td class="code">*100#</td></tr>
-                <tr><td class="service-name">ÔÍä ÇáßÇÑÊ</td><td class="code">*888*ÑÞã ÇáßÇÑÊ#</td></tr>
-                <tr><td class="service-name">ÈÇÞÇÊ ÇáÅäÊÑäÊ</td><td class="code">*2000#</td></tr>
-                <tr><td class="service-name">ÈÇÞÇÊ ÝáíßÓ</td><td class="code">*020# Åáì *090#</td></tr>
-            </table>
-        </div>
-
-        <div id="eti" class="codes-table">
-            <h3>ÇÊÕÇáÇÊ - Etisalat</h3>
-            <table>
-                <tr><td class="service-name">ãÚÑÝÉ ÇáÑÞã</td><td class="code">*947#</td></tr>
-                <tr><td class="service-name">ÇáÇÓÊÚáÇã Úä ÇáÑÕíÏ</td><td class="code">*555#</td></tr>
-                <tr><td class="service-name">ÈÇÞÇÊ ÇáÅäÊÑäÊ</td><td class="code">*566#</td></tr>
-                <tr><td class="service-name">ÓáÝäí ÔßÑÇð</td><td class="code">*911#</td></tr>
-                <tr><td class="service-name">ÇÊÕÇáÇÊ ßÇÔ</td><td class="code">*777#</td></tr>
-            </table>
-        </div>
-
-        <div id="ora" class="codes-table">
-            <h3>ÃæÑÇäÌ - Orange</h3>
-            <table>
-                <tr><td class="service-name">ÎÏãÉ ÇáÚãáÇÁ</td><td class="code">110</td></tr>
-                <tr><td class="service-name">ÔÍä ÇáßÇÑÊ</td><td class="code">#ÑÞã ÇáßÇÑÊ*102#</td></tr>
-                <tr><td class="service-name">ãÚÑÝÉ ÇáÑÕíÏ</td><td class="code">#100#3#</td></tr>
-                <tr><td class="service-name">ÓáÝäí ÔßÑÇð</td><td class="code">#100#2#</td></tr>
-                <tr><td class="service-name">ßáãäí ÔßÑÇð</td><td class="code">#ÑÞã ÇáÊáÝæä*121#</td></tr>
-                <tr><td class="service-name">ãÚÑÝÉ ÑÞãß</td><td class="code">#119#</td></tr>
-            </table>
-        </div>
-
-        <div id="we" class="codes-table">
-            <h3>æí - WE</h3>
-            <table>
-                <tr><td class="service-name">ãÚÑÝÉ ÑÞãß</td><td class="code">*688#</td></tr>
-                <tr><td class="service-name">ãÚÑÝÉ ÇáÑÕíÏ</td><td class="code">*322#</td></tr>
-                <tr><td class="service-name">ÎÏãÉ ÓáÝäí</td><td class="code">*504#</td></tr>
-                <tr><td class="service-name">ÎÏãÉ ßáãäí</td><td class="code">#ÇáÑÞã*515#</td></tr>
-                <tr><td class="service-name">ÈÇÞÇÊ ÇáÅäÊÑäÊ</td><td class="code">*999#</td></tr>
-                <tr><td class="service-name">ÎÏãÉ ÇáÚãáÇÁ</td><td class="code">111</td></tr>
-            </table>
-        </div>
+    <div id="w" class="code-box">
+        <h3>أكواد وي WE</h3>
+        <p>معرفة الرصيد: <span class="code-text">*322#</span></p>
     </div>
 
     <script>
-        // ÊÝÚíáÉ ÇáÔÈßÉ ÇáÎáÝíÉ
-        const canvas = document.getElementById('net-canvas');
-        const ctx = canvas.getContext('2d');
-        let points = [];
-        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-        window.onresize = resize; resize();
-        class Point {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.vx = (Math.random() - 0.5) * 0.4;
-                this.vy = (Math.random() - 0.5) * 0.4;
-            }
-            update() {
-                this.x += this.vx; this.y += this.vy;
-                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
-                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
-            }
+        function show(id) {
+            document.querySelectorAll('.code-box').forEach(b => b.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
         }
-        for (let i = 0; i < 70; i++) points.push(new Point());
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            points.forEach(p => {
-                p.update();
-                ctx.fillStyle = 'rgba(0, 212, 255, 0.5)';
-                ctx.beginPath(); ctx.arc(p.x, p.y, 2, 0, Math.PI*2); ctx.fill();
-                points.forEach(p2 => {
-                    let d = Math.hypot(p.x - p2.x, p.y - p2.y);
-                    if (d < 120) {
-                        ctx.strokeStyle = `rgba(0, 212, 255, ${0.2 - d/600})`;
-                        ctx.lineWidth = 0.5;
-                        ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
-                    }
-                });
-            });
-            requestAnimationFrame(animate);
-        }
-        animate();
 
-        // ÊäÞá ÇáÊÈæíÈÇÊ
-        function openTab(evt, tabId) {
-            let i, content, links;
-            content = document.getElementsByClassName("codes-table");
-            for (i = 0; i < content.length; i++) content[i].classList.remove("active");
-            links = document.getElementsByClassName("tab-link");
-            for (i = 0; i < links.length; i++) links[i].classList.remove("active");
-            document.getElementById(tabId).classList.add("active");
-            evt.currentTarget.classList.add("active");
+        // تفعيلة بسيطة وسريعة للشبكة
+        const canvas = document.getElementById('c');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        let particles = [];
+        for(let i=0; i<50; i++) particles.push({x: Math.random()*canvas.width, y: Math.random()*canvas.height, vx: Math.random()-0.5, vy: Math.random()-0.5});
+        function draw() {
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            ctx.fillStyle = '#00d4ff';
+            particles.forEach(p => {
+                p.x += p.vx; p.y += p.vy;
+                if(p.x<0 || p.x>canvas.width) p.vx *= -1;
+                if(p.y<0 || p.y>canvas.height) p.vy *= -1;
+                ctx.beginPath(); ctx.arc(p.x, p.y, 2, 0, Math.PI*2); ctx.fill();
+            });
+            requestAnimationFrame(draw);
         }
+        draw();
     </script>
 </body>
 </html>
