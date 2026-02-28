@@ -1,29 +1,35 @@
-<div id="codes-container">جاري تحميل الأكواد...</div>
-
 <script>
     async function loadCodes() {
         try {
-            // بنضيف رقم عشوائي في آخر الرابط عشان نجبر المتصفح يجيب الجديد (تجنب الكاش)
-            const response = await fetch('./codes.json?v=' + new Date().getTime());
-            const data = await response.json();
-            
-            const container = document.getElementById('codes-container');
-            container.innerHTML = ''; // مسح الرسالة القديمة
+            // سحب البيانات من الملف اللي البوت بيحدثه
+            const response = await fetch('./codes.json?v=' + Date.now());
+            if (!response.ok) return;
 
-            // افترضنا إن ملف الـ JSON عبارة عن قائمة أكواد
+            const data = await response.json();
+            const container = document.getElementById('codes-container');
+            
+            if (data.length === 0) {
+                container.innerHTML = 'لا توجد أكواد جديدة حالياً';
+                return;
+            }
+
+            // عرض الأكواد بشكل منظم
+            container.innerHTML = ''; 
             data.forEach(item => {
-                const codeElement = document.createElement('p');
-                codeElement.textContent = item.code; // تأكد إن كلمة code هي اللي مستخدمها البوت
-                container.appendChild(codeElement);
+                const codeDiv = document.createElement('div');
+                codeDiv.style.border = "1px solid red";
+                codeDiv.style.margin = "10px";
+                codeDiv.style.padding = "10px";
+                // تأكد إن البوت بيبعت الحقل باسم 'code' جوه الـ JSON
+                codeDiv.textContent = item.code || "كود غير معروف"; 
+                container.appendChild(codeDiv);
             });
-        } catch (error) {
-            console.error('خطأ في تحميل الأكواد:', error);
+        } catch (e) {
+            console.log("في انتظار تحديث الملف من البوت...");
         }
     }
 
-    // تشغيل الدالة أول ما الصفحة تفتح
+    // تشغيل الدالة وتكرارها كل 10 ثواني
     loadCodes();
-    
-    // تحديث الأكواد كل 30 ثانية تلقائياً
-    setInterval(loadCodes, 30000);
+    setInterval(loadCodes, 10000);
 </script>
