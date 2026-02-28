@@ -2,154 +2,53 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ALHWARY NET | دليل الأكواد الشامل</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>ALHWARY VIP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;900&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --voda: #e60000; --eti: #7ab800; --ora: #ff6600; --we: #4c2c92;
-        }
-        body {
-            font-family: 'Segoe UI', Tahoma, sans-serif;
-            background-color: #f0f2f5; margin: 0; padding: 0; color: #333;
-        }
-        header {
-            background: white; padding: 20px; text-align: center;
-            border-bottom: 3px solid #007bff; box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        header h1 { margin: 0; color: #007bff; font-size: 1.8rem; }
-        .container { max-width: 700px; margin: 20px auto; padding: 10px; }
-        
-        /* التبويبات */
-        .tabs {
-            display: flex; overflow-x: auto; gap: 8px; margin-bottom: 20px; padding-bottom: 5px;
-        }
-        .tab-btn {
-            flex: 1; min-width: 80px; padding: 12px; border: none; background: white;
-            border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-        .tab-btn.active { color: white; }
-        .tab-btn[data-target="voda"].active { background: var(--voda); }
-        .tab-btn[data-target="eti"].active { background: var(--eti); }
-        .tab-btn[data-target="ora"].active { background: var(--ora); }
-        .tab-btn[data-target="we"].active { background: var(--we); }
-
-        /* الأقسام */
-        .content-section { display: none; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        .active-section { display: block; animation: fadeIn 0.4s ease; }
-
-        table { width: 100%; border-collapse: collapse; }
-        td { padding: 15px; border-bottom: 1px solid #eee; font-size: 0.95rem; }
-        .code-val {
-            color: #007bff; font-family: monospace; font-weight: bold; font-size: 1.1rem;
-            background: #f8f9fa; padding: 5px 10px; border-radius: 5px; cursor: pointer;
-            direction: ltr; display: inline-block; transition: 0.2s;
-        }
-        .code-val:active { transform: scale(0.9); background: #e2e6ea; }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
-        /* تنبيه النسخ */
-        #copy-toast {
-            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-            background: #333; color: white; padding: 10px 20px; border-radius: 20px;
-            font-size: 0.9rem; display: none; z-index: 1000;
-        }
+        :root { --r:#ff0000; --dark:#0a0a0a; --card:#151515; --gold:#f5c842; }
+        body { background:var(--dark); color:#fff; font-family:'Cairo', sans-serif; margin:0; }
+        .hdr { padding:20px; text-align:center; border-bottom:2px solid var(--r); background:#000; font-size:1.5rem; font-weight:900; }
+        .hdr span { color:var(--r); }
+        .container { padding:15px; display:flex; flex-direction:column; gap:15px; }
+        .card { background:var(--card); border-radius:15px; border:1px solid #333; padding:15px; animation: fadeIn 0.5s ease; }
+        .c-code { color:var(--gold); font-size:1.2rem; display:block; text-align:center; margin-bottom:10px; font-weight:900; }
+        .c-info { display:flex; justify-content:space-between; margin-bottom:15px; font-size:0.9rem; color:#aaa; }
+        .c-btn { background:linear-gradient(to bottom, #ff0000, #b30000); color:#fff; text-decoration:none; display:block; text-align:center; padding:12px; border-radius:10px; font-weight:900; }
+        @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
     </style>
 </head>
 <body>
-
-<header>
-    <h1>ALHWARY NET</h1>
-    <p>اضغط على الكود لنسخه فوراً</p>
-</header>
-
-<div class="container">
-    <div class="tabs">
-        <button class="tab-btn active" data-target="voda">فودافون</button>
-        <button class="tab-btn" data-target="eti">اتصالات</button>
-        <button class="tab-btn" data-target="ora">أورانج</button>
-        <button class="tab-btn" data-target="we">WE</button>
+    <div class="hdr">ALHWARY <span>VIP</span></div>
+    <div class="container" id="cardsBox">
+        <div style="text-align:center; padding:50px;">جاري تحديث الأكواد من البوت...</div>
     </div>
 
-    <div id="voda" class="content-section active-section">
-        <table>
-            <tr><td>الاحتفاظ بالمكالمات</td><td class="code-val">*888*3#</td></tr>
-            <tr><td>معرفة رقم PUK</td><td class="code-val">*888*الرقم#</td></tr>
-            <tr><td>معرفة الوقت والتاريخ</td><td class="code-val">*100#</td></tr>
-            <tr><td>شحن كارت</td><td class="code-val">*858*الرقم#</td></tr>
-            <tr><td>سلفني شكراً</td><td class="code-val">*3#</td></tr>
-            <tr><td>باقات فليكس 20</td><td class="code-val">*020#</td></tr>
-            <tr><td>باقات فليكس 30</td><td class="code-val">*030#</td></tr>
-            <tr><td>إلغاء باقة النت</td><td class="code-val">*2000*5#</td></tr>
-        </table>
-    </div>
+    <script>
+        // استبدل USERNAME باسم حسابك و REPO باسم المستودع على GitHub
+        const GITHUB_URL = "https://raw.githubusercontent.com/USERNAME/REPO/main/data.json";
 
-    <div id="eti" class="content-section">
-        <table>
-            <tr><td>معرفة الرقم</td><td class="code-val">*947#</td></tr>
-            <tr><td>الاستعلام عن الرصيد</td><td class="code-val">*555#</td></tr>
-            <tr><td>شحن الرصيد</td><td class="code-val">*556*الرقم#</td></tr>
-            <tr><td>باقات الإنترنت</td><td class="code-val">*566#</td></tr>
-            <tr><td>تجديد باقة حكاية</td><td class="code-val">*807#</td></tr>
-            <tr><td>سلفني شكراً</td><td class="code-val">*911#</td></tr>
-            <tr><td>كود تحويل الرصيد</td><td class="code-val">*557*الرقم*المبلغ#</td></tr>
-        </table>
-    </div>
-
-    <div id="ora" class="content-section">
-        <table>
-            <tr><td>معرفة الرصيد</td><td class="code-val">#100#3#</td></tr>
-            <tr><td>شحن الكارت</td><td class="code-val">#رقم الكارت*102#</td></tr>
-            <tr><td>سلفني شكراً</td><td class="code-val">#100#2#</td></tr>
-            <tr><td>كلمني شكراً</td><td class="code-val">#الرقم*121#</td></tr>
-            <tr><td>معرفة رقمك</td><td class="code-val">#119#</td></tr>
-            <tr><td>كود العروض اليومية</td><td class="code-val">#12#</td></tr>
-        </table>
-    </div>
-
-    <div id="we" class="content-section">
-        <table>
-            <tr><td>معرفة رقمك</td><td class="code-val">*688#</td></tr>
-            <tr><td>معرفة الرصيد</td><td class="code-val">*322#</td></tr>
-            <tr><td>شحن الرصيد</td><td class="code-val">*555*الرقم#</td></tr>
-            <tr><td>خدمة سلفني</td><td class="code-val">*504#</td></tr>
-            <tr><td>خدمة كلمني</td><td class="code-val">#الرقم*515#</td></tr>
-            <tr><td>باقات الإنترنت</td><td class="code-val">*999#</td></tr>
-        </table>
-    </div>
-</div>
-
-<div id="copy-toast">تم نسخ الكود بنجاح ✅</div>
-
-<script>
-    // التنقل بين الشبكات
-    const tabs = document.querySelectorAll('.tab-btn');
-    const sections = document.querySelectorAll('.content-section');
-
-    tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            tabs.forEach(t => t.classList.remove('active'));
-            sections.forEach(s => s.classList.remove('active-section'));
-            
-            tab.classList.add('active');
-            document.getElementById(tab.dataset.target).classList.add('active-section');
-        });
-    });
-
-    // ميزة النسخ التلقائي
-    const toast = document.getElementById('copy-toast');
-    document.querySelectorAll('.code-val').forEach(code => {
-        code.addEventListener('click', () => {
-            const text = code.innerText;
-            navigator.clipboard.writeText(text).then(() => {
-                toast.style.display = 'block';
-                setTimeout(() => { toast.style.display = 'none'; }, 1500);
-            });
-        });
-    });
-</script>
-
+        async function loadFromGithub() {
+            try {
+                const response = await fetch(GITHUB_URL + '?v=' + Math.random());
+                const cards = await response.json();
+                const box = document.getElementById('cardsBox');
+                box.innerHTML = '';
+                cards.forEach(item => {
+                    box.innerHTML += `
+                        <div class="card">
+                            <span class="c-code">${item.code}</span>
+                            <div class="c-info">
+                                <span>الوحدات: ${item.units}</span>
+                                <span>المتبقي: ${item.rem}</span>
+                            </div>
+                            <a href="tel:${item.code}" class="c-btn">شحن الآن</a>
+                        </div>`;
+                });
+            } catch (e) { console.error("Error loading data"); }
+        }
+        setInterval(loadFromGithub, 10000); // تحديث كل 10 ثواني
+        window.onload = loadFromGithub;
+    </script>
 </body>
 </html>
-
