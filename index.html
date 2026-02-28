@@ -4,36 +4,66 @@
     <meta charset="UTF-8">
     <title>ALHWARY_NET</title>
     <style>
-        body { background: #000; color: #fff; text-align: center; font-family: sans-serif; padding-top: 50px; }
-        .code-box { border: 2px solid red; margin: 20px auto; padding: 20px; width: 80%; max-width: 500px; border-radius: 15px; background: #111; }
-        .msg { color: #ff4444; font-size: 18px; }
+        body { background: #000; color: #fff; text-align: center; font-family: sans-serif; padding-top: 50px; margin: 0; }
+        .header { border-bottom: 2px solid red; padding-bottom: 10px; margin-bottom: 30px; }
+        .code-box { 
+            border: 2px solid #ff0000; 
+            margin: 20px auto; 
+            padding: 25px; 
+            width: 85%; 
+            max-width: 500px; 
+            border-radius: 15px; 
+            background: #111;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.3);
+        }
+        .code-text { color: #00ff00; font-size: 24px; font-weight: bold; word-wrap: break-word; }
+        .status { color: #888; font-size: 14px; margin-top: 10px; }
     </style>
 </head>
 <body>
-    <h1 style="color:white">ALHWARY <span style="color:red">NET</span></h1>
+    <div class="header">
+        <h1>ALHWARY <span style="color:red">NET</span></h1>
+    </div>
+
     <div id="display">
-        <p class="msg">في انتظار بيانات البوت...</p>
+        <p style="color: #ff4444;">جاري الاتصال بالبوت...</p>
     </div>
 
     <script>
         async function loadData() {
             try {
-                // سحب الملف المحلي من المستودع مباشرة لتجنب أخطاء CORS
+                // سحب الملف مع منع الكاش
                 const resp = await fetch('./codes.json?t=' + Date.now());
                 if (!resp.ok) throw new Error();
-                const data = await resp.json();
                 
+                const data = await resp.json();
                 const display = document.getElementById('display');
-                display.innerHTML = ''; 
 
-                data.forEach(item => {
-                    display.innerHTML += `<div class="code-box"><h2 style="color:#0f0">${item.code}</h2></div>`;
-                });
+                // تعديل طريقة القراءة لتناسب شكل ملفك الجديد
+                // الملف يحتوي على مفتاح اسمه latest_code وبداخله نص الـ JSON
+                if (data.latest_code) {
+                    // تحويل النص اللي جوه latest_code لـ JSON حقيقي
+                    const cleanData = JSON.parse(data.latest_code);
+                    
+                    display.innerHTML = ''; 
+                    cleanData.forEach(item => {
+                        display.innerHTML += `
+                            <div class="code-box">
+                                <div class="code-text">${item.code}</div>
+                                <div class="status">تم التحديث بنجاح ✅</div>
+                            </div>`;
+                    });
+                } else {
+                    display.innerHTML = '<p>لا توجد أكواد حالياً</p>';
+                }
             } catch (e) {
-                document.getElementById('display').innerHTML = '<p class="msg">فشل جلب البيانات. تأكد أن البوت قام بتحديث ملف codes.json</p>';
+                console.error(e);
+                document.getElementById('display').innerHTML = '<p style="color:red">فشل جلب البيانات. تأكد من إرسال البوت للكود.</p>';
             }
         }
-        setInterval(loadData, 5000); // تحديث كل 5 ثواني
+
+        // التحديث كل 5 ثواني
+        setInterval(loadData, 5000);
         loadData();
     </script>
 </body>
