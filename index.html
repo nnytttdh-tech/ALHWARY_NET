@@ -1,35 +1,108 @@
-<script>
-    async function loadCodes() {
-        try {
-            // سحب البيانات من الملف اللي البوت بيحدثه
-            const response = await fetch('./codes.json?v=' + Date.now());
-            if (!response.ok) return;
-
-            const data = await response.json();
-            const container = document.getElementById('codes-container');
-            
-            if (data.length === 0) {
-                container.innerHTML = 'لا توجد أكواد جديدة حالياً';
-                return;
-            }
-
-            // عرض الأكواد بشكل منظم
-            container.innerHTML = ''; 
-            data.forEach(item => {
-                const codeDiv = document.createElement('div');
-                codeDiv.style.border = "1px solid red";
-                codeDiv.style.margin = "10px";
-                codeDiv.style.padding = "10px";
-                // تأكد إن البوت بيبعت الحقل باسم 'code' جوه الـ JSON
-                codeDiv.textContent = item.code || "كود غير معروف"; 
-                container.appendChild(codeDiv);
-            });
-        } catch (e) {
-            console.log("في انتظار تحديث الملف من البوت...");
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALHWARY_NET</title>
+    <style>
+        /* تصميم متوافق مع الصور اللي بعتها */
+        body { 
+            background-color: #000; 
+            color: #fff; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            text-align: center; 
+            padding: 20px; 
+            margin: 0;
         }
-    }
+        .header {
+            border-bottom: 2px solid #ff0000;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+        h1 { font-size: 28px; margin: 0; }
+        .red-text { color: #ff0000; }
+        
+        #codes-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
 
-    // تشغيل الدالة وتكرارها كل 10 ثواني
-    loadCodes();
-    setInterval(loadCodes, 10000);
-</script>
+        .code-box {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 20px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.1);
+            transition: 0.3s;
+        }
+
+        .code-text {
+            font-size: 22px;
+            font-weight: bold;
+            color: #00ff00; /* لون الكود أخضر واضح */
+            letter-spacing: 2px;
+        }
+
+        .loading-text { color: #888; font-style: italic; }
+        .error-text { color: #ff4444; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>ALHWARY <span class="red-text">NET</span></h1>
+    </div>
+
+    <div id="codes-container">
+        <p class="loading-text">جاري جلب الأكواد من البوت...</p>
+    </div>
+
+    <script>
+        async function getBotCodes() {
+            try {
+                // السحب من الملف المحلي لتجنب أخطاء CORS اللي ظهرت في الصورة
+                // إضافة متغير لمنع الكاش لضمان وصول التحديثات فوراً
+                const response = await fetch('./codes.json?update=' + new Date().getTime());
+                
+                if (!response.ok) {
+                    throw new Error("ملف الأكواد غير موجود حالياً");
+                }
+
+                const data = await response.json();
+                const container = document.getElementById('codes-container');
+
+                if (!data || data.length === 0) {
+                    container.innerHTML = '<p class="loading-text">لا توجد أكواد نشطة الآن، انتظر البوت...</p>';
+                    return;
+                }
+
+                container.innerHTML = ''; // مسح رسالة التحميل
+
+                // عرض الأكواد بطريقة منظمة
+                data.forEach(item => {
+                    const div = document.createElement('div');
+                    div.className = 'code-box';
+                    // بيفترض إن البوت بيبعت الحقل باسم "code"
+                    div.innerHTML = `<div class="code-text">${item.code || "كود غير صالح"}</div>`;
+                    container.appendChild(div);
+                });
+
+            } catch (error) {
+                console.error("Error:", error);
+                document.getElementById('codes-container').innerHTML = 
+                    '<p class="error-text">فشل جلب البيانات. تأكد من إرسال البوت للأكواد.</p>';
+            }
+        }
+
+        // تشغيل الدالة فور فتح الصفحة
+        getBotCodes();
+
+        // تحديث تلقائي كل 10 ثواني عشان الأكواد تظهر أول ما البوت يبعتها
+        setInterval(getBotCodes, 10000);
+    </script>
+</body>
+</html>
