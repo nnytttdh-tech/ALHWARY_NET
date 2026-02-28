@@ -1,54 +1,29 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>ALHWARY VIP</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;900&display=swap" rel="stylesheet">
-    <style>
-        :root { --r:#ff0000; --dark:#0a0a0a; --card:#151515; --gold:#f5c842; }
-        body { background:var(--dark); color:#fff; font-family:'Cairo', sans-serif; margin:0; }
-        .hdr { padding:20px; text-align:center; border-bottom:2px solid var(--r); background:#000; font-size:1.5rem; font-weight:900; }
-        .hdr span { color:var(--r); }
-        .container { padding:15px; display:flex; flex-direction:column; gap:15px; }
-        .card { background:var(--card); border-radius:15px; border:1px solid #333; padding:15px; animation: fadeIn 0.5s ease; }
-        .c-code { color:var(--gold); font-size:1.2rem; display:block; text-align:center; margin-bottom:10px; font-weight:900; }
-        .c-info { display:flex; justify-content:space-between; margin-bottom:15px; font-size:0.9rem; color:#aaa; }
-        .c-btn { background:linear-gradient(to bottom, #ff0000, #b30000); color:#fff; text-decoration:none; display:block; text-align:center; padding:12px; border-radius:10px; font-weight:900; }
-        @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
-    </style>
-</head>
-<body>
-    <div class="hdr">ALHWARY <span>VIP</span></div>
-    <div class="container" id="cardsBox">
-        <div style="text-align:center; padding:50px;">جاري تحديث الأكواد من البوت...</div>
-    </div>
+<div id="codes-container">جاري تحميل الأكواد...</div>
 
-    <script>
-        // استبدل USERNAME باسم حسابك و REPO باسم المستودع على GitHub
-        const GITHUB_URL = "https://raw.githubusercontent.com/USERNAME/REPO/main/data.json";
+<script>
+    async function loadCodes() {
+        try {
+            // بنضيف رقم عشوائي في آخر الرابط عشان نجبر المتصفح يجيب الجديد (تجنب الكاش)
+            const response = await fetch('./codes.json?v=' + new Date().getTime());
+            const data = await response.json();
+            
+            const container = document.getElementById('codes-container');
+            container.innerHTML = ''; // مسح الرسالة القديمة
 
-        async function loadFromGithub() {
-            try {
-                const response = await fetch(GITHUB_URL + '?v=' + Math.random());
-                const cards = await response.json();
-                const box = document.getElementById('cardsBox');
-                box.innerHTML = '';
-                cards.forEach(item => {
-                    box.innerHTML += `
-                        <div class="card">
-                            <span class="c-code">${item.code}</span>
-                            <div class="c-info">
-                                <span>الوحدات: ${item.units}</span>
-                                <span>المتبقي: ${item.rem}</span>
-                            </div>
-                            <a href="tel:${item.code}" class="c-btn">شحن الآن</a>
-                        </div>`;
-                });
-            } catch (e) { console.error("Error loading data"); }
+            // افترضنا إن ملف الـ JSON عبارة عن قائمة أكواد
+            data.forEach(item => {
+                const codeElement = document.createElement('p');
+                codeElement.textContent = item.code; // تأكد إن كلمة code هي اللي مستخدمها البوت
+                container.appendChild(codeElement);
+            });
+        } catch (error) {
+            console.error('خطأ في تحميل الأكواد:', error);
         }
-        setInterval(loadFromGithub, 10000); // تحديث كل 10 ثواني
-        window.onload = loadFromGithub;
-    </script>
-</body>
-</html>
+    }
+
+    // تشغيل الدالة أول ما الصفحة تفتح
+    loadCodes();
+    
+    // تحديث الأكواد كل 30 ثانية تلقائياً
+    setInterval(loadCodes, 30000);
+</script>
