@@ -2,107 +2,39 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ALHWARY_NET</title>
     <style>
-        /* تصميم متوافق مع الصور اللي بعتها */
-        body { 
-            background-color: #000; 
-            color: #fff; 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            text-align: center; 
-            padding: 20px; 
-            margin: 0;
-        }
-        .header {
-            border-bottom: 2px solid #ff0000;
-            padding-bottom: 15px;
-            margin-bottom: 30px;
-        }
-        h1 { font-size: 28px; margin: 0; }
-        .red-text { color: #ff0000; }
-        
-        #codes-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .code-box {
-            background: #111;
-            border: 1px solid #333;
-            border-radius: 10px;
-            padding: 20px;
-            width: 90%;
-            max-width: 400px;
-            box-shadow: 0 0 10px rgba(255, 0, 0, 0.1);
-            transition: 0.3s;
-        }
-
-        .code-text {
-            font-size: 22px;
-            font-weight: bold;
-            color: #00ff00; /* لون الكود أخضر واضح */
-            letter-spacing: 2px;
-        }
-
-        .loading-text { color: #888; font-style: italic; }
-        .error-text { color: #ff4444; }
+        body { background: #000; color: #fff; text-align: center; font-family: sans-serif; padding-top: 50px; }
+        .code-box { border: 2px solid red; margin: 20px auto; padding: 20px; width: 80%; max-width: 500px; border-radius: 15px; background: #111; }
+        .msg { color: #ff4444; font-size: 18px; }
     </style>
 </head>
 <body>
-
-    <div class="header">
-        <h1>ALHWARY <span class="red-text">NET</span></h1>
-    </div>
-
-    <div id="codes-container">
-        <p class="loading-text">جاري جلب الأكواد من البوت...</p>
+    <h1 style="color:white">ALHWARY <span style="color:red">NET</span></h1>
+    <div id="display">
+        <p class="msg">في انتظار بيانات البوت...</p>
     </div>
 
     <script>
-        async function getBotCodes() {
+        async function loadData() {
             try {
-                // السحب من الملف المحلي لتجنب أخطاء CORS اللي ظهرت في الصورة
-                // إضافة متغير لمنع الكاش لضمان وصول التحديثات فوراً
-                const response = await fetch('./codes.json?update=' + new Date().getTime());
+                // سحب الملف المحلي من المستودع مباشرة لتجنب أخطاء CORS
+                const resp = await fetch('./codes.json?t=' + Date.now());
+                if (!resp.ok) throw new Error();
+                const data = await resp.json();
                 
-                if (!response.ok) {
-                    throw new Error("ملف الأكواد غير موجود حالياً");
-                }
+                const display = document.getElementById('display');
+                display.innerHTML = ''; 
 
-                const data = await response.json();
-                const container = document.getElementById('codes-container');
-
-                if (!data || data.length === 0) {
-                    container.innerHTML = '<p class="loading-text">لا توجد أكواد نشطة الآن، انتظر البوت...</p>';
-                    return;
-                }
-
-                container.innerHTML = ''; // مسح رسالة التحميل
-
-                // عرض الأكواد بطريقة منظمة
                 data.forEach(item => {
-                    const div = document.createElement('div');
-                    div.className = 'code-box';
-                    // بيفترض إن البوت بيبعت الحقل باسم "code"
-                    div.innerHTML = `<div class="code-text">${item.code || "كود غير صالح"}</div>`;
-                    container.appendChild(div);
+                    display.innerHTML += `<div class="code-box"><h2 style="color:#0f0">${item.code}</h2></div>`;
                 });
-
-            } catch (error) {
-                console.error("Error:", error);
-                document.getElementById('codes-container').innerHTML = 
-                    '<p class="error-text">فشل جلب البيانات. تأكد من إرسال البوت للأكواد.</p>';
+            } catch (e) {
+                document.getElementById('display').innerHTML = '<p class="msg">فشل جلب البيانات. تأكد أن البوت قام بتحديث ملف codes.json</p>';
             }
         }
-
-        // تشغيل الدالة فور فتح الصفحة
-        getBotCodes();
-
-        // تحديث تلقائي كل 10 ثواني عشان الأكواد تظهر أول ما البوت يبعتها
-        setInterval(getBotCodes, 10000);
+        setInterval(loadData, 5000); // تحديث كل 5 ثواني
+        loadData();
     </script>
 </body>
 </html>
