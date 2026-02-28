@@ -2,69 +2,133 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>ALHWARY_NET</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALHWARY_NET | VIP</title>
     <style>
-        body { background: #000; color: #fff; text-align: center; font-family: sans-serif; padding-top: 50px; margin: 0; }
-        .header { border-bottom: 2px solid red; padding-bottom: 10px; margin-bottom: 30px; }
-        .code-box { 
-            border: 2px solid #ff0000; 
-            margin: 20px auto; 
-            padding: 25px; 
-            width: 85%; 
-            max-width: 500px; 
-            border-radius: 15px; 
-            background: #111;
-            box-shadow: 0 0 15px rgba(255, 0, 0, 0.3);
+        /* إعدادات الصفحة الأساسية */
+        body { 
+            background-color: #0d0d0d; 
+            color: #ffffff; 
+            font-family: 'Segoe UI', Tahoma, sans-serif; 
+            margin: 0; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
         }
-        .code-text { color: #00ff00; font-size: 24px; font-weight: bold; word-wrap: break-word; }
-        .status { color: #888; font-size: 14px; margin-top: 10px; }
+
+        /* الهيدر الشيك */
+        .header {
+            width: 100%;
+            padding: 20px 0;
+            background: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%);
+            border-bottom: 3px solid #ff0000;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.2);
+            margin-bottom: 30px;
+        }
+
+        h1 { margin: 0; font-size: 2.5rem; letter-spacing: 2px; }
+        .red-text { color: #ff0000; text-shadow: 0 0 10px rgba(255, 0, 0, 0.5); }
+
+        /* حاوية الأكواد */
+        #code-list {
+            width: 90%;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column-reverse; /* الجديد يظهر فوق */
+            gap: 20px;
+        }
+
+        /* تصميم بطاقة الكود (البوكس الشيك) */
+        .code-card {
+            background: #1a1a1a;
+            border-left: 5px solid #ff0000;
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.3s ease;
+            animation: slideIn 0.5s ease-out;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+        }
+
+        .code-card:hover { transform: scale(1.02); }
+
+        .code-content { display: flex; flex-direction: column; }
+        
+        .code-value { 
+            font-size: 1.4rem; 
+            color: #00ff00; /* أخضر فسفوري */
+            font-weight: bold; 
+            font-family: monospace;
+            margin-bottom: 5px;
+        }
+
+        .code-label { color: #888; font-size: 0.8rem; text-transform: uppercase; }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .loading { color: #ff0000; font-style: italic; margin-top: 50px; }
     </style>
 </head>
 <body>
+
     <div class="header">
-        <h1>ALHWARY <span style="color:red">NET</span></h1>
+        <h1>ALHWARY <span class="red-text">NET</span></h1>
     </div>
 
-    <div id="display">
-        <p style="color: #ff4444;">جاري الاتصال بالبوت...</p>
+    <div id="code-list">
+        <p class="loading">جاري انتظار الأكواد من البوت...</p>
     </div>
 
     <script>
-        async function loadData() {
-            try {
-                // سحب الملف مع منع الكاش
-                const resp = await fetch('./codes.json?t=' + Date.now());
-                if (!resp.ok) throw new Error();
-                
-                const data = await resp.json();
-                const display = document.getElementById('display');
+        let seenCodes = new Set();
 
-                // تعديل طريقة القراءة لتناسب شكل ملفك الجديد
-                // الملف يحتوي على مفتاح اسمه latest_code وبداخله نص الـ JSON
+        async function updatePage() {
+            try {
+                // جلب البيانات من ملف البوت
+                const response = await fetch('./codes.json?v=' + Date.now());
+                if (!response.ok) return;
+
+                const data = await response.json();
+                
                 if (data.latest_code) {
-                    // تحويل النص اللي جوه latest_code لـ JSON حقيقي
-                    const cleanData = JSON.parse(data.latest_code);
-                    
-                    display.innerHTML = ''; 
-                    cleanData.forEach(item => {
-                        display.innerHTML += `
-                            <div class="code-box">
-                                <div class="code-text">${item.code}</div>
-                                <div class="status">تم التحديث بنجاح ✅</div>
-                            </div>`;
+                    const codesArray = JSON.parse(data.latest_code);
+                    const container = document.getElementById('code-list');
+
+                    codesArray.forEach(item => {
+                        if (!seenCodes.has(item.code)) {
+                            // إزالة رسالة التحميل أول مرة
+                            if (seenCodes.size === 0) container.innerHTML = '';
+                            
+                            seenCodes.add(item.code);
+
+                            // إنشاء البطاقة الشيك
+                            const card = document.createElement('div');
+                            card.className = 'code-card';
+                            card.innerHTML = `
+                                <div class="code-content">
+                                    <span class="code-label">كود جديد مستلم</span>
+                                    <span class="code-value">${item.code}</span>
+                                </div>
+                                <div style="color: #444; font-size: 1.2rem;">⚡</div>
+                            `;
+                            container.appendChild(card);
+                        }
                     });
-                } else {
-                    display.innerHTML = '<p>لا توجد أكواد حالياً</p>';
                 }
             } catch (e) {
-                console.error(e);
-                document.getElementById('display').innerHTML = '<p style="color:red">فشل جلب البيانات. تأكد من إرسال البوت للكود.</p>';
+                console.log("Waiting for data...");
             }
         }
 
-        // التحديث كل 5 ثواني
-        setInterval(loadData, 5000);
-        loadData();
+        // تحديث كل 5 ثوانٍ
+        setInterval(updatePage, 5000);
+        updatePage();
     </script>
 </body>
 </html>
