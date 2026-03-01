@@ -208,10 +208,10 @@ input:checked + .slider { background: #ff0000; }
             const dateStr = now.getFullYear() + "" + (now.getMonth() + 1) + "" + now.getDate();
 
             const hour = now.getHours();
-
-            // المعادلة: (تاريخ اليوم + الساعة) + رقم سري ثابت من اختيارك (88)
-
-            return (parseInt(dateStr) + hour + 88).toString(); 
+        // المعادلة الجديدة: الساعة الحالية + رقم سري ثابت (مثلاً 500)
+        // لو الساعة 10 الصبح، الباسورد هيكون 510
+         return (now.getHours() + 500).toString(); 
+            
 
         }
 
@@ -361,3 +361,4 @@ const data = await res.json();
 </body>
 
 </html>
+
