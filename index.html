@@ -32,82 +32,109 @@
             margin-bottom: 12px; padding: 18px; border-radius: 12px;
             display: flex; justify-content: space-between; align-items: center;
             animation: fadeIn 0.5s ease forwards;
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ALHWARY_NET | FIXED</title>
-    <style>
-        :root { --primary: #ff0000; --bg: #050505; }
-        body { background-color: var(--bg); color: #fff; font-family: 'Segoe UI', sans-serif; text-align: center; margin: 0; }
-        #lock-screen { position: fixed; inset: 0; background: #000; z-index: 10000; display: flex; align-items: center; justify-content: center; }
-        .lock-box { border: 1px solid var(--primary); padding: 30px; border-radius: 20px; width: 80%; max-width: 350px; background: #0d0d0d; }
-        .lock-input { width: 100%; padding: 12px; margin: 15px 0; background: #1a1a1a; border: 1px solid #333; color: #fff; border-radius: 8px; text-align: center; font-size: 1.2rem; box-sizing: border-box; }
-        .lock-btn { width: 100%; padding: 12px; background: var(--primary); color: #fff; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
-        .code-item { background: #111; border-right: 5px solid var(--primary); margin: 10px; padding: 15px; border-radius: 10px; display: flex; justify-content: space-between; }
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .code-val { font-family: monospace; color: #00ff88; font-size: 1.4rem; font-weight: bold; }
+        .units-badge { background: rgba(255,0,0,0.1); color: var(--primary); padding: 2px 10px; border-radius: 5px; font-size: 0.8rem; border: 1px solid rgba(255,0,0,0.2); }
+
+        footer { text-align: center; padding: 20px; color: #333; font-size: 0.7rem; }
     </style>
 </head>
 <body>
 
     <div id="lock-screen">
         <div class="lock-box">
-            <h2 style="color:var(--primary)">SECURITY CHECK</h2>
-            <input type="password" id="pass-input" class="lock-input" placeholder="الشفرة">
-            <button class="lock-btn" onclick="checkAccess()">دخول</button>
-            <p id="err" style="color:red; display:none; margin-top:10px;">خطأ في الشفرة!</p>
+            <h2 class="red-glow" style="font-size: 1.5rem;">SECURITY ACCESS</h2>
+            <p style="color: #666; font-size: 0.9rem;">نظام الهواري المتغير - أدخل الشفرة</p>
+            <input type="password" id="pass-input" class="lock-input" placeholder="0000">
+            <button class="lock-btn" onclick="checkAccess()">دخول النظام</button>
+            <p id="err" style="color:var(--primary); display:none; margin-top:15px; font-size:0.8rem;">⚠️ الشفرة غير صحيحة أو انتهت!</p>
         </div>
     </div>
 
-    <h1 style="padding:20px;">ALHWARY <span style="color:var(--primary)">NET</span></h1>
-    <div id="code-list"></div>
+    <div class="header">
+        <h1 class="red-glow">ALHWARY <span style="color:#fff">NET</span></h1>
+    </div>
+
+    <div class="container">
+        <div class="stat-card">
+            <span style="color:#666; font-size:0.8rem; display:block; margin-bottom:5px;">كروت نشطة حالياً</span>
+            <span class="stat-num" id="total-codes">0</span>
+        </div>
+        <div id="code-list"></div>
+    </div>
+
+    <footer>BY ALHWARY SYSTEM &copy; 2026</footer>
 
     <script>
+        // إعدادات البوت (تأكد من وضع التوكن والـ ID الصحيح)
         const TG_TOKEN = "7737242130:AAECXvX_Y37L9XF-P8O76G7S2-K8975G-P0";
         const TG_CHAT_ID = "6102142273";
 
-        function getPass() {
-            const h = new Date().getHours();
-            return (2026 + h + 2026).toString();
+        // المعادلة المطلوبة: 2026 + الساعة + 2026
+        function getHourlyPassword() {
+            const hour = new Date().getHours();
+            return (2026 + hour + 2026).toString();
         }
 
+        // فحص حالة الدخول
         if (localStorage.getItem('alhwary_auth') === 'granted') {
             document.getElementById('lock-screen').style.display = 'none';
         }
 
         function checkAccess() {
             const input = document.getElementById('pass-input').value;
-            if (input === getPass()) {
+            if (input === getHourlyPassword()) {
                 localStorage.setItem('alhwary_auth', 'granted');
-                fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage?chat_id=${TG_CHAT_ID}&text=${encodeURIComponent("🔥 تم الدخول!")}`);
+                // إرسال إشعار تليجرام عند الدخول
+                fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage?chat_id=${TG_CHAT_ID}&text=${encodeURIComponent("✅ تم دخول شخص للموقع بنجاح!")}`);
                 document.getElementById('lock-screen').style.display = 'none';
             } else {
                 document.getElementById('err').style.display = 'block';
+                setTimeout(() => document.getElementById('err').style.display = 'none', 2000);
             }
         }
 
+        let seenCodes = new Set();
         async function fetchCodes() {
             try {
                 const res = await fetch('./codes.json?t=' + Date.now());
-                const text = await res.text();
+                const rawData = await res.text();
                 
-                // لو لقيت كلمة الطرد، اخرج فوراً
-                if (text.includes("FORCE_LOGOUT")) {
+                // فحص ميزة الطرد (إذا وجدت الكلمة يمسح الدخول)
+                if (rawData.includes("FORCE_LOGOUT")) {
                     localStorage.removeItem('alhwary_auth');
                     location.reload();
                     return;
                 }
 
-                const codes = JSON.parse(text);
+                // تحويل النص لـ JSON نظيف
+                const codes = JSON.parse(rawData.replace(/FORCE_LOGOUT/g, ''));
+                
+                document.getElementById('total-codes').innerText = codes.length;
                 const list = document.getElementById('code-list');
-                list.innerHTML = "";
-                codes.reverse().forEach(item => {
-                    list.innerHTML += `<div class="code-item"><div><b>${item.code}</b></div><div style="color:red">${item.units} U</div></div>`;
+                
+                codes.reverse().forEach((item) => {
+                    if (item.code && !seenCodes.has(item.code)) {
+                        seenCodes.add(item.code);
+                        const div = document.createElement('div');
+                        div.className = 'code-item';
+                        div.innerHTML = `
+                            <div>
+                                <div class="code-val">${item.code}</div>
+                                <span class="units-badge">${item.units} UNIT</span>
+                            </div>
+                            <div style="color:var(--primary); font-size:1.2rem;">⚡</div>
+                        `;
+                        list.prepend(div);
+                    }
                 });
-            } catch (e) {}
+            } catch (e) { console.log("Waiting for data..."); }
         }
 
-        setInterval(fetchCodes, 5000);
+        setInterval(fetchCodes, 8000); // تحديث كل 8 ثواني
         fetchCodes();
     </script>
 </body>
