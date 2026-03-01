@@ -1,78 +1,155 @@
 <!DOCTYPE html>
+
 <html lang="ar" dir="rtl">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>ALHWARY NET</title>
+
     <style>
+
         body { background-color: #0d0d0d; color: white; font-family: sans-serif; text-align: center; padding: 15px; }
+
         .header { color: #ff3131; font-size: 28px; font-weight: bold; margin-bottom: 20px; }
+
         #cardsList { display: flex; flex-direction: column; gap: 12px; max-width: 400px; margin: 0 auto; }
+
         .card { background: #1a1a1a; border-radius: 12px; padding: 15px; border: 1px solid #333; border-bottom: 4px solid #ff3131; }
+
         .card-code { color: #fbff00; font-size: 20px; font-weight: bold; margin-bottom: 10px; display: block; }
+
         .card-stats { display: flex; justify-content: space-between; color: #bbb; font-size: 13px; border-top: 1px solid #333; padding-top: 10px; }
+
         .stat-value { display: block; color: white; font-size: 16px; font-weight: bold; }
+
         .btn-charge { background-color: #ff3131; color: white; border: none; width: 100%; padding: 10px; border-radius: 8px; font-size: 18px; font-weight: bold; margin-top: 12px; cursor: pointer; }
+
     </style>
+
 </head>
+
 <body>
 
+
+
     <div class="header">ALHWARY NET</div>
+
     <div id="cardsList">جاري جلب الأكواد...</div>
 
+
+
     <script>
+
         const targetUrl = 'https://repository-o2oweb.onrender.com/get-cards';
 
+
+
         // وظيفة لحفظ الأكواد عشان ما تختفيش
+
         function saveToCache(data) {
+
             localStorage.setItem('cached_cards', JSON.stringify(data));
+
         }
+
+
 
         // وظيفة لعرض الأكواد المحفوظة لو السيرفر هنج
+
         function loadFromCache() {
+
             const cached = localStorage.getItem('cached_cards');
+
             if (cached) renderCards(JSON.parse(cached));
+
         }
+
+
 
         async function fetchCards() {
+
             try {
+
                 // استخدام بروكسي أسرع مع تايمر لمنع التهنيج
+
                 const response = await fetch('https://api.allorigins.win/get?url=' + encodeURIComponent(targetUrl) + '&t=' + Date.now());
+
                 const json = await response.json();
+
                 const data = JSON.parse(json.contents);
 
+
+
                 if (data && data.cards) {
+
                     renderCards(data.cards);
+
                     saveToCache(data.cards); // حفظ نسخة احتياطية
+
                 }
+
             } catch (e) {
+
                 console.log("السيرفر هنج، بعرض الأكواد القديمة...");
+
                 loadFromCache();
+
             }
+
         }
+
+
 
         function renderCards(cards) {
+
             const container = document.getElementById('cardsList');
+
             container.innerHTML = ''; 
+
             cards.forEach(card => {
+
                 container.innerHTML += `
+
                     <div class="card">
+
                         <span class="card-code">*858*${card.card_serial}#</span>
+
                         <div class="card-stats">
+
                             <div>الوحدات <span class="stat-value">${card.gift_units}</span></div>
+
                             <div>متبقي <span class="stat-value">${card.remaining_dedications}</span></div>
+
                         </div>
+
                         <button class="btn-charge" onclick="window.location.href='tel:*858*${card.card_serial}#'">شحن الآن</button>
+
                     </div>
+
                 `;
+
             });
+
         }
 
+
+
         // تشغيل فوري وتحميل من الكاش أولاً
+
         loadFromCache();
+
         fetchCards();
+
         // التحديث كل 15 ثانية (زودنا الوقت شوية عشان السيرفر ميعملكش بلوك)
+
         setInterval(fetchCards, 15000);
+
     </script>
+
 </body>
+
 </html>
