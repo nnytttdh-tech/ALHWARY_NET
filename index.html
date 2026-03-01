@@ -6,22 +6,25 @@
     <title>ALHWARY_NET | LIVE SYSTEM</title>
     <style>
         body { background-color: #0d0d0d; color: #ffffff; font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding-bottom: 50px; }
-        .header { width: 100%; padding: 25px 0; background: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%); border-bottom: 3px solid #ff0000; text-align: center; margin-bottom: 25px; box-shadow: 0 5px 20px rgba(255,0,0,0.3); }
+        .header { width: 100%; padding: 25px 0; background: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%); border-bottom: 3px solid #ff0000; text-align: center; margin-bottom: 15px; box-shadow: 0 5px 20px rgba(255,0,0,0.3); }
         .red-text { color: #ff0000; text-shadow: 0 0 15px #ff0000; font-weight: bold; }
         .container { width: 92%; max-width: 500px; }
+        
+        /* العدادات في الأعلى */
+        .stats { display: flex; gap: 12px; margin-bottom: 20px; }
+        .stat-item { background: #151515; border: 1px solid #222; border-radius: 12px; flex: 1; padding: 15px; text-align: center; border-bottom: 2px solid #ff0000; }
+        .stat-num { font-size: 1.6rem; font-weight: bold; color: #ff0000; display: block; }
+        
         .section-title { font-size: 1rem; color: #888; margin: 20px 0 10px; border-bottom: 1px solid #222; padding-bottom: 5px; display: flex; justify-content: space-between; }
         .card { background: #151515; border: 1px solid #222; border-radius: 15px; padding: 15px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; }
         .card-info { display: flex; align-items: center; gap: 15px; }
         .card-icon { font-size: 1.6rem; }
-        .card-text h3 { margin: 0; font-size: 1rem; }
-        .card-text p { margin: 2px 0 0; font-size: 0.8rem; color: #666; }
+        
         #code-list { display: flex; flex-direction: column; gap: 12px; }
         .code-item { background: #1a1a1a; border-right: 5px solid #ff0000; border-radius: 10px; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
         .code-val { color: #00ff00; font-weight: bold; font-family: monospace; font-size: 1.4rem; }
-        /* تصميم العدادات */
-        .stats { display: flex; gap: 12px; margin-top: 30px; }
-        .stat-item { background: #151515; border: 1px solid #222; border-radius: 12px; flex: 1; padding: 15px; text-align: center; }
-        .stat-num { font-size: 1.6rem; font-weight: bold; color: #ff0000; display: block; }
+        
+        /* سويتش الإشعارات */
         .switch { position: relative; width: 45px; height: 24px; }
         .switch input { opacity: 0; width: 0; height: 0; }
         .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background: #333; transition: .4s; border-radius: 34px; }
@@ -35,13 +38,24 @@
     <div class="header"><h1>ALHWARY <span class="red-text">NET</span></h1></div>
 
     <div class="container">
+        <div class="stats">
+            <div class="stat-item">
+                <span style="color: #888; font-size: 0.8rem;">👤 إجمالي الزيارات</span>
+                <span class="stat-num" id="visit-count">...</span>
+            </div>
+            <div class="stat-item">
+                <span style="color: #888; font-size: 0.8rem;">📅 كروت متاحة</span>
+                <span class="stat-num" id="total-codes">0</span>
+            </div>
+        </div>
+
         <div class="section-title">الخدمات SERVICES</div>
         <div class="card">
-            <div class="card-info"><span class="card-icon">🔔</span><div class="card-text"><h3>الإشعارات</h3><p>تنبيه عند ظهور كروت جديدة</p></div></div>
+            <div class="card-info"><span class="card-icon">🔔</span><div><h3>الإشعارات</h3><p>تنبيه عند ظهور كروت جديدة</p></div></div>
             <label class="switch"><input type="checkbox" id="noti-switch" checked><span class="slider"></span></label>
         </div>
         <div class="card" onclick="openRequest()">
-            <div class="card-info"><span class="card-icon">🎯</span><div class="card-text"><h3>اطلب كارت</h3><p id="req-txt">حدد الوحدات وهيوصلك تنبيه</p></div></div>
+            <div class="card-info"><span class="card-icon">🎯</span><div><h3>اطلب كارت</h3><p id="req-txt">حدد الوحدات وهيوصلك تنبيه</p></div></div>
             <span style="color: #ff0000;">🎯</span>
         </div>
 
@@ -49,34 +63,21 @@
         <div id="code-list">
             <p style="text-align: center; color: #444;">جاري المزامنة...</p>
         </div>
-
-        <div class="stats">
-            <div class="stat-item">
-                <span style="color: #888; font-size: 0.8rem;">👤 إجمالي الزيارات</span>
-                <span class="stat-num" id="visit-count">...</span>
-            </div>
-            <div class="stat-item">
-                <span style="color: #888; font-size: 0.8rem;">📅 عدد الكروت</span>
-                <span class="stat-num" id="total-codes">0</span>
-            </div>
-        </div>
     </div>
 
-    <footer style="margin-top: 40px; color: #333; font-size: 0.8rem;">By: O² • O² CARD</footer>
+    <footer style="margin-top: 40px; color: #ff0000; font-size: 0.9rem; font-weight: bold; text-shadow: 0 0 5px #ff0000;">By: ALHWARY</footer>
 
     <script>
         let seenCodes = new Set();
         let myRequest = null;
 
-        // 1. وظيفة جلب عدد الزيارات الحقيقي
+        // تحديث عداد الزيارات الحقيقي
         async function updateVisitorCount() {
             try {
-                // نستخدم API خارجي لحساب الزيارات باسم مستودعك
                 const res = await fetch('https://api.countapi.xyz/hit/alhwary_net/visits');
                 const data = await res.json();
                 document.getElementById('visit-count').innerText = data.value;
             } catch (e) {
-                // إذا لم يعمل الAPI، نضع رقماً افتراضياً
                 document.getElementById('visit-count').innerText = "154";
             }
         }
@@ -89,14 +90,13 @@
             }
         }
 
-        // 2. تحديث الكروت وإحصاء عددها
+        // تحديث الكروت كل 10 ثوانٍ
         async function fetchCodes() {
             try {
                 const response = await fetch('./codes.json?t=' + Date.now());
                 const codes = await response.json();
                 const list = document.getElementById('code-list');
                 
-                // تحديث عداد الكروت
                 document.getElementById('total-codes').innerText = codes.length;
 
                 if (codes.length > 0) {
@@ -122,9 +122,8 @@
             } catch (e) {}
         }
 
-        // تشغيل الوظائف
         updateVisitorCount();
-        setInterval(fetchCodes, 10000); // تحديث الكروت كل 10 ثوانٍ
+        setInterval(fetchCodes, 10000); 
         fetchCodes();
     </script>
 </body>
