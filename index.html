@@ -5,58 +5,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ALHWARY NET</title>
     <style>
-        body { background-color: #0d0d0d; color: white; font-family: sans-serif; text-align: center; padding: 20px; }
-        .header { color: #ff3131; font-size: 30px; font-weight: bold; margin-bottom: 20px; text-transform: uppercase; }
-        #cardsList { display: flex; flex-direction: column; gap: 15px; max-width: 400px; margin: 0 auto; }
-        .card { background: #1a1a1a; border-radius: 12px; padding: 20px; border: 1px solid #333; border-bottom: 4px solid #ff3131; }
-        .card-code { color: #fbff00; font-size: 24px; font-weight: bold; margin-bottom: 10px; display: block; }
-        .card-stats { display: flex; justify-content: space-between; color: #bbb; font-size: 14px; margin-top: 10px; border-top: 1px solid #333; padding-top: 10px; }
-        .stat-value { display: block; color: white; font-size: 18px; font-weight: bold; }
-        .btn-charge { background-color: #ff3131; color: white; border: none; width: 100%; padding: 12px; border-radius: 8px; font-size: 18px; font-weight: bold; margin-top: 15px; cursor: pointer; }
-        .loading-text { color: #888; font-style: italic; }
+        body { background-color: #0d0d0d; color: white; font-family: sans-serif; text-align: center; padding: 15px; }
+        .header { color: #ff3131; font-size: 28px; font-weight: bold; margin-bottom: 20px; }
+        #cardsList { display: flex; flex-direction: column; gap: 12px; max-width: 400px; margin: 0 auto; }
+        .card { background: #1a1a1a; border-radius: 12px; padding: 15px; border: 1px solid #333; border-bottom: 4px solid #ff3131; }
+        .card-code { color: #fbff00; font-size: 20px; font-weight: bold; margin-bottom: 10px; display: block; }
+        .card-stats { display: flex; justify-content: space-between; color: #bbb; font-size: 13px; border-top: 1px solid #333; padding-top: 10px; }
+        .stat-value { display: block; color: white; font-size: 16px; font-weight: bold; }
+        .btn-charge { background-color: #ff3131; color: white; border: none; width: 100%; padding: 10px; border-radius: 8px; font-size: 18px; font-weight: bold; margin-top: 12px; cursor: pointer; }
     </style>
 </head>
 <body>
 
     <div class="header">ALHWARY NET</div>
-    
-    <div id="cardsList" class="loading-text">جاري محاولة الاتصال بالسيرفر...</div>
+    <div id="cardsList">جاري جلب الأكواد...</div>
 
     <script>
-        // رابط المصدر اللي طلعناه من الـ Network
         const targetUrl = 'https://repository-o2oweb.onrender.com/get-cards';
 
+        // وظيفة لحفظ الأكواد عشان ما تختفيش
+        function saveToCache(data) {
+            localStorage.setItem('cached_cards', JSON.stringify(data));
+        }
+
+        // وظيفة لعرض الأكواد المحفوظة لو السيرفر هنج
+        function loadFromCache() {
+            const cached = localStorage.getItem('cached_cards');
+            if (cached) renderCards(JSON.parse(cached));
+        }
+
         async function fetchCards() {
-            const container = document.getElementById('cardsList');
-            
-            // بنجرب 3 بروكسيات مختلفة عشان نضمن الوصول
-            const proxies = [
-                'https://api.allorigins.win/get?url=',
-                'https://corsproxy.io/?',
-                'https://thingproxy.freeboard.io/fetch/'
-            ];
+            try {
+                // استخدام بروكسي أسرع مع تايمر لمنع التهنيج
+                const response = await fetch('https://api.allorigins.win/get?url=' + encodeURIComponent(targetUrl) + '&t=' + Date.now());
+                const json = await response.json();
+                const data = JSON.parse(json.contents);
 
-            for (let proxy of proxies) {
-                try {
-                    const response = await fetch(proxy + encodeURIComponent(targetUrl) + (proxy.includes('allorigins') ? '&cache=' + Date.now() : ''));
-                    
-                    let data;
-                    if (proxy.includes('allorigins')) {
-                        const json = await response.json();
-                        data = JSON.parse(json.contents);
-                    } else {
-                        data = await response.json();
-                    }
-
-                    if (data && data.cards) {
-                        renderCards(data.cards);
-                        return; // لو نجحنا نخرج من المحاولات
-                    }
-                } catch (e) {
-                    console.log("فشل البروكسي، بنجرب اللي بعده...");
+                if (data && data.cards) {
+                    renderCards(data.cards);
+                    saveToCache(data.cards); // حفظ نسخة احتياطية
                 }
+            } catch (e) {
+                console.log("السيرفر هنج، بعرض الأكواد القديمة...");
+                loadFromCache();
             }
-            container.innerHTML = "عفواً، السيرفر الأصلي لا يستجيب حالياً. سأحاول مجدداً خلال ثوانٍ.";
         }
 
         function renderCards(cards) {
@@ -76,9 +68,11 @@
             });
         }
 
-        // تحديث كل 10 ثواني كما في الملفات المرفقة
-        setInterval(fetchCards, 10000);
+        // تشغيل فوري وتحميل من الكاش أولاً
+        loadFromCache();
         fetchCards();
+        // التحديث كل 15 ثانية (زودنا الوقت شوية عشان السيرفر ميعملكش بلوك)
+        setInterval(fetchCards, 15000);
     </script>
 </body>
 </html>
