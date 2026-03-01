@@ -5,26 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ALHWARY_NET | LIVE SYSTEM</title>
     <style>
+        /* ستايل شاشة القفل - الهكر */
+        #lock-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; z-index: 10000; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; font-family: 'Courier New', Courier, monospace;
+        }
+        .restricted-box {
+            border: 1px solid #00ff00; padding: 40px 20px; border-radius: 10px;
+            text-align: center; box-shadow: 0 0 20px rgba(0, 255, 0, 0.2); background: rgba(0,0,0,0.9);
+        }
+        .green-neon { color: #00ff00; text-shadow: 0 0 10px #00ff00; letter-spacing: 2px; }
+        .red-alert { color: #ff0000; font-size: 0.8rem; margin-bottom: 20px; animation: blink 1s infinite; }
+        @keyframes blink { 50% { opacity: 0; } }
+        
+        #pass-input {
+            background: #111; border: 1px solid #00ff00; color: #00ff00;
+            padding: 12px; text-align: center; font-size: 1.2rem; border-radius: 5px;
+            outline: none; width: 200px; margin-bottom: 20px;
+        }
+        .btn-access {
+            background: #00ff00; color: #000; border: none; padding: 10px 30px;
+            font-weight: bold; cursor: pointer; border-radius: 5px; transition: 0.3s;
+        }
+        .btn-access:hover { background: #008800; color: #fff; }
+
+        /* ستايل موقعك الأصلي */
         body { background-color: #0d0d0d; color: #ffffff; font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding-bottom: 50px; }
         .header { width: 100%; padding: 25px 0; background: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%); border-bottom: 3px solid #ff0000; text-align: center; margin-bottom: 15px; box-shadow: 0 5px 20px rgba(255,0,0,0.3); }
         .red-text { color: #ff0000; text-shadow: 0 0 15px #ff0000; font-weight: bold; }
         .container { width: 92%; max-width: 500px; }
-        
-        /* العدادات في الأعلى */
         .stats { display: flex; gap: 12px; margin-bottom: 20px; }
         .stat-item { background: #151515; border: 1px solid #222; border-radius: 12px; flex: 1; padding: 15px; text-align: center; border-bottom: 2px solid #ff0000; }
         .stat-num { font-size: 1.6rem; font-weight: bold; color: #ff0000; display: block; }
-        
         .section-title { font-size: 1rem; color: #888; margin: 20px 0 10px; border-bottom: 1px solid #222; padding-bottom: 5px; display: flex; justify-content: space-between; }
         .card { background: #151515; border: 1px solid #222; border-radius: 15px; padding: 15px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; }
         .card-info { display: flex; align-items: center; gap: 15px; }
         .card-icon { font-size: 1.6rem; }
-        
         #code-list { display: flex; flex-direction: column; gap: 12px; }
         .code-item { background: #1a1a1a; border-right: 5px solid #ff0000; border-radius: 10px; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
         .code-val { color: #00ff00; font-weight: bold; font-family: monospace; font-size: 1.4rem; }
-        
-        /* سويتش الإشعارات */
         .switch { position: relative; width: 45px; height: 24px; }
         .switch input { opacity: 0; width: 0; height: 0; }
         .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background: #333; transition: .4s; border-radius: 34px; }
@@ -34,6 +54,17 @@
     </style>
 </head>
 <body>
+
+    <div id="lock-screen">
+        <div class="restricted-box">
+            <h1 class="green-neon">SYSTEM RESTRICTED</h1>
+            <p class="red-alert">> STATUS: UNAUTHORIZED_ACCESS_DETECTED</p>
+            <input type="text" id="pass-input" placeholder="أدخل كلمة السر">
+            <br>
+            <button class="btn-access" onclick="checkAccess()">LOGIN SYSTEM</button>
+            <p id="err" style="color:red; display:none; margin-top:10px;">خطأ في كلمة السر!</p>
+        </div>
+    </div>
 
     <div class="header"><h1>ALHWARY <span class="red-text">NET</span></h1></div>
 
@@ -68,18 +99,45 @@
     <footer style="margin-top: 40px; color: #ff0000; font-size: 0.9rem; font-weight: bold; text-shadow: 0 0 5px #ff0000;">By: ALHWARY</footer>
 
     <script>
+        // --- 1. نظام الحماية الذكي ---
+        function getHourlyPassword() {
+            const now = new Date();
+            const dateStr = now.getFullYear() + "" + (now.getMonth() + 1) + "" + now.getDate();
+            const hour = now.getHours();
+            // المعادلة: (تاريخ اليوم + الساعة) + رقم سري ثابت من اختيارك (88)
+            return (parseInt(dateStr) + hour + 88).toString(); 
+        }
+
+        // فحص الدخول
+        if (localStorage.getItem('alhwary_login') === 'active') {
+            document.getElementById('lock-screen').style.display = 'none';
+        }
+
+        function checkAccess() {
+            const val = document.getElementById('pass-input').value;
+            if (val === getHourlyPassword()) {
+                localStorage.setItem('alhwary_login', 'active');
+                document.getElementById('lock-screen').style.display = 'none';
+            } else {
+                document.getElementById('err').style.display = 'block';
+                setTimeout(() => { document.getElementById('err').style.display = 'none'; }, 2000);
+            }
+        }
+
+        // لإظهار الباسورد في الكونسول لك فقط (للتجربة)
+        console.log("باسورد هذه الساعة هو: " + getHourlyPassword());
+
+        // --- 2. كود موقعك الأصلي ---
         let seenCodes = new Set();
         let myRequest = null;
 
-        // تحديث عداد الزيارات الحقيقي
         async function updateVisitorCount() {
             try {
+                // ملاحظة: هذا الرابط قد لا يعمل دائماً، يفضل استبداله بـ Firebase لاحقاً
                 const res = await fetch('https://api.countapi.xyz/hit/alhwary_net/visits');
                 const data = await res.json();
                 document.getElementById('visit-count').innerText = data.value;
-            } catch (e) {
-                document.getElementById('visit-count').innerText = "154";
-            }
+            } catch (e) { document.getElementById('visit-count').innerText = "154"; }
         }
 
         function openRequest() {
@@ -90,28 +148,23 @@
             }
         }
 
-        // تحديث الكروت كل 10 ثوانٍ
         async function fetchCodes() {
             try {
                 const response = await fetch('./codes.json?t=' + Date.now());
                 const codes = await response.json();
                 const list = document.getElementById('code-list');
-                
                 document.getElementById('total-codes').innerText = codes.length;
-
                 if (codes.length > 0) {
                     if (seenCodes.size === 0) list.innerHTML = "";
                     codes.reverse().forEach(item => {
                         if (!seenCodes.has(item.code)) {
                             seenCodes.add(item.code);
-                            
                             if (myRequest && parseInt(item.units) >= myRequest) {
                                 if (document.getElementById('noti-switch').checked) {
                                     alert(`🔔 كارت جديد: ${item.units} وحدة!`);
                                     new Audio('https://www.soundjay.com/buttons/beep-01a.mp3').play();
                                 }
                             }
-
                             const div = document.createElement('div');
                             div.className = 'code-item';
                             div.innerHTML = `<div><div class="code-val">${item.code}</div><span style="background:#ff0000; padding:2px 8px; border-radius:5px; font-size:0.8rem;">${item.units} وحدة</span></div><div style="font-size:1.8rem;">⚡</div>`;
