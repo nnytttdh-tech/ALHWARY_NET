@@ -5,71 +5,78 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ALHWARY NET</title>
     <style>
-        body { background-color: #0a0a0a; color: white; font-family: 'Segoe UI', Tahoma, sans-serif; text-align: center; padding: 15px; margin: 0; }
-        .header { color: #ff3131; font-size: 30px; font-weight: bold; padding: 20px 0; text-shadow: 2px 2px 10px rgba(255, 0, 0, 0.3); }
-        #cardsList { display: flex; flex-direction: column; gap: 15px; max-width: 400px; margin: 0 auto; min-height: 200px; }
-        .card { background: #1a1a1a; border-radius: 15px; padding: 18px; border: 1px solid #333; position: relative; transition: 0.3s; }
-        .card:active { transform: scale(0.98); }
-        .card-code { color: #ffff00; font-size: 22px; font-weight: bold; margin-bottom: 12px; display: block; letter-spacing: 1px; }
-        .card-stats { display: flex; justify-content: space-between; color: #aaa; font-size: 14px; border-top: 1px solid #333; pt: 10px; margin-top: 10px; }
-        .stat-value { display: block; color: #fff; font-size: 18px; font-weight: bold; }
-        .btn-charge { background: #ff3131; color: white; border: none; width: 100%; padding: 12px; border-radius: 8px; font-size: 18px; font-weight: bold; margin-top: 15px; cursor: pointer; }
-        .status-msg { color: #888; font-size: 14px; margin-top: 20px; }
+        body { background-color: #0d0d0d; color: white; font-family: sans-serif; text-align: center; padding: 20px; }
+        .header { color: #ff3131; font-size: 30px; font-weight: bold; margin-bottom: 20px; text-transform: uppercase; }
+        #cardsList { display: flex; flex-direction: column; gap: 15px; max-width: 400px; margin: 0 auto; }
+        .card { background: #1a1a1a; border-radius: 12px; padding: 20px; border: 1px solid #333; border-bottom: 4px solid #ff3131; }
+        .card-code { color: #fbff00; font-size: 24px; font-weight: bold; margin-bottom: 10px; display: block; }
+        .card-stats { display: flex; justify-content: space-between; color: #bbb; font-size: 14px; margin-top: 10px; border-top: 1px solid #333; padding-top: 10px; }
+        .stat-value { display: block; color: white; font-size: 18px; font-weight: bold; }
+        .btn-charge { background-color: #ff3131; color: white; border: none; width: 100%; padding: 12px; border-radius: 8px; font-size: 18px; font-weight: bold; margin-top: 15px; cursor: pointer; }
+        .loading-text { color: #888; font-style: italic; }
     </style>
 </head>
 <body>
 
     <div class="header">ALHWARY NET</div>
     
-    <div id="cardsList">جاري محاولة سحب الكروت...</div>
-    <div id="status" class="status-msg"></div>
+    <div id="cardsList" class="loading-text">جاري محاولة الاتصال بالسيرفر...</div>
 
     <script>
-        // الرابط المباشر من render
+        // رابط المصدر اللي طلعناه من الـ Network
         const targetUrl = 'https://repository-o2oweb.onrender.com/get-cards';
 
         async function fetchCards() {
             const container = document.getElementById('cardsList');
-            const status = document.getElementById('status');
+            
+            // بنجرب 3 بروكسيات مختلفة عشان نضمن الوصول
+            const proxies = [
+                'https://api.allorigins.win/get?url=',
+                'https://corsproxy.io/?',
+                'https://thingproxy.freeboard.io/fetch/'
+            ];
 
-            try {
-                // استخدام بروكسي "cors-anywhere" البديل أو إضافة Timestamp لمنع الكاش
-                const response = await fetch('https://api.allorigins.win/get?url=' + encodeURIComponent(targetUrl) + '&t=' + Date.now());
-                
-                if (!response.ok) throw new Error();
+            for (let proxy of proxies) {
+                try {
+                    const response = await fetch(proxy + encodeURIComponent(targetUrl) + (proxy.includes('allorigins') ? '&cache=' + Date.now() : ''));
+                    
+                    let data;
+                    if (proxy.includes('allorigins')) {
+                        const json = await response.json();
+                        data = JSON.parse(json.contents);
+                    } else {
+                        data = await response.json();
+                    }
 
-                const data = await response.json();
-                const apiData = JSON.parse(data.contents);
-                const cards = apiData.cards;
-
-                if (!cards || cards.length === 0) {
-                    container.innerHTML = "لا توجد كروت متاحة حالياً.";
-                    return;
+                    if (data && data.cards) {
+                        renderCards(data.cards);
+                        return; // لو نجحنا نخرج من المحاولات
+                    }
+                } catch (e) {
+                    console.log("فشل البروكسي، بنجرب اللي بعده...");
                 }
-
-                container.innerHTML = ''; 
-                cards.forEach(card => {
-                    container.innerHTML += `
-                        <div class="card">
-                            <span class="card-code">*858*${card.card_serial}#</span>
-                            <div class="card-stats">
-                                <div>الوحدات <span class="stat-value">${card.gift_units}</span></div>
-                                <div>متبقي <span class="stat-value">${card.remaining_dedications}</span></div>
-                            </div>
-                            <button class="btn-charge" onclick="window.location.href='tel:*858*${card.card_serial}#'">شحن الآن</button>
-                        </div>
-                    `;
-                });
-                status.innerText = "آخر تحديث: " + new Date().toLocaleTimeString('ar-EG');
-
-            } catch (error) {
-                // لو فشل، بنجرب رابط البروكسي التاني تلقائياً
-                console.log("إعادة محاولة الاتصال...");
-                status.innerText = "جاري إعادة الاتصال بالسيرفر الأصلي...";
             }
+            container.innerHTML = "عفواً، السيرفر الأصلي لا يستجيب حالياً. سأحاول مجدداً خلال ثوانٍ.";
         }
 
-        // التحديث كل 10 ثواني بالظبط
+        function renderCards(cards) {
+            const container = document.getElementById('cardsList');
+            container.innerHTML = ''; 
+            cards.forEach(card => {
+                container.innerHTML += `
+                    <div class="card">
+                        <span class="card-code">*858*${card.card_serial}#</span>
+                        <div class="card-stats">
+                            <div>الوحدات <span class="stat-value">${card.gift_units}</span></div>
+                            <div>متبقي <span class="stat-value">${card.remaining_dedications}</span></div>
+                        </div>
+                        <button class="btn-charge" onclick="window.location.href='tel:*858*${card.card_serial}#'">شحن الآن</button>
+                    </div>
+                `;
+            });
+        }
+
+        // تحديث كل 10 ثواني كما في الملفات المرفقة
         setInterval(fetchCards, 10000);
         fetchCards();
     </script>
