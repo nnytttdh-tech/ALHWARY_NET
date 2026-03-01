@@ -14,6 +14,7 @@
             display: flex; 
             flex-direction: column; 
             align-items: center; 
+            min-height: 100vh;
         }
 
         /* الهيدر الشيك */
@@ -23,26 +24,27 @@
             background: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%);
             border-bottom: 3px solid #ff0000;
             text-align: center;
-            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.2);
+            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.4);
             margin-bottom: 30px;
         }
 
         h1 { margin: 0; font-size: 2.5rem; letter-spacing: 2px; }
-        .red-text { color: #ff0000; text-shadow: 0 0 10px rgba(255, 0, 0, 0.5); }
+        .red-text { color: #ff0000; text-shadow: 0 0 10px rgba(255, 0, 0, 0.8); }
 
         /* حاوية الأكواد */
         #code-list {
-            width: 90%;
+            width: 95%;
             max-width: 600px;
             display: flex;
-            flex-direction: column-reverse; /* الجديد يظهر فوق */
-            gap: 20px;
+            flex-direction: column; /* الجديد سيظهر فوق باستخدام prepend */
+            gap: 15px;
+            padding-bottom: 50px;
         }
 
         /* تصميم بطاقة الكود (البوكس الشيك) */
         .code-card {
             background: #1a1a1a;
-            border-left: 5px solid #ff0000;
+            border-right: 5px solid #ff0000;
             border-radius: 12px;
             padding: 20px;
             display: flex;
@@ -55,24 +57,33 @@
 
         .code-card:hover { transform: scale(1.02); }
 
-        .code-content { display: flex; flex-direction: column; }
+        .code-content { display: flex; flex-direction: column; align-items: flex-start; }
         
         .code-value { 
-            font-size: 1.4rem; 
-            color: #00ff00; /* أخضر فسفوري */
+            font-size: 1.6rem; 
+            color: #00ff00; /* أخضر فسفوري واضح */
             font-weight: bold; 
             font-family: monospace;
             margin-bottom: 5px;
+            letter-spacing: 1px;
         }
 
-        .code-label { color: #888; font-size: 0.8rem; text-transform: uppercase; }
+        .code-label { color: #888; font-size: 0.9rem; margin-bottom: 4px; }
+        .units-badge { 
+            background: #ff0000; 
+            color: white; 
+            padding: 2px 10px; 
+            border-radius: 20px; 
+            font-size: 0.8rem; 
+            font-weight: bold;
+        }
 
         @keyframes slideIn {
-            from { opacity: 0; transform: translateX(-20px); }
-            to { opacity: 1; transform: translateX(0); }
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .loading { color: #ff0000; font-style: italic; margin-top: 50px; }
+        .loading { color: #ff0000; font-style: italic; margin-top: 50px; font-size: 1.2rem; }
     </style>
 </head>
 <body>
@@ -82,7 +93,7 @@
     </div>
 
     <div id="code-list">
-        <p class="loading">جاري انتظار الأكواد من البوت...</p>
+        <p class="loading" id="status-msg">جاري فحص الأكواد الجديدة من البوت...</p>
     </div>
 
     <script>
@@ -90,44 +101,48 @@
 
         async function updatePage() {
             try {
-                // جلب البيانات من ملف البوت
+                // جلب البيانات من ملف codes.json
+                // إضافة متغير لمنع التخزين المؤقت (Cache)
                 const response = await fetch('./codes.json?v=' + Date.now());
                 if (!response.ok) return;
 
                 const data = await response.json();
-                
-                if (data.latest_code) {
-                    const codesArray = JSON.parse(data.latest_code);
-                    const container = document.getElementById('code-list');
+                const container = document.getElementById('code-list');
+                const statusMsg = document.getElementById('status-msg');
 
-                    codesArray.forEach(item => {
-                        if (!seenCodes.has(item.code)) {
-                            // إزالة رسالة التحميل أول مرة
-                            if (seenCodes.size === 0) container.innerHTML = '';
-                            
-                            seenCodes.add(item.code);
-
-                            // إنشاء البطاقة الشيك
-                            const card = document.createElement('div');
-                            card.className = 'code-card';
-                            card.innerHTML = `
-                                <div class="code-content">
-                                    <span class="code-label">كود جديد مستلم</span>
-                                    <span class="code-value">${item.code}</span>
-                                </div>
-                                <div style="color: #444; font-size: 1.2rem;">⚡</div>
-                            `;
-                            container.appendChild(card);
-                        }
-                    });
+                // مسح الرسالة القديمة إذا وجدت بيانات
+                if (data.length > 0 && statusMsg) {
+                    statusMsg.remove();
                 }
+
+                // معالجة كل كود في المصفوفة
+                data.forEach(item => {
+                    if (!seenCodes.has(item.code)) {
+                        seenCodes.add(item.code);
+
+                        // إنشاء بطاقة الكود بتصميمك المفضل
+                        const card = document.createElement('div');
+                        card.className = 'code-card';
+                        card.innerHTML = `
+                            <div class="code-content">
+                                <span class="code-label">كود مستلم بنجاح ✅</span>
+                                <span class="code-value">${item.code}</span>
+                                <span class="units-badge">${item.units} وحدة</span>
+                            </div>
+                            <div style="color: #ff0000; font-size: 2rem; filter: drop-shadow(0 0 5px red);">⚡</div>
+                        `;
+                        // إضافة الكود الجديد في أعلى القائمة
+                        container.prepend(card);
+                    }
+                });
             } catch (e) {
-                console.log("Waiting for data...");
+                console.log("Waiting for data update...");
             }
         }
 
-        // تحديث كل 5 ثوانٍ
+        // تحديث كل 5 ثوانٍ تلقائياً
         setInterval(updatePage, 5000);
+        // تشغيل أول مرة عند فتح الصفحة
         updatePage();
     </script>
 </body>
