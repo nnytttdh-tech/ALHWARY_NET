@@ -3,139 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ALHWARY_NET | PREMIUM SYSTEM</title>
+    <title>ALHWARY_NET | PREMIUM</title>
     <style>
-        :root { --primary: #ff0000; --bg: #050505; --card-bg: rgba(20, 20, 20, 0.9); }
-        body { background-color: var(--bg); color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; overflow-x: hidden; }
+        :root { --primary: #ff0000; --accent: #00ff00; --bg: #050505; }
+        body { background: var(--bg); color: #fff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
         
-        /* تصميم الهيدر */
-        .header { padding: 40px 0; text-align: center; border-bottom: 1px solid #1a1a1a; }
-        .red-glow { color: var(--primary); text-shadow: 0 0 15px var(--primary); font-weight: 900; font-size: 2.2rem; }
+        /* شاشة القفل الاحترافية */
+        #lock-screen { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; align-items: center; justify-content: center; text-align: center; }
+        .lock-card { background: #0d0d0d; border: 1px solid var(--primary); padding: 40px; border-radius: 25px; box-shadow: 0 0 40px rgba(255,0,0,0.2); width: 85%; max-width: 380px; }
+        .lock-input { width: 100%; padding: 15px; margin: 20px 0; background: #151515; border: 1px solid #333; color: #fff; border-radius: 12px; text-align: center; font-size: 1.3rem; outline: none; transition: 0.3s; }
+        .lock-input:focus { border-color: var(--primary); box-shadow: 0 0 15px var(--primary); }
+        .lock-btn { width: 100%; padding: 15px; background: var(--primary); color: #fff; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
 
-        .container { width: 92%; max-width: 450px; margin: 20px auto; }
-
-        /* شاشة القفل */
-        #lock-screen { position: fixed; inset: 0; background: #000; z-index: 10000; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(15px); }
-        .lock-box { background: var(--card-bg); border: 1px solid var(--primary); padding: 35px; border-radius: 20px; text-align: center; width: 85%; box-shadow: 0 0 30px rgba(255,0,0,0.2); }
+        /* الواجهة الرئيسية */
+        .header { width: 100%; padding: 30px 0; text-align: center; border-bottom: 1px solid #222; margin-bottom: 30px; }
+        .neon-text { color: var(--primary); text-shadow: 0 0 15px var(--primary); font-weight: 900; font-size: 2rem; }
+        .container { width: 90%; max-width: 500px; }
         
-        .lock-input { width: 100%; padding: 15px; margin: 20px 0; background: #000; border: 1px solid #333; color: #fff; border-radius: 10px; text-align: center; font-size: 1.5rem; outline: none; box-sizing: border-box; }
-        .lock-input:focus { border-color: var(--primary); }
+        .card-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
+        .code-card { background: rgba(20,20,20,0.8); border: 1px solid #222; border-right: 5px solid var(--primary); padding: 20px; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; transition: 0.3s; animation: fadeIn 0.5s ease forwards; }
+        .code-card:hover { transform: scale(1.02); background: #111; }
         
-        .lock-btn { width: 100%; padding: 15px; background: var(--primary); color: #fff; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 1.1rem; }
-
-        /* الكروت */
-        .stat-card { background: var(--card-bg); padding: 20px; border-radius: 15px; text-align: center; margin-bottom: 20px; border: 1px solid #222; }
-        .stat-num { font-size: 2.2rem; color: var(--primary); font-weight: bold; }
-
-        .code-item { 
-            background: #0d0d0d; border-right: 4px solid var(--primary);
-            margin-bottom: 12px; padding: 18px; border-radius: 12px;
-            display: flex; justify-content: space-between; align-items: center;
-            animation: fadeIn 0.5s ease forwards;
-        }
+        .code-info h3 { margin: 0; color: var(--accent); font-family: monospace; font-size: 1.6rem; }
+        .unit-tag { background: rgba(255,0,0,0.1); color: var(--primary); padding: 3px 10px; border-radius: 6px; font-size: 0.8rem; margin-top: 5px; display: inline-block; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        .code-val { font-family: monospace; color: #00ff88; font-size: 1.4rem; font-weight: bold; }
-        .units-badge { background: rgba(255,0,0,0.1); color: var(--primary); padding: 2px 10px; border-radius: 5px; font-size: 0.8rem; border: 1px solid rgba(255,0,0,0.2); }
-
-        footer { text-align: center; padding: 20px; color: #333; font-size: 0.7rem; }
+        footer { margin-top: auto; padding: 20px; color: #444; font-size: 0.8rem; }
     </style>
 </head>
 <body>
 
     <div id="lock-screen">
-        <div class="lock-box">
-            <h2 class="red-glow" style="font-size: 1.5rem;">SECURITY ACCESS</h2>
-            <p style="color: #666; font-size: 0.9rem;">نظام الهواري المتغير - أدخل الشفرة</p>
-            <input type="password" id="pass-input" class="lock-input" placeholder="0000">
-            <button class="lock-btn" onclick="checkAccess()">دخول النظام</button>
-            <p id="err" style="color:var(--primary); display:none; margin-top:15px; font-size:0.8rem;">⚠️ الشفرة غير صحيحة أو انتهت!</p>
+        <div class="lock-card">
+            <h2 style="color:var(--primary); margin:0;">SYSTEM LOCK</h2>
+            <p style="color:#666; font-size:0.9rem;">ادخل شفرة الوقت للوصول</p>
+            <input type="password" id="pass-input" class="lock-input" placeholder="••••">
+            <button class="lock-btn" onclick="checkAccess()">تأكيد الهوية</button>
+            <p id="err" style="color:red; display:none; margin-top:15px;">الشفرة غير صحيحة!</p>
         </div>
     </div>
 
     <div class="header">
-        <h1 class="red-glow">ALHWARY <span style="color:#fff">NET</span></h1>
+        <div class="neon-text">ALHWARY <span style="color:#fff;">NET</span></div>
     </div>
 
     <div class="container">
-        <div class="stat-card">
-            <span style="color:#666; font-size:0.8rem; display:block; margin-bottom:5px;">كروت نشطة حالياً</span>
-            <span class="stat-num" id="total-codes">0</span>
-        </div>
-        <div id="code-list"></div>
+        <div id="code-list" class="card-grid">
+            </div>
     </div>
 
-    <footer>BY ALHWARY SYSTEM &copy; 2026</footer>
+    <footer>BY ALHWARY | VER 2026.1</footer>
 
     <script>
-        // إعدادات البوت (تأكد من وضع التوكن والـ ID الصحيح)
-        const TG_TOKEN = "7737242130:AAECXvX_Y37L9XF-P8O76G7S2-K8975G-P0";
-        const TG_CHAT_ID = "6102142273";
+        // إعدادات التليجرام
+        const BOT_TOKEN = "7737242130:AAECXvX_Y37L9XF-P8O76G7S2-K8975G-P0"; // حط التوكن بتاعك
+        const CHAT_ID = "6102142273"; // حط الشات أي دي بتاعك
 
-        // المعادلة المطلوبة: 2026 + الساعة + 2026
-        function getHourlyPassword() {
-            const hour = new Date().getHours();
-            return (2026 + hour + 2026).toString();
+        // المعادلة: 2026 + الساعة + 2026
+        function getPass() {
+            const h = new Date().getHours();
+            return (2026 + h + 2026).toString();
         }
 
-        // فحص حالة الدخول
-        if (localStorage.getItem('alhwary_auth') === 'granted') {
+        // إشعار التليجرام
+        function notify() {
+            const msg = "🚀 دخول جديد للموقع بنجاح!";
+            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(msg)}`);
+        }
+
+        // فحص الدخول والطرد
+        if (localStorage.getItem('alhwary_session') === 'active') {
             document.getElementById('lock-screen').style.display = 'none';
         }
 
         function checkAccess() {
-            const input = document.getElementById('pass-input').value;
-            if (input === getHourlyPassword()) {
-                localStorage.setItem('alhwary_auth', 'granted');
-                // إرسال إشعار تليجرام عند الدخول
-                fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage?chat_id=${TG_CHAT_ID}&text=${encodeURIComponent("✅ تم دخول شخص للموقع بنجاح!")}`);
+            const val = document.getElementById('pass-input').value;
+            if (val === getPass()) {
+                localStorage.setItem('alhwary_session', 'active');
+                notify();
                 document.getElementById('lock-screen').style.display = 'none';
             } else {
                 document.getElementById('err').style.display = 'block';
-                setTimeout(() => document.getElementById('err').style.display = 'none', 2000);
+                setTimeout(() => { document.getElementById('err').style.display = 'none'; }, 2000);
             }
         }
 
-        let seenCodes = new Set();
-        async function fetchCodes() {
+        // جلب البيانات
+        let seen = new Set();
+        async function load() {
             try {
-                const res = await fetch('./codes.json?t=' + Date.now());
-                const rawData = await res.text();
-                
-                // فحص ميزة الطرد (إذا وجدت الكلمة يمسح الدخول)
-                if (rawData.includes("FORCE_LOGOUT")) {
-                    localStorage.removeItem('alhwary_auth');
+                const r = await fetch('./codes.json?v=' + Date.now());
+                const data = await r.json();
+
+                // ميزة الطرد برمجياً (Remote Logout)
+                if (JSON.stringify(data).includes("FORCE_LOGOUT")) {
+                    localStorage.removeItem('alhwary_session');
                     location.reload();
                     return;
                 }
 
-                // تحويل النص لـ JSON نظيف
-                const codes = JSON.parse(rawData.replace(/FORCE_LOGOUT/g, ''));
-                
-                document.getElementById('total-codes').innerText = codes.length;
                 const list = document.getElementById('code-list');
-                
-                codes.reverse().forEach((item) => {
-                    if (item.code && !seenCodes.has(item.code)) {
-                        seenCodes.add(item.code);
+                data.reverse().forEach(item => {
+                    if (!seen.has(item.code)) {
+                        seen.add(item.code);
                         const div = document.createElement('div');
-                        div.className = 'code-item';
-                        div.innerHTML = `
-                            <div>
-                                <div class="code-val">${item.code}</div>
-                                <span class="units-badge">${item.units} UNIT</span>
-                            </div>
-                            <div style="color:var(--primary); font-size:1.2rem;">⚡</div>
-                        `;
+                        div.className = 'code-card';
+                        div.innerHTML = `<div class="code-info"><h3>${item.code}</h3><span class="unit-tag">${item.units} وحدة</span></div><div style="font-size:1.5rem;">⚡</div>`;
                         list.prepend(div);
                     }
                 });
-            } catch (e) { console.log("Waiting for data..."); }
+            } catch (e) {}
         }
 
-        setInterval(fetchCodes, 8000); // تحديث كل 8 ثواني
-        fetchCodes();
+        setInterval(load, 8000);
+        load();
     </script>
 </body>
 </html>
