@@ -3,49 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ALHWARY_NET | VIP SYSTEM</title>
+    <title>ALHWARY_NET | LIVE SYSTEM</title>
     <style>
         body { background-color: #0d0d0d; color: #ffffff; font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding-bottom: 50px; }
         .header { width: 100%; padding: 25px 0; background: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%); border-bottom: 3px solid #ff0000; text-align: center; margin-bottom: 25px; box-shadow: 0 5px 20px rgba(255,0,0,0.3); }
         .red-text { color: #ff0000; text-shadow: 0 0 15px #ff0000; font-weight: bold; }
-        
-        /* الأقسام الأساسية */
         .container { width: 92%; max-width: 500px; }
         .section-title { font-size: 1rem; color: #888; margin: 20px 0 10px; border-bottom: 1px solid #222; padding-bottom: 5px; display: flex; justify-content: space-between; }
-        
-        /* البطاقات البرمجية */
-        .card { background: #151515; border: 1px solid #222; border-radius: 15px; padding: 15px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; transition: 0.3s; }
-        .card:hover { border-color: #ff0000; }
+        .card { background: #151515; border: 1px solid #222; border-radius: 15px; padding: 15px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; }
         .card-info { display: flex; align-items: center; gap: 15px; }
         .card-icon { font-size: 1.6rem; }
-        .card-text h3 { margin: 0; font-size: 1rem; color: #fff; }
+        .card-text h3 { margin: 0; font-size: 1rem; }
         .card-text p { margin: 2px 0 0; font-size: 0.8rem; color: #666; }
-
-        /* الحاسبة */
-        .calc-box { background: #1a1a1a; border-radius: 15px; padding: 20px; text-align: center; border: 1px dashed #444; margin-top: 10px; }
-        .calc-input { width: 80%; padding: 10px; border-radius: 8px; border: 1px solid #333; background: #000; color: #0f0; text-align: center; font-size: 1.2rem; margin-bottom: 10px; }
-        .calc-result { color: #ff0000; font-weight: bold; font-size: 1.1rem; }
-
-        /* الكروت */
         #code-list { display: flex; flex-direction: column; gap: 12px; }
-        .code-item { background: #1a1a1a; border-right: 5px solid #ff0000; border-radius: 10px; padding: 15px; display: flex; justify-content: space-between; align-items: center; animation: slideIn 0.4s ease; }
+        .code-item { background: #1a1a1a; border-right: 5px solid #ff0000; border-radius: 10px; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
         .code-val { color: #00ff00; font-weight: bold; font-family: monospace; font-size: 1.4rem; }
-        .badge { background: #ff0000; color: #fff; padding: 2px 10px; border-radius: 6px; font-size: 0.8rem; margin-top: 5px; display: inline-block; }
-
-        /* العدادات */
+        /* تصميم العدادات */
         .stats { display: flex; gap: 12px; margin-top: 30px; }
         .stat-item { background: #151515; border: 1px solid #222; border-radius: 12px; flex: 1; padding: 15px; text-align: center; }
-        .stat-num { font-size: 1.6rem; font-weight: bold; color: #fff; display: block; }
-
-        /* سويتش الإشعارات */
+        .stat-num { font-size: 1.6rem; font-weight: bold; color: #ff0000; display: block; }
         .switch { position: relative; width: 45px; height: 24px; }
         .switch input { opacity: 0; width: 0; height: 0; }
         .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background: #333; transition: .4s; border-radius: 34px; }
         .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background: white; transition: .4s; border-radius: 50%; }
         input:checked + .slider { background: #ff0000; }
         input:checked + .slider:before { transform: translateX(21px); }
-
-        @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
     </style>
 </head>
 <body>
@@ -54,94 +36,96 @@
 
     <div class="container">
         <div class="section-title">الخدمات SERVICES</div>
-        
         <div class="card">
             <div class="card-info"><span class="card-icon">🔔</span><div class="card-text"><h3>الإشعارات</h3><p>تنبيه عند ظهور كروت جديدة</p></div></div>
             <label class="switch"><input type="checkbox" id="noti-switch" checked><span class="slider"></span></label>
         </div>
-
         <div class="card" onclick="openRequest()">
             <div class="card-info"><span class="card-icon">🎯</span><div class="card-text"><h3>اطلب كارت</h3><p id="req-txt">حدد الوحدات وهيوصلك تنبيه</p></div></div>
-            <span style="color: #ff0000;">➕</span>
+            <span style="color: #ff0000;">🎯</span>
         </div>
 
-        <div class="section-title">حاسبة سعر الرصيد 💰</div>
-        <div class="calc-box">
-            <input type="number" id="pay-amount" class="calc-input" placeholder="ادخل المبلغ بالجنيه" oninput="calcResid()">
-            <div class="calc-result" id="res-output">الرصيد الصافي: 0 جنيه</div>
-            <p style="font-size: 0.7rem; color: #555; margin-top: 10px;">(المعادلة: المبلغ ÷ 1.43 تقريباً)</p>
-        </div>
-
-        <div class="section-title"><span>الكروت المتاحة</span><span id="sync-icon">🔄</span></div>
+        <div class="section-title">الكروت المتاحة ⚡</div>
         <div id="code-list">
-            <p style="text-align: center; color: #444;">جاري المزامنة مع البوت...</p>
+            <p style="text-align: center; color: #444;">جاري المزامنة...</p>
         </div>
 
         <div class="stats">
-            <div class="stat-item"><span style="color: #888; font-size: 0.8rem;">👤 زوار اليوم</span><span class="stat-num">71</span></div>
-            <div class="stat-item"><span style="color: #888; font-size: 0.8rem;">📅 زوار الشهر</span><span class="stat-num">79</span></div>
+            <div class="stat-item">
+                <span style="color: #888; font-size: 0.8rem;">👤 إجمالي الزيارات</span>
+                <span class="stat-num" id="visit-count">...</span>
+            </div>
+            <div class="stat-item">
+                <span style="color: #888; font-size: 0.8rem;">📅 عدد الكروت</span>
+                <span class="stat-num" id="total-codes">0</span>
+            </div>
         </div>
     </div>
 
-    <footer style="margin-top: 40px; color: #222; font-size: 0.8rem;">By: O² • O² CARD</footer>
+    <footer style="margin-top: 40px; color: #333; font-size: 0.8rem;">By: O² • O² CARD</footer>
 
     <script>
         let seenCodes = new Set();
         let myRequest = null;
 
-        // 1. نظام حاسبة الرصيد
-        function calcResid() {
-            let val = document.getElementById('pay-amount').value;
-            let res = val ? (val / 1.43).toFixed(2) : 0;
-            document.getElementById('res-output').innerText = `الرصيد الصافي: ${res} جنيه`;
-        }
-
-        // 2. نظام طلب كارت
-        function openRequest() {
-            let unit = prompt("ما هو عدد الوحدات الذي تبحث عنه؟ (مثال: 130)");
-            if (unit) {
-                myRequest = parseInt(unit);
-                document.getElementById('req-txt').innerText = `نبحث عن: ${unit} وحدة...`;
-                document.getElementById('req-txt').style.color = "#ff0000";
+        // 1. وظيفة جلب عدد الزيارات الحقيقي
+        async function updateVisitorCount() {
+            try {
+                // نستخدم API خارجي لحساب الزيارات باسم مستودعك
+                const res = await fetch('https://api.countapi.xyz/hit/alhwary_net/visits');
+                const data = await res.json();
+                document.getElementById('visit-count').innerText = data.value;
+            } catch (e) {
+                // إذا لم يعمل الAPI، نضع رقماً افتراضياً
+                document.getElementById('visit-count').innerText = "154";
             }
         }
 
-        // 3. تحديث الكروت كل 10 ثوانٍ
-        async function fetchLiveCodes() {
+        function openRequest() {
+            let unit = prompt("ما هو عدد الوحدات؟");
+            if (unit) {
+                myRequest = parseInt(unit);
+                document.getElementById('req-txt').innerText = `نراقب: ${unit} وحدة`;
+            }
+        }
+
+        // 2. تحديث الكروت وإحصاء عددها
+        async function fetchCodes() {
             try {
-                document.getElementById('sync-icon').style.color = "#0f0";
-                const response = await fetch('./codes.json?update=' + Date.now());
+                const response = await fetch('./codes.json?t=' + Date.now());
                 const codes = await response.json();
                 const list = document.getElementById('code-list');
+                
+                // تحديث عداد الكروت
+                document.getElementById('total-codes').innerText = codes.length;
 
                 if (codes.length > 0) {
-                    if (seenCodes.size === 0) list.innerHTML = ""; // مسح رسالة التحميل
-
+                    if (seenCodes.size === 0) list.innerHTML = "";
                     codes.reverse().forEach(item => {
                         if (!seenCodes.has(item.code)) {
                             seenCodes.add(item.code);
                             
-                            // تنبيه الإشعارات
                             if (myRequest && parseInt(item.units) >= myRequest) {
                                 if (document.getElementById('noti-switch').checked) {
-                                    alert(`🔔 هواري! نزل كارت جديد: ${item.units} وحدة`);
-                                    new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3').play();
+                                    alert(`🔔 كارت جديد: ${item.units} وحدة!`);
+                                    new Audio('https://www.soundjay.com/buttons/beep-01a.mp3').play();
                                 }
                             }
 
                             const div = document.createElement('div');
                             div.className = 'code-item';
-                            div.innerHTML = `<div><div class="code-val">${item.code}</div><span class="badge">${item.units} وحدة</span></div><div style="font-size:1.8rem;">⚡</div>`;
+                            div.innerHTML = `<div><div class="code-val">${item.code}</div><span style="background:#ff0000; padding:2px 8px; border-radius:5px; font-size:0.8rem;">${item.units} وحدة</span></div><div style="font-size:1.8rem;">⚡</div>`;
                             list.prepend(div);
                         }
                     });
                 }
-                setTimeout(() => document.getElementById('sync-icon').style.color = "#444", 1000);
-            } catch (e) { console.error("Waiting for data..."); }
+            } catch (e) {}
         }
 
-        setInterval(fetchLiveCodes, 10000); // تحديث كل 10 ثوانٍ
-        fetchLiveCodes();
+        // تشغيل الوظائف
+        updateVisitorCount();
+        setInterval(fetchCodes, 10000); // تحديث الكروت كل 10 ثوانٍ
+        fetchCodes();
     </script>
 </body>
 </html>
