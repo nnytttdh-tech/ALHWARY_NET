@@ -3,120 +3,132 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ALHWARY_NET | PREMIUM</title>
+    <title>O2 Card - لوحة الكروت</title>
     <style>
-        :root { --primary: #ff0000; --accent: #00ff00; --bg: #050505; }
-        body { background: var(--bg); color: #fff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
-        
-        /* شاشة القفل الاحترافية */
-        #lock-screen { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; align-items: center; justify-content: center; text-align: center; }
-        .lock-card { background: #0d0d0d; border: 1px solid var(--primary); padding: 40px; border-radius: 25px; box-shadow: 0 0 40px rgba(255,0,0,0.2); width: 85%; max-width: 380px; }
-        .lock-input { width: 100%; padding: 15px; margin: 20px 0; background: #151515; border: 1px solid #333; color: #fff; border-radius: 12px; text-align: center; font-size: 1.3rem; outline: none; transition: 0.3s; }
-        .lock-input:focus { border-color: var(--primary); box-shadow: 0 0 15px var(--primary); }
-        .lock-btn { width: 100%; padding: 15px; background: var(--primary); color: #fff; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
-
-        /* الواجهة الرئيسية */
-        .header { width: 100%; padding: 30px 0; text-align: center; border-bottom: 1px solid #222; margin-bottom: 30px; }
-        .neon-text { color: var(--primary); text-shadow: 0 0 15px var(--primary); font-weight: 900; font-size: 2rem; }
-        .container { width: 90%; max-width: 500px; }
-        
-        .card-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
-        .code-card { background: rgba(20,20,20,0.8); border: 1px solid #222; border-right: 5px solid var(--primary); padding: 20px; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; transition: 0.3s; animation: fadeIn 0.5s ease forwards; }
-        .code-card:hover { transform: scale(1.02); background: #111; }
-        
-        .code-info h3 { margin: 0; color: var(--accent); font-family: monospace; font-size: 1.6rem; }
-        .unit-tag { background: rgba(255,0,0,0.1); color: var(--primary); padding: 3px 10px; border-radius: 6px; font-size: 0.8rem; margin-top: 5px; display: inline-block; }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        footer { margin-top: auto; padding: 20px; color: #444; font-size: 0.8rem; }
+        /* التنسيق ليكون شبه الصورة بالظبط */
+        body {
+            background-color: #0d0d0d;
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            color: #ff3b3b;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        #cardsList {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .card {
+            background: linear-gradient(145deg, #1a1a1a, #262626);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #333;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+        .card-code {
+            color: #fbff00;
+            font-size: 22px;
+            text-align: center;
+            font-weight: bold;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+        }
+        .card-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            color: #bbb;
+            margin-bottom: 15px;
+        }
+        .stat-box { text-align: center; }
+        .stat-value {
+            display: block;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+        .btn-charge {
+            background-color: #d32f2f;
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-charge:hover { background-color: #ff1717; }
+        .loading { text-align: center; color: #888; }
     </style>
 </head>
 <body>
 
-    <div id="lock-screen">
-        <div class="lock-card">
-            <h2 style="color:var(--primary); margin:0;">SYSTEM LOCK</h2>
-            <p style="color:#666; font-size:0.9rem;">ادخل شفرة الوقت للوصول</p>
-            <input type="password" id="pass-input" class="lock-input" placeholder="••••">
-            <button class="lock-btn" onclick="checkAccess()">تأكيد الهوية</button>
-            <p id="err" style="color:red; display:none; margin-top:15px;">الشفرة غير صحيحة!</p>
-        </div>
-    </div>
-
-    <div class="header">
-        <div class="neon-text">ALHWARY <span style="color:#fff;">NET</span></div>
-    </div>
-
-    <div class="container">
-        <div id="code-list" class="card-grid">
-            </div>
-    </div>
-
-    <footer>BY ALHWARY | VER 2026.1</footer>
+    <div class="header">O2 CARD - الكروت المتاحة</div>
+    
+    <div id="cardsList" class="loading">جاري سحب أحدث الكروت...</div>
 
     <script>
-        // إعدادات التليجرام
-        const BOT_TOKEN = "7737242130:AAECXvX_Y37L9XF-P8O76G7S2-K8975G-P0"; // حط التوكن بتاعك
-        const CHAT_ID = "6102142273"; // حط الشات أي دي بتاعك
+        const targetUrl = 'https://repository-o2oweb.onrender.com/get-cards';
+        // استخدام بروكسي لتخطي حماية المتصفح (CORS)
+        const proxyUrl = 'https://api.allorigins.win/get?url=' + encodeURIComponent(targetUrl);
 
-        // المعادلة: 2026 + الساعة + 2026
-        function getPass() {
-            const h = new Date().getHours();
-            return (2026 + h + 2026).toString();
-        }
+        async function updateCards() {
+            try {
+                const response = await fetch(proxyUrl);
+                const data = await response.json();
+                
+                // تحويل النص المستلم لـ JSON حقيقي
+                const apiData = JSON.parse(data.contents);
+                const cards = apiData.cards;
 
-        // إشعار التليجرام
-        function notify() {
-            const msg = "🚀 دخول جديد للموقع بنجاح!";
-            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(msg)}`);
-        }
+                const container = document.getElementById('cardsList');
+                container.innerHTML = ''; // تنظيف القائمة قبل التحديث
 
-        // فحص الدخول والطرد
-        if (localStorage.getItem('alhwary_session') === 'active') {
-            document.getElementById('lock-screen').style.display = 'none';
-        }
+                cards.forEach(card => {
+                    // بناء شكل الكارت بناءً على البيانات (Serial, Units, Remaining)
+                    container.innerHTML += `
+                        <div class="card">
+                            <div class="card-code">*858*${card.card_serial}#</div>
+                            <div class="card-stats">
+                                <div class="stat-box">
+                                    الوحدات
+                                    <span class="stat-value">${card.gift_units}</span>
+                                </div>
+                                <div class="stat-box">
+                                    متبقي
+                                    <span class="stat-value">${card.remaining_dedications}</span>
+                                </div>
+                            </div>
+                            <button class="btn-charge" onclick="window.location.href='tel:*858*${card.card_serial}#'">📞 شحن الكارت</button>
+                        </div>
+                    `;
+                });
 
-        function checkAccess() {
-            const val = document.getElementById('pass-input').value;
-            if (val === getPass()) {
-                localStorage.setItem('alhwary_session', 'active');
-                notify();
-                document.getElementById('lock-screen').style.display = 'none';
-            } else {
-                document.getElementById('err').style.display = 'block';
-                setTimeout(() => { document.getElementById('err').style.display = 'none'; }, 2000);
+                console.log("تم التحديث بنجاح: " + new Date().toLocaleTimeString());
+
+            } catch (error) {
+                console.error("خطأ في جلب البيانات:", error);
+                document.getElementById('cardsList').innerHTML = "فشل في تحديث البيانات. جاري المحاولة مرة أخرى...";
             }
         }
 
-        // جلب البيانات
-        let seen = new Set();
-        async function load() {
-            try {
-                const r = await fetch('./codes.json?v=' + Date.now());
-                const data = await r.json();
+        // تشغيل التحديث كل 10 ثواني (10000 مللي ثانية)
+        setInterval(updateCards, 10000);
 
-                // ميزة الطرد برمجياً (Remote Logout)
-                if (JSON.stringify(data).includes("FORCE_LOGOUT")) {
-                    localStorage.removeItem('alhwary_session');
-                    location.reload();
-                    return;
-                }
-
-                const list = document.getElementById('code-list');
-                data.reverse().forEach(item => {
-                    if (!seen.has(item.code)) {
-                        seen.add(item.code);
-                        const div = document.createElement('div');
-                        div.className = 'code-card';
-                        div.innerHTML = `<div class="code-info"><h3>${item.code}</h3><span class="unit-tag">${item.units} وحدة</span></div><div style="font-size:1.5rem;">⚡</div>`;
-                        list.prepend(div);
-                    }
-                });
-            } catch (e) {}
-        }
-
-        setInterval(load, 8000);
-        load();
+        // تشغيل أول مرة عند فتح الصفحة
+        updateCards();
     </script>
 </body>
 </html>
