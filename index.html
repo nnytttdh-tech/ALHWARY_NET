@@ -1,155 +1,97 @@
 <!DOCTYPE html>
-
 <html lang="ar" dir="rtl">
-
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>ALHWARY NET</title>
-
+    <title>ALHWARY NET | التحديث المباشر</title>
     <style>
-
-        body { background-color: #0d0d0d; color: white; font-family: sans-serif; text-align: center; padding: 15px; }
-
-        .header { color: #ff3131; font-size: 28px; font-weight: bold; margin-bottom: 20px; }
-
-        #cardsList { display: flex; flex-direction: column; gap: 12px; max-width: 400px; margin: 0 auto; }
-
-        .card { background: #1a1a1a; border-radius: 12px; padding: 15px; border: 1px solid #333; border-bottom: 4px solid #ff3131; }
-
-        .card-code { color: #fbff00; font-size: 20px; font-weight: bold; margin-bottom: 10px; display: block; }
-
-        .card-stats { display: flex; justify-content: space-between; color: #bbb; font-size: 13px; border-top: 1px solid #333; padding-top: 10px; }
-
-        .stat-value { display: block; color: white; font-size: 16px; font-weight: bold; }
-
-        .btn-charge { background-color: #ff3131; color: white; border: none; width: 100%; padding: 10px; border-radius: 8px; font-size: 18px; font-weight: bold; margin-top: 12px; cursor: pointer; }
-
+        body { background-color: #0d0d0d; color: white; font-family: sans-serif; text-align: center; padding: 10px; }
+        .header { color: #ff3131; font-size: 28px; font-weight: bold; text-shadow: 0 0 15px rgba(255,49,49,0.4); }
+        .live-indicator { color: #00ff00; font-size: 12px; margin-bottom: 15px; animation: pulse 1.5s infinite; }
+        #cardsList { display: flex; flex-direction: column; gap: 12px; max-width: 420px; margin: 0 auto; }
+        .card { background: #1a1a1a; border-radius: 12px; padding: 15px; border-left: 5px solid #ff3131; position: relative; animation: fadeIn 0.5s; }
+        .card-code { color: #fbff00; font-size: 22px; font-weight: bold; display: block; margin-bottom: 8px; }
+        .card-stats { display: flex; justify-content: space-between; color: #aaa; font-size: 14px; border-top: 1px solid #333; pt: 8px; }
+        .stat-value { color: #fff; font-weight: bold; }
+        .btn-charge { background: #ff3131; color: #fff; border: none; width: 100%; padding: 12px; border-radius: 8px; font-weight: bold; margin-top: 10px; cursor: pointer; }
+        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        .new-tag { position: absolute; top: 5px; left: 5px; background: #fbff00; color: #000; font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
     </style>
-
 </head>
-
 <body>
 
-
-
     <div class="header">ALHWARY NET</div>
+    <div class="live-indicator">● متصل الآن - جلب الأكواد مباشرة</div>
+    
+    <div id="cardsList">جاري فحص السيرفر الأصلي...</div>
 
-    <div id="cardsList">جاري جلب الأكواد...</div>
-
-
+    <audio id="alertSound" src="https://notificationsounds.com/storage/sounds/file-sounds-1150-pristine.mp3"></audio>
 
     <script>
-
         const targetUrl = 'https://repository-o2oweb.onrender.com/get-cards';
+        let existingCodes = new Set();
 
-
-
-        // وظيفة لحفظ الأكواد عشان ما تختفيش
-
-        function saveToCache(data) {
-
-            localStorage.setItem('cached_cards', JSON.stringify(data));
-
-        }
-
-
-
-        // وظيفة لعرض الأكواد المحفوظة لو السيرفر هنج
-
-        function loadFromCache() {
-
-            const cached = localStorage.getItem('cached_cards');
-
-            if (cached) renderCards(JSON.parse(cached));
-
-        }
-
-
-
-        async function fetchCards() {
-
+        async function fetchLiveCards() {
             try {
-
-                // استخدام بروكسي أسرع مع تايمر لمنع التهنيج
-
-                const response = await fetch('https://api.allorigins.win/get?url=' + encodeURIComponent(targetUrl) + '&t=' + Date.now());
+                // تقنية كسر الكاش المتطورة: إضافة طابع زمني فريد جداً للرابط
+                const cacheBuster = encodeURIComponent(targetUrl + "?v=" + Math.random() + Date.now());
+                const response = await fetch(`https://api.allorigins.win/get?url=${cacheBuster}`);
+                
+                if (!response.ok) throw new Error();
 
                 const json = await response.json();
-
                 const data = JSON.parse(json.contents);
 
-
-
                 if (data && data.cards) {
-
-                    renderCards(data.cards);
-
-                    saveToCache(data.cards); // حفظ نسخة احتياطية
-
+                    processCards(data.cards);
                 }
-
-            } catch (e) {
-
-                console.log("السيرفر هنج، بعرض الأكواد القديمة...");
-
-                loadFromCache();
-
+            } catch (error) {
+                console.log("محاولة إعادة اتصال...");
             }
-
         }
 
-
-
-        function renderCards(cards) {
-
+        function processCards(cards) {
             const container = document.getElementById('cardsList');
+            let isFirstLoad = existingCodes.size === 0;
+            let foundNew = false;
 
-            container.innerHTML = ''; 
+            // نعكس المصفوفة لجعل الأحدث يظهر في البداية
+            cards.reverse().forEach(card => {
+                if (!existingCodes.has(card.card_serial)) {
+                    existingCodes.add(card.card_serial);
+                    foundNew = true;
 
-            cards.forEach(card => {
-
-                container.innerHTML += `
-
-                    <div class="card">
-
-                        <span class="card-code">*858*${card.card_serial}#</span>
-
-                        <div class="card-stats">
-
-                            <div>الوحدات <span class="stat-value">${card.gift_units}</span></div>
-
-                            <div>متبقي <span class="stat-value">${card.remaining_dedications}</span></div>
-
+                    const cardHtml = `
+                        <div class="card">
+                            ${!isFirstLoad ? '<span class="new-tag">كود جديد!</span>' : ''}
+                            <span class="card-code">*858*${card.card_serial}#</span>
+                            <div class="card-stats">
+                                <div>الوحدات: <span class="stat-value">${card.gift_units}</span></div>
+                                <div>المتبقي: <span class="stat-value">${card.remaining_dedications}</span></div>
+                            </div>
+                            <button class="btn-charge" onclick="location.href='tel:*858*${card.card_serial}#'">شحن الآن</button>
                         </div>
+                    `;
 
-                        <button class="btn-charge" onclick="window.location.href='tel:*858*${card.card_serial}#'">شحن الآن</button>
-
-                    </div>
-
-                `;
-
+                    if (isFirstLoad) {
+                        if (container.innerHTML.includes('جاري')) container.innerHTML = '';
+                        container.innerHTML += cardHtml;
+                    } else {
+                        // إضافة الكود الجديد في أعلى القائمة فوراً
+                        container.insertAdjacentHTML('afterbegin', cardHtml);
+                        document.getElementById('alertSound').play().catch(e => {});
+                    }
+                }
             });
-
         }
 
+        // تشغيل الفحص كل 8 ثوانٍ لضمان السرعة القصوى
+        fetchLiveCards();
+        setInterval(fetchLiveCards, 8000);
 
-
-        // تشغيل فوري وتحميل من الكاش أولاً
-
-        loadFromCache();
-
-        fetchCards();
-
-        // التحديث كل 15 ثانية (زودنا الوقت شوية عشان السيرفر ميعملكش بلوك)
-
-        setInterval(fetchCards, 15000);
-
+        // تنبيه للمستخدم لتفعيل الصوت
+        document.body.onclick = () => { console.log("الصوت مفعل"); };
     </script>
-
 </body>
-
 </html>
