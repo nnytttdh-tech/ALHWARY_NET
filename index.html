@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ALHWARY NET | تفعيل الحساب</title>
+    <title>ALHWARY NET | طلب تفعيل</title>
     <style>
-        /* تصميم الهواري نت الاحترافي */
         body {
             background-color: #050000;
             color: #ffffff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
             margin: 0;
             display: flex;
             justify-content: center;
@@ -23,121 +22,93 @@
             border-radius: 25px;
             padding: 40px;
             text-align: center;
-            box-shadow: 0 0 30px rgba(200, 0, 0, 0.3);
+            box-shadow: 0 0 30px rgba(200, 0, 0, 0.5);
             width: 90%;
             max-width: 400px;
         }
 
-        h1 {
-            color: #c80000;
-            font-size: 32px;
-            margin-bottom: 5px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        h1 span {
-            color: #ffffff;
-        }
-
-        p {
-            font-size: 16px;
-            color: #cccccc;
-            margin-bottom: 25px;
-        }
+        h1 { color: #c80000; font-size: 32px; margin-bottom: 5px; text-transform: uppercase; }
+        h1 span { color: #ffffff; }
+        p { color: #cccccc; margin-bottom: 20px; }
 
         .id-box {
             background: #000;
             border: 1px dashed #f5c842;
-            padding: 20px;
+            padding: 15px;
             border-radius: 15px;
-            font-size: 24px;
+            font-size: 28px;
             color: #f5c842;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             font-weight: bold;
             cursor: pointer;
-            transition: 0.3s;
+            letter-spacing: 3px;
         }
 
-        .id-box:hover {
-            background: #111;
-            transform: scale(1.02);
-        }
-
-        .btn-bot {
+        .btn-direct {
             background: linear-gradient(45deg, #c80000, #800000);
             color: white;
             border: none;
-            padding: 15px 30px;
+            padding: 15px;
             border-radius: 12px;
             font-size: 18px;
             font-weight: bold;
             text-decoration: none;
-            display: inline-block;
+            display: block;
             transition: 0.3s;
-            width: 100%;
-            box-sizing: border-box;
+            box-shadow: 0 4px 15px rgba(200, 0, 0, 0.3);
         }
 
-        .btn-bot:hover {
-            box-shadow: 0 0 20px rgba(200, 0, 0, 0.6);
+        .btn-direct:hover {
+            box-shadow: 0 0 25px #c80000;
             transform: translateY(-3px);
         }
 
-        .footer {
-            margin-top: 20px;
-            font-size: 12px;
-            color: #555;
-        }
+        .note { font-size: 13px; color: #888; margin-top: 20px; line-height: 1.5; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <h1>ALHWARY <span>NET</span></h1>
-    <p>أهلاً بك في نظام التفعيل الذكي</p>
+    <p>نظام طلب أكواد التفعيل</p>
     
-    <div class="id-box" id="displayID" onclick="copyID()">
-        جاري إنشاء ID...
+    <div class="id-box" id="displayID" onclick="copyID()" title="اضغط للنسخ">
+        جاري الإنشاء...
     </div>
     
-    <p style="font-size: 14px;">انسخ الرقم أعلاه وأرسله للبوت للحصول على كودك</p>
+    <p style="font-size: 14px;">انسخ الـ ID أعلاه، ثم اضغط بالأسفل لإرساله للمدير لتفعيل حسابك.</p>
 
-    <a href="https://t.me/Shshsijs_bot" target="_blank" class="btn-bot">
-        الانتقال للبوت الآن
+    <a href="https://t.me/X_WUK" target="_blank" class="btn-direct">
+        إرسال الـ ID للمدير (X_WUK)
     </a>
 
-    <div class="footer">
-        &copy; 2024 ALHWARY NET - جميع الحقوق محفوظة
+    <div class="note">
+        * اضغط على الرقم لنسخه تلقائياً.<br>
+        * سيتم تفعيل حسابك فور استلام الرسالة.
     </div>
 </div>
 
 <script>
-    // وظيفة إنشاء ID ثابت لكل جهاز (بناءً على الـ Local Storage)
+    // إنشاء ID فريد لكل مستخدم
     function setupID() {
         let userID = localStorage.getItem('alhwary_user_id');
-        
         if (!userID) {
-            // توليد رقم عشوائي من 6 أرقام
             userID = Math.floor(100000 + Math.random() * 900000);
             localStorage.setItem('alhwary_user_id', userID);
         }
-        
-        document.getElementById('displayID').innerText = "ID: " + userID;
+        document.getElementById('displayID').innerText = userID;
     }
 
-    // وظيفة النسخ عند الضغط
+    // وظيفة النسخ الذكي
     function copyID() {
-        let idText = document.getElementById('displayID').innerText.replace("ID: ", "");
-        navigator.clipboard.writeText(idText);
-        alert("تم نسخ الـ ID بنجاح: " + idText);
+        let idText = document.getElementById('displayID').innerText;
+        navigator.clipboard.writeText(idText).then(() => {
+            alert("✅ تم نسخ الـ ID بنجاح: " + idText + "\nتوجه الآن للمدير لتفعيله.");
+        });
     }
 
-    // تشغيل الدالة عند تحميل الصفحة
     window.onload = setupID;
 </script>
 
 </body>
 </html>
-
-
