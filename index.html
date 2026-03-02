@@ -18,16 +18,16 @@
 
         .container {
             background: linear-gradient(145deg, #0f0000, #1a0000);
-            border: 2px solid #c80000;
+            border: 2px solid #25d366; /* لون أخضر واتساب */
             border-radius: 25px;
             padding: 40px;
             text-align: center;
-            box-shadow: 0 0 30px rgba(200, 0, 0, 0.5);
+            box-shadow: 0 0 30px rgba(37, 211, 102, 0.3);
             width: 90%;
             max-width: 400px;
         }
 
-        h1 { color: #c80000; font-size: 32px; margin-bottom: 5px; text-transform: uppercase; }
+        h1 { color: #25d366; font-size: 32px; margin-bottom: 5px; }
         h1 span { color: #ffffff; }
         p { color: #cccccc; margin-bottom: 20px; }
 
@@ -41,11 +41,10 @@
             margin-bottom: 20px;
             font-weight: bold;
             cursor: pointer;
-            letter-spacing: 3px;
         }
 
-        .btn-direct {
-            background: linear-gradient(45deg, #c80000, #800000);
+        .btn-whatsapp {
+            background: linear-gradient(45deg, #25d366, #128c7e);
             color: white;
             border: none;
             padding: 15px;
@@ -55,41 +54,40 @@
             text-decoration: none;
             display: block;
             transition: 0.3s;
-            box-shadow: 0 4px 15px rgba(200, 0, 0, 0.3);
         }
 
-        .btn-direct:hover {
-            box-shadow: 0 0 25px #c80000;
-            transform: translateY(-3px);
+        .btn-whatsapp:hover {
+            box-shadow: 0 0 20px #25d366;
+            transform: scale(1.05);
         }
 
-        .note { font-size: 13px; color: #888; margin-top: 20px; line-height: 1.5; }
+        .note { font-size: 13px; color: #888; margin-top: 15px; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <h1>ALHWARY <span>NET</span></h1>
-    <p>نظام طلب أكواد التفعيل</p>
+    <p>تفعيل الكود عبر الواتساب</p>
     
-    <div class="id-box" id="displayID" onclick="copyID()" title="اضغط للنسخ">
-        جاري الإنشاء...
+    <div class="id-box" id="displayID" onclick="copyID()">
+        جاري التحميل...
     </div>
     
-    <p style="font-size: 14px;">انسخ الـ ID أعلاه، ثم اضغط بالأسفل لإرساله للمدير لتفعيل حسابك.</p>
+    <p style="font-size: 14px;">انسخ الـ ID واضغط بالأسفل لإرساله للمدير.</p>
 
-    <a href="https://t.me/X_WUK" target="_blank" class="btn-direct">
-        إرسال الـ ID للمدير (X_WUK)
-    </a>
+    <button onclick="sendToWhatsApp()" class="btn-whatsapp">
+        إرسال الـ ID عبر واتساب
+    </button>
 
-    <div class="note">
-        * اضغط على الرقم لنسخه تلقائياً.<br>
-        * سيتم تفعيل حسابك فور استلام الرسالة.
-    </div>
+    <div class="note">سيتم إرسال رسالة جاهزة للمدير لتفعيل كودك.</div>
 </div>
 
 <script>
-    // إنشاء ID فريد لكل مستخدم
+    // حط رقمك هنا بالصيغة الدولية (بدون أصفار في الأول وبدون علامة +)
+    // مثال: 201234567890 (لمصر)
+    const MY_PHONE = "201556853817"; 
+
     function setupID() {
         let userID = localStorage.getItem('alhwary_user_id');
         if (!userID) {
@@ -99,12 +97,18 @@
         document.getElementById('displayID').innerText = userID;
     }
 
-    // وظيفة النسخ الذكي
-    function copyID() {
+    function copyID() 
         let idText = document.getElementById('displayID').innerText;
-        navigator.clipboard.writeText(idText).then(() => {
-            alert("✅ تم نسخ الـ ID بنجاح: " + idText + "\nتوجه الآن للمدير لتفعيله.");
-        });
+        navigator.clipboard.writeText(idText);
+        alert("تم نسخ الـ ID: " + idText);
+    }
+
+    function sendToWhatsApp() {
+        let idText = document.getElementById('displayID').innerText;
+        let message = "يا مدير، ده الـ ID بتاعي وعايز كود التفعيل: " + idText;
+        // رابط واتساب السريع
+        let url = "https://wa.me/" + MY_PHONE + "?text=" + encodeURIComponent(message);
+        window.open(url, '_blank');
     }
 
     window.onload = setupID;
