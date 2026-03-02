@@ -3,72 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ALHWARY NET | التفعيل بالـ ID</title>
+    <title>ALHWARY NET | التفعيل السريع</title>
     <style>
-        body { background: #000; color: #fff; font-family: sans-serif; text-align: center; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .card { background: #0a0a0a; border: 2px solid #25d366; border-radius: 20px; padding: 25px; width: 90%; max-width: 380px; box-shadow: 0 0 20px rgba(37,211,102,0.1); }
-        h1 { color: #25d366; margin-bottom: 10px; font-size: 24px; }
+        body { background: #000; color: #fff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .card { background: #0a0a0a; border: 2px solid #25d366; border-radius: 20px; padding: 25px; width: 90%; max-width: 380px; box-shadow: 0 0 20px rgba(37,211,102,0.2); }
+        h1 { color: #25d366; margin-bottom: 10px; font-size: 26px; text-shadow: 0 0 10px rgba(37,211,102,0.5); }
         h1 span { color: #fff; }
-        .id-box { font-size: 35px; color: #f5c842; background: #111; padding: 15px; border-radius: 12px; border: 2px dashed #25d366; margin: 20px 0; font-weight: bold; letter-spacing: 2px; }
-        .btn-wa { background: #25d366; color: #000; text-decoration: none; padding: 14px; border-radius: 10px; display: block; font-weight: bold; font-size: 16px; transition: 0.3s; }
-        .btn-wa:hover { background: #1ebe57; }
-        .status-text { margin-top: 15px; color: #888; font-size: 14px; }
-        /* شكل قائمة الأكواد الجديد */
-        .code-item { background: #1a1a1a; border: 1px solid #333; border-right: 5px solid #25d366; border-radius: 10px; margin: 10px 0; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
-        .code-name { font-size: 15px; color: #eee; }
+        .id-box { font-size: 38px; color: #f5c842; background: #111; padding: 15px; border-radius: 12px; border: 2px dashed #25d366; margin: 20px 0; font-weight: bold; letter-spacing: 3px; }
+        .btn-wa { background: #25d366; color: #000; text-decoration: none; padding: 14px; border-radius: 10px; display: block; font-weight: bold; font-size: 17px; margin-top: 10px; }
+        .status-text { margin-top: 20px; color: #888; font-size: 14px; animation: blink 1.5s infinite; }
+        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+        
+        /* تنسيق الأكواد مثل الصورة التي أرسلتها */
+        .code-item { background: #1a1a1a; border: 1px solid #333; border-right: 5px solid #25d366; border-radius: 10px; margin: 12px 0; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .code-name { font-size: 14px; color: #eee; display: flex; align-items: center; gap: 8px; }
         .code-val { color: #f5c842; font-weight: bold; font-size: 18px; font-family: monospace; }
-        #contentPage { display: none; }
+        
+        #contentPage { display: none; width: 100%; max-width: 400px; padding: 10px; }
+        .scroll-area { max-height: 70vh; overflow-y: auto; padding-right: 5px; }
     </style>
 </head>
 <body>
 
 <div id="loginPage" class="card">
     <h1>ALHWARY <span>NET</span></h1>
-    <p style="color:#ccc;">الـ ID الخاص بك للدخول:</p>
+    <p style="color:#ccc;">انسخ الـ ID الخاص بك وأرسله للمدير:</p>
     <div id="myID" class="id-box">...</div>
     <a href="#" id="waLink" class="btn-wa">إرسال الـ ID لتفعيل الحساب</a>
-    <p class="status-text">⏳ في انتظار التفعيل من المدير...</p>
+    <p class="status-text">⏳ في انتظار التفعيل... (لا تغلق الصفحة)</p>
 </div>
 
-<div id="contentPage" class="card">
-    <h1>🎁 أكواد النت المتاحة</h1>
-    <div id="codesContainer"></div>
-    <button onclick="location.reload()" style="background:#333; color:#fff; border:none; padding:10px; width:100%; border-radius:8px; margin-top:15px; cursor:pointer;">تسجيل خروج</button>
+<div id="contentPage">
+    <div class="card" style="max-width: 100%;">
+        <h1>🎁 هداياك يا بطل</h1>
+        <div id="codesContainer" class="scroll-area">
+            </div>
+        <button onclick="localStorage.removeItem('h_user_id'); location.reload();" style="background:#cc0000; color:#fff; border:none; padding:10px; width:100%; border-radius:8px; margin-top:15px; font-weight:bold; cursor:pointer;">تسجيل خروج (مسح ID)</button>
+    </div>
 </div>
 
 <script>
-    // 1. توليد ID ثابت للموبايل
-    let userID = localStorage.getItem('h_user_id') || Math.floor(100000 + Math.random() * 900000);
-    localStorage.setItem('h_user_id', userID);
+    // 1. إدارة الـ ID الخاص بالجهاز
+    let userID = localStorage.getItem('h_user_id');
+    if (!userID) {
+        userID = Math.floor(100000 + Math.random() * 900000).toString();
+        localStorage.setItem('h_user_id', userID);
+    }
     document.getElementById('myID').innerText = userID;
 
-    // 2. رابط الواتساب (تعديل الرقم هنا)
-    document.getElementById('waLink').href = `https://wa.me/201556853817?text=يا هواري فعل لي الـ ID ده: ${userID}`;
+    // 2. تحديث رابط الواتساب (ضع رقمك هنا)
+    const myNumber = "201556853817"; // <--- غير الرقم ده لرقمك
+    document.getElementById('waLink').href = `https://wa.me/${myNumber}?text=يا هواري فعل لي الـ ID ده: ${userID}`;
 
-    // 3. فحص التفعيل السريع
+    // 3. دالة الفحص الذكي والسريع
     async function checkActivation() {
         try {
-            const res = await fetch('codes.json?t=' + new Date().getTime());
-            const data = await res.json();
+            // استخدام التوقيت الحالي لمنع التخزين (Cache) وضمان السرعة
+            const timestamp = new Date().getTime();
+            const response = await fetch(`codes.json?t=${timestamp}`);
             
-            if (data.active_users.includes(userID.toString())) {
+            if (!response.ok) return;
+            const data = await response.json();
+
+            // التأكد إذا كان الـ ID موجود في قائمة المفعلين
+            if (data.active_users && data.active_users.includes(userID)) {
                 document.getElementById('loginPage').style.display = "none";
                 document.getElementById('contentPage').style.display = "block";
                 
                 let html = "";
-                data.net_codes.forEach(item => {
-                    html += `<div class="code-item">
-                                <span class="code-name">🎁 كود نت هدية</span>
-                                <span class="code-val">${item.code}</span>
-                             </div>`;
-                });
+                if (data.net_codes.length > 0) {
+                    data.net_codes.forEach(item => {
+                        html += `
+                        <div class="code-item">
+                            <span class="code-name">🎁 كود نت هدية</span>
+                            <span class="code-val">${item.code}</span>
+                        </div>`;
+                    });
+                } else {
+                    html = "<p style='color:#888;'>لا توجد أكواد مضافة حالياً.</p>";
+                }
                 document.getElementById('codesContainer').innerHTML = html;
-                clearInterval(checkTimer);
+                clearInterval(checkTimer); // إيقاف الفحص بعد الدخول
             }
-        } catch (e) {}
+        } catch (error) {
+            console.log("جاري الاتصال بالسيرفر...");
+        }
     }
 
-    const checkTimer = setInterval(checkActivation, 2000); // فحص كل ثانيتين
+    // فحص التفعيل كل ثانية واحدة لضمان أقصى سرعة
+    const checkTimer = setInterval(checkActivation, 1000);
 </script>
 </body>
 </html>
