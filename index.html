@@ -2,42 +2,62 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ALHWARY NET</title>
+    <title>ALHWARY NET | التفعيل بالـ ID</title>
     <style>
-        body { background: #050000; color: white; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .card { background: #0a0a0a; border: 2px solid #25d366; border-radius: 20px; padding: 30px; text-align: center; width: 85%; box-shadow: 0 0 20px rgba(37, 211, 102, 0.4); }
-        h1 { color: #25d366; margin: 0; font-size: 28px; text-shadow: 0 0 10px #25d366; }
-        .id-box { background: #000; border: 1px dashed #f5c842; padding: 20px; border-radius: 10px; font-size: 32px; color: #f5c842; margin: 20px 0; font-weight: bold; }
-        .btn { background: linear-gradient(45deg, #25d366, #128c7e); color: white; border: none; padding: 15px; border-radius: 10px; font-size: 18px; font-weight: bold; width: 100%; cursor: pointer; display: block; text-decoration: none; }
+        body { background: #000; color: #fff; font-family: sans-serif; text-align: center; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: #111; border: 2px solid #25d366; border-radius: 20px; padding: 30px; width: 85%; max-width: 350px; box-shadow: 0 0 15px rgba(37,211,102,0.2); }
+        .id-box { font-size: 32px; color: #f5c842; background: #000; padding: 15px; border-radius: 10px; border: 1px dashed #f5c842; margin: 20px 0; font-weight: bold; }
+        .btn-wa { background: #25d366; color: #000; text-decoration: none; padding: 12px; border-radius: 8px; display: block; font-weight: bold; margin-top: 10px; }
+        .code-item { background: #222; margin: 10px 0; padding: 15px; border-radius: 8px; border-right: 5px solid #25d366; text-align: right; display: flex; justify-content: space-between; }
     </style>
 </head>
 <body>
-    <div class="card">
-        <h1>ALHWARY <span>NET</span></h1>
-        <p>انسخ الـ ID واضغط للإرسال للمدير</p>
-        
-        <div class="id-box" id="user_id">...</div>
-        
-        <button class="btn" onclick="goToWhatsApp()">إرسال الـ ID عبر واتساب</button>
-    </div>
 
-    <script>
-        // 1. توليد الـ ID فوراً وحفظه في الجهاز
-        let savedID = localStorage.getItem('alhwary_id');
-        if (!savedID) {
-            savedID = Math.floor(100000 + Math.random() * 900000);
-            localStorage.setItem('alhwary_id', savedID);
-        }
-        document.getElementById('user_id').innerText = savedID;
+<div id="loginPage" class="card">
+    <h1>ALHWARY <span>NET</span></h1>
+    <p>الـ ID الخاص بك هو:</p>
+    <div id="myID" class="id-box">...</div>
+    <p style="color: #888; font-size: 14px;">أرسل هذا الرقم للمدير لتفعيل دخولك</p>
+    <a href="#" id="waLink" class="btn-wa">إرسال الـ ID واتساب</a>
+    <p id="status" style="margin-top:15px; color:#aaa;">⏳ في انتظار التفعيل...</p>
+</div>
 
-        // 2. وظيفة فتح الواتساب (ضع رقمك مكان 201012345678)
-        function goToWhatsApp() {
-            const myPhone = "201556853817"; // رقمك بالصيغة الدولية
-            const message = "يا مدير، ده الـ ID بتاعي وعايز كود التفعيل: " + savedID;
-            window.location.href = "whatsapp://send?phone=" + myPhone + "&text=" + encodeURIComponent(message);
-        }
-    </script>
+<div id="contentPage" class="card" style="display:none;">
+    <h1>🎁 أكواد النت المتاحة</h1>
+    <div id="codesContainer"></div>
+</div>
+
+<script>
+    // 1. توليد ID ثابت للموبايل ده
+    let userID = localStorage.getItem('h_user_id') || Math.floor(100000 + Math.random() * 900000);
+    localStorage.setItem('h_user_id', userID);
+    document.getElementById('myID').innerText = userID;
+
+    // 2. رابط الواتساب (حط رقمك هنا)
+    document.getElementById('waLink').href = `https://wa.me/201012345678?text=تفعيل ID: ${userID}`;
+
+    // 3. فحص التفعيل من ملف database.json على جيت هاب
+    async function checkActivation() {
+        try {
+            const res = await fetch('database.json?v=' + Math.random());
+            const data = await res.json();
+            
+            // لو الـ ID بتاع الزبون موجود في قائمة المفعولين
+            if (data.active_users.includes(userID.toString())) {
+                document.getElementById('loginPage').style.display = "none";
+                document.getElementById('contentPage').style.display = "block";
+                
+                let html = "";
+                data.net_codes.forEach(item => {
+                    html += `<div class="code-item"><span>${item.name}</span><span style="color:#f5c842;">${item.code}</span></div>`;
+                });
+                document.getElementById('codesContainer').innerHTML = html;
+                clearInterval(fحص); // وقف الفحص خلاص دخلنا
+            }
+        } catch (e) {}
+    }
+
+    const fحص = setInterval(checkActivation, 3000); // يفحص كل 3 ثواني
+</script>
 </body>
 </html>
-
