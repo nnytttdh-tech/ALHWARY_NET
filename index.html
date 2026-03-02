@@ -23,7 +23,7 @@
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 html,body{height:100%;overflow:hidden;}
-body{background:var(--dark);color:var(--tx);font-family:'Cairo',sans-serif;display:flex;flex-direction:column;}
+body{background:var(--dark);color:var(--tx);font-family:'IOS15','Cairo',sans-serif;display:flex;flex-direction:column;}
 body::before{
   content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
   background:
@@ -80,11 +80,59 @@ body::before{
 
 /* ═══ CARDS ═══ */
 .cards{display:flex;flex-direction:column;gap:10px;}
-.card{border-radius:18px;overflow:hidden;border:1px solid var(--bd);background:var(--s1);position:relative;}
-.c-band{padding:0;display:flex;align-items:stretch;border-bottom:1px solid rgba(240,192,66,.08);background:rgba(240,192,66,.035);}
-.c-code-wrap{flex:1;padding:13px 12px;display:flex;align-items:center;justify-content:center;}
-.c-code{font-family:'Space Mono',monospace;font-size:.88rem;font-weight:700;color:var(--gold);direction:ltr;unicode-bidi:bidi-override;letter-spacing:.5px;word-break:break-all;text-align:center;}
-.c-copy{flex-shrink:0;align-self:stretch;padding:0 14px;border:none;border-left:1px solid rgba(240,192,66,.1);background:rgba(240,192,66,.07);color:var(--gold);font-size:.72rem;font-weight:700;cursor:pointer;}
+.card{
+  border-radius:18px;overflow:hidden;border:1px solid var(--bd);
+  background:var(--s1);animation:fup .26s ease both;position:relative;
+}
+.card.big{border-color:rgba(200,0,0,.28);background:linear-gradient(155deg,#140000,#0c0000);}
+.card.big::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent 0%,var(--r2) 50%,transparent 100%);}
+@keyframes fup{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+.c-band{
+  padding:0;display:flex;align-items:stretch;
+  border-bottom:1px solid rgba(240,192,66,.08);
+  background:rgba(240,192,66,.035);
+}
+.c-code-wrap{
+  flex:1;padding:13px 12px;
+  display:flex;align-items:center;justify-content:center;
+}
+.c-code{
+  font-family:'Space Mono',monospace;font-size:.88rem;font-weight:700;
+  color:var(--gold);direction:ltr;unicode-bidi:bidi-override;letter-spacing:.5px;word-break:break-all;text-align:center;
+}
+.c-copy{
+  flex-shrink:0;align-self:stretch;padding:0 14px;border:none;
+  border-left:1px solid rgba(240,192,66,.1);
+  background:rgba(240,192,66,.07);color:var(--gold);
+  font-family:'Cairo',sans-serif;font-size:.72rem;font-weight:700;
+  cursor:pointer;transition:all .15s;white-space:nowrap;
+}
+.c-info{display:flex;border-bottom:1px solid rgba(200,0,0,.06);}
+.c-cell{flex:1;padding:10px 14px;display:flex;flex-direction:column;gap:2px;}
+.c-lbl{font-size:.56rem;color:var(--mu2);font-weight:700;letter-spacing:.8px;text-transform:uppercase;}
+.c-val{font-size:1.55rem;font-weight:900;color:var(--tx);line-height:1;font-family:'Space Mono',monospace;}
+
+.c-charge{
+  display:flex;align-items:center;justify-content:center;gap:7px;
+  width:100%;padding:13px;border:none;
+  background:linear-gradient(135deg,#d00000,#720000);
+  color:#fff;font-family:'Cairo',sans-serif;
+  font-size:.95rem;font-weight:900;cursor:pointer;
+  text-decoration:none;
+}
+
+/* ═══ BOTTOM ═══ */
+.bot{
+  position:fixed;bottom:0;left:0;right:0;z-index:100;
+  padding:7px 13px calc(var(--sb)+7px);
+  background:rgba(7,0,0,.96);backdrop-filter:blur(22px);
+  border-top:1px solid var(--bd);
+  display:flex;align-items:center;flex-direction:row;gap:10px;
+}
+.by{font-size:.8rem;color:var(--mu2);flex:1;text-align:left;direction:ltr;}
+.by b{color:var(--r2);font-style:italic;}
+
 </style>
 </head>
 <body>
@@ -92,7 +140,7 @@ body::before{
 <div class="hdr">
   <div class="hdr-row">
     <div class="logo">
-      <div class="logo-ico" style="color:#fff; font-weight:900;">H</div>
+      <div class="logo-ico" style="color:#fff; font-weight:900; font-family:sans-serif;">H</div>
       <div class="logo-txt">ALHWARY <span style="color:var(--r2)">NET</span>
         <small>Digital Services</small>
       </div>
@@ -100,8 +148,8 @@ body::before{
     <div class="hdr-r">
       <div class="dot ok" id="dot"></div>
       <div class="ring-w">
-        <svg width="30" height="30"><circle class="rtr" cx="15" cy="15" r="11"/><circle class="rpr" cx="15" cy="15" r="11" id="prg"/></svg>
-        <div class="rnm" id="rnm">100%</div>
+        <svg width="30" height="30"><circle class="rtr" cx="15" cy="15" r="11"/><circle class="rpr" cx="15" cy="15" r="11" style="stroke-dashoffset:0;"/></svg>
+        <div class="rnm">100%</div>
       </div>
     </div>
   </div>
@@ -112,19 +160,27 @@ body::before{
     <div class="ltl">قائمة الكروت</div>
     <div class="lbg">ALHWARY</div>
   </div>
-  
+
   <div class="cards">
     <div class="card">
       <div class="c-band">
-        <div class="c-code-wrap"><div class="c-code">XXXX-XXXX-XXXX-XXXX</div></div>
+        <div class="c-code-wrap"><div class="c-code">0000-0000-0000-0000</div></div>
         <button class="c-copy">نسخ</button>
       </div>
+      <div class="c-info">
+        <div class="c-cell">
+          <span class="c-lbl">الكمية</span>
+          <span class="c-val">10</span>
+        </div>
+      </div>
+      <button class="c-charge">شحن الآن</button>
     </div>
   </div>
 </div>
 
-<div style="position:fixed; bottom:0; width:100%; padding:15px; background:rgba(7,0,0,0.9); border-top:1px solid var(--bd); text-align:center; font-size:12px; color:var(--mu2);">
-  © 2024 <b>ALHWARY NET</b> - جميع الحقوق محفوظة
+<div class="bot">
+  <div class="by">By <b>ALHWARY NET</b> <sup>2026</sup></div>
+  <div class="ib"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg></div>
 </div>
 
 </body>
