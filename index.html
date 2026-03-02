@@ -3,83 +3,138 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ALHWARY NET</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+    <title>ALHWARY NET | تفعيل الحساب</title>
     <style>
-        :root { --r: #c80000; --dark: #070000; --gold: #f5c842; --tx: #f0ecec; }
-        body { background: var(--dark); color: var(--tx); font-family: 'Cairo', sans-serif; text-align: center; padding: 20px; }
-        .container { max-width: 400px; margin: 50px auto; background: #0f0000; padding: 30px; border-radius: 20px; border: 1px solid rgba(200,0,0,0.2); }
-        .logo { font-size: 24px; font-weight: 900; margin-bottom: 20px; }
-        .logo span { color: var(--r); }
-        .display-box { background: #160000; padding: 20px; border-radius: 12px; border: 1px dashed var(--r); margin: 20px 0; font-family: 'Space Mono', monospace; color: var(--gold); word-break: break-all; }
-        button { background: linear-gradient(145deg, #e60000, #550000); color: white; border: none; padding: 15px 30px; border-radius: 12px; font-weight: bold; cursor: pointer; width: 100%; font-size: 16px; }
-        button:disabled { opacity: 0.5; cursor: not-allowed; }
-        .status-txt { font-size: 12px; color: #9a6060; margin-top: 10px; }
+        /* تصميم الهواري نت الاحترافي */
+        body {
+            background-color: #050000;
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: linear-gradient(145deg, #0f0000, #1a0000);
+            border: 2px solid #c80000;
+            border-radius: 25px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(200, 0, 0, 0.3);
+            width: 90%;
+            max-width: 400px;
+        }
+
+        h1 {
+            color: #c80000;
+            font-size: 32px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        h1 span {
+            color: #ffffff;
+        }
+
+        p {
+            font-size: 16px;
+            color: #cccccc;
+            margin-bottom: 25px;
+        }
+
+        .id-box {
+            background: #000;
+            border: 1px dashed #f5c842;
+            padding: 20px;
+            border-radius: 15px;
+            font-size: 24px;
+            color: #f5c842;
+            margin-bottom: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .id-box:hover {
+            background: #111;
+            transform: scale(1.02);
+        }
+
+        .btn-bot {
+            background: linear-gradient(45deg, #c80000, #800000);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+            transition: 0.3s;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .btn-bot:hover {
+            box-shadow: 0 0 20px rgba(200, 0, 0, 0.6);
+            transform: translateY(-3px);
+        }
+
+        .footer {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #555;
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="logo">ALHWARY <span>NET</span></div>
-    <div class="display-box" id="main-display">جاري التحميل...</div>
-    <button id="action-btn" onclick="pullCard()" disabled>سحب كود</button>
-    <div class="status-txt" id="status-msg">يرجى الانتظار...</div>
+    <h1>ALHWARY <span>NET</span></h1>
+    <p>أهلاً بك في نظام التفعيل الذكي</p>
+    
+    <div class="id-box" id="displayID" onclick="copyID()">
+        جاري إنشاء ID...
+    </div>
+    
+    <p style="font-size: 14px;">انسخ الرقم أعلاه وأرسله للبوت للحصول على كودك</p>
+
+    <a href="https://t.me/YOUR_BOT_USERNAME" target="_blank" class="btn-bot">
+        الانتقال للبوت الآن
+    </a>
+
+    <div class="footer">
+        &copy; 2024 ALHWARY NET - جميع الحقوق محفوظة
+    </div>
 </div>
 
 <script>
-    // 🔗 حط IP سيرفرك هنا
-    const MY_SERVER_IP = "123.123.123.123"; 
-    const API_BASE = `http://${MY_SERVER_IP}:5000`;
-
-    // توليد ID فريد للجهاز
-    function getID() {
-        let id = localStorage.getItem('h_uid');
-        if (!id) {
-            id = Math.floor(100 + Math.random() * 899); // ID من 3 أرقام لسهولة النقل
-            localStorage.setItem('h_uid', id);
+    // وظيفة إنشاء ID ثابت لكل جهاز (بناءً على الـ Local Storage)
+    function setupID() {
+        let userID = localStorage.getItem('alhwary_user_id');
+        
+        if (!userID) {
+            // توليد رقم عشوائي من 6 أرقام
+            userID = Math.floor(100000 + Math.random() * 900000);
+            localStorage.setItem('alhwary_user_id', userID);
         }
-        return id;
+        
+        document.getElementById('displayID').innerText = "ID: " + userID;
     }
 
-    const UID = getID();
-
-    async function checkStatus() {
-        const display = document.getElementById('main-display');
-        const btn = document.getElementById('action-btn');
-        const statusMsg = document.getElementById('status-msg');
-
-        try {
-            const res = await fetch(`${API_BASE}/check_status?uid=${UID}`);
-            const data = await res.json();
-
-            if (data.status === 'active') {
-                display.innerText = "XXXX-XXXX-XXXX-XXXX";
-                btn.disabled = false;
-                statusMsg.innerText = "حسابك مفعل بنجاح ✅";
-            } else {
-                display.innerText = `ID: ${UID}`;
-                btn.disabled = true;
-                statusMsg.innerText = "ابعث الـ ID ده للمدير عشان يفعل لك الحساب";
-            }
-        } catch (e) {
-            display.innerText = "خطأ في الاتصال";
-        }
+    // وظيفة النسخ عند الضغط
+    function copyID() {
+        let idText = document.getElementById('displayID').innerText.replace("ID: ", "");
+        navigator.clipboard.writeText(idText);
+        alert("تم نسخ الـ ID بنجاح: " + idText);
     }
 
-    async function pullCard() {
-        const display = document.getElementById('main-display');
-        try {
-            const res = await fetch(`${API_BASE}/get_card?uid=${UID}`);
-            const data = await res.json();
-            if (data.status === 'success') {
-                display.innerText = data.code;
-            } else {
-                alert("المخزن فارغ!");
-            }
-        } catch (e) { alert("حدث خطأ!"); }
-    }
-
-    window.onload = checkStatus;
+    // تشغيل الدالة عند تحميل الصفحة
+    window.onload = setupID;
 </script>
 
 </body>
