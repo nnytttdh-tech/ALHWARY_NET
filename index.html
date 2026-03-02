@@ -1,187 +1,86 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#c80000">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="ALHWARY NET">
-<title>ALHWARY NET</title>
-<script>window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();window._installPrompt=e;});</script>
-<link rel="manifest" href="/manifest.json">
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
-<style>
-@font-face{font-family:'IOS15';src:url('/fonts/IOS_15_Heavy.ttf') format('truetype');font-display:swap;}
-:root{
-  --r:#c80000;--r2:#e60000;--r3:#ff3300;
-  --dark:#070000;--s1:#0f0000;--s2:#160000;--s3:#1e0305;
-  --bd:rgba(200,0,0,.14);--bd2:rgba(200,0,0,.26);
-  --tx:#f0ecec;--mu:#5a3333;--mu2:#9a6060;
-  --gold:#f5c842;--gn:#00e676;--bl:#29b6f6;
-  --st:env(safe-area-inset-top,0px);--sb:env(safe-area-inset-bottom,0px);
-}
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-html,body{height:100%;overflow:hidden;}
-body{background:var(--dark);color:var(--tx);font-family:'IOS15','Cairo',sans-serif;display:flex;flex-direction:column;}
-body::before{
-  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
-  background:
-    radial-gradient(ellipse 90% 35% at 50% -5%,rgba(200,0,0,.2) 0%,transparent 70%),
-    repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(200,0,0,.025) 40px),
-    repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(200,0,0,.025) 40px);
-}
-
-/* ═══ HEADER ═══ */
-.hdr{position:relative;z-index:100;flex-shrink:0;padding:calc(var(--st)+8px) 10px 8px;background:rgba(7,0,0,.93);backdrop-filter:blur(22px);border-bottom:1px solid var(--bd);}
-.hdr-row{display:flex;align-items:center;justify-content:space-between;gap:10px;direction:ltr;}
-.logo{display:flex;align-items:center;gap:9px;flex:1;justify-content:center;}
-.logo-ico{width:34px;height:34px;border-radius:10px;flex-shrink:0;background:linear-gradient(145deg,#e60000,#550000);display:flex;align-items:center;justify-content:center;font-size:17px;box-shadow:0 0 20px rgba(230,0,0,.4);}
-.logo-txt{font-size:.92rem;font-weight:900;line-height:1.15;direction:rtl;text-align:right;}
-.logo-txt small{display:block;font-size:.5rem;color:var(--mu2);font-weight:600;letter-spacing:1.5px;text-transform:uppercase;}
-.hdr-r{display:flex;align-items:center;gap:7px;margin-right:0;}
-
-/* status dot */
-.dot{width:8px;height:8px;border-radius:50%;background:var(--mu);transition:background .3s;flex-shrink:0;position:relative;}
-.dot.ok{background:var(--gn);box-shadow:0 0 7px var(--gn);}
-.dot.ok::after{content:'';position:absolute;inset:-3px;border-radius:50%;border:1px solid var(--gn);opacity:.5;animation:ping 1.5s ease-out infinite;}
-@keyframes ping{to{transform:scale(2.4);opacity:0}}
-.dot.ld{background:#4d88ff;animation:blink .9s infinite;}
-.dot.er{background:var(--r2);}
-@keyframes blink{50%{opacity:.2}}
-
-/* ring */
-.ring-w{position:relative;width:30px;height:30px;flex-shrink:0;}
-.ring-w svg{transform:rotate(-90deg);}
-.rtr{fill:none;stroke:rgba(200,0,0,.1);stroke-width:2.5;}
-.rpr{fill:none;stroke:var(--r2);stroke-width:2.5;stroke-dasharray:69.1;stroke-dashoffset:0;transition:stroke-dashoffset .8s linear;}
-.rnm{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:.42rem;font-family:'Space Mono',monospace;color:var(--mu2);font-weight:700;}
-
-/* icon btn */
-.ib{width:44px;height:44px;border-radius:12px;background:var(--s2);border:2px solid var(--bd2);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--tx);transition:all .18s;flex-shrink:0;box-shadow:0 3px 12px rgba(0,0,0,.5);}
-.ib:active{transform:scale(.88);}
-.ib.on{color:var(--r2);border-color:var(--r2);background:rgba(200,0,0,.12);}
-.ib svg{width:22px;height:22px;}
-
-/* ═══ STATS ═══ */
-.sts{position:relative;z-index:80;flex-shrink:0;display:flex;background:rgba(7,0,0,.7);border-bottom:1px solid var(--bd);}
-.st{flex:1;padding:7px 10px;display:flex;align-items:center;gap:7px;}
-.st+.st{border-right:1px solid var(--bd);}
-.st-i{font-size:.9rem;}
-.st-n{font-size:1rem;font-weight:900;font-family:'Space Mono',monospace;line-height:1;}
-.st-l{font-size:.52rem;color:var(--mu2);margin-top:1px;}
-
-/* ═══ SCROLL ═══ */
-.scrl{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;position:relative;z-index:1;padding:11px 10px calc(var(--sb) + 68px);}
-.scrl::-webkit-scrollbar{display:none;}
-.lhd{display:flex;align-items:center;justify-content:center;margin-bottom:10px;padding:0 2px;gap:8px;}
-.ltl{font-size:.62rem;font-weight:700;color:var(--mu2);letter-spacing:2px;text-transform:uppercase;}
-.lbg{font-size:.67rem;font-weight:800;color:var(--r2);background:rgba(200,0,0,.1);border:1px solid var(--bd2);padding:2px 9px;border-radius:20px;font-family:'Space Mono',monospace;}
-
-/* ═══ CARDS ═══ */
-.cards{display:flex;flex-direction:column;gap:10px;}
-.card{
-  border-radius:18px;overflow:hidden;border:1px solid var(--bd);
-  background:var(--s1);animation:fup .26s ease both;position:relative;
-}
-.card.big{border-color:rgba(200,0,0,.28);background:linear-gradient(155deg,#140000,#0c0000);}
-.card.big::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent 0%,var(--r2) 50%,transparent 100%);}
-@keyframes fup{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-
-.c-band{
-  padding:0;display:flex;align-items:stretch;
-  border-bottom:1px solid rgba(240,192,66,.08);
-  background:rgba(240,192,66,.035);
-}
-.c-code-wrap{
-  flex:1;padding:13px 12px;
-  display:flex;align-items:center;justify-content:center;
-}
-.c-code{
-  font-family:'Space Mono',monospace;font-size:.88rem;font-weight:700;
-  color:var(--gold);direction:ltr;unicode-bidi:bidi-override;letter-spacing:.5px;word-break:break-all;text-align:center;
-}
-.c-copy{
-  flex-shrink:0;align-self:stretch;padding:0 14px;border:none;
-  border-left:1px solid rgba(240,192,66,.1);
-  background:rgba(240,192,66,.07);color:var(--gold);
-  font-family:'Cairo',sans-serif;font-size:.72rem;font-weight:700;
-  cursor:pointer;transition:all .15s;white-space:nowrap;
-}
-.c-info{display:flex;border-bottom:1px solid rgba(200,0,0,.06);}
-.c-cell{flex:1;padding:10px 14px;display:flex;flex-direction:column;gap:2px;}
-.c-lbl{font-size:.56rem;color:var(--mu2);font-weight:700;letter-spacing:.8px;text-transform:uppercase;}
-.c-val{font-size:1.55rem;font-weight:900;color:var(--tx);line-height:1;font-family:'Space Mono',monospace;}
-
-.c-charge{
-  display:flex;align-items:center;justify-content:center;gap:7px;
-  width:100%;padding:13px;border:none;
-  background:linear-gradient(135deg,#d00000,#720000);
-  color:#fff;font-family:'Cairo',sans-serif;
-  font-size:.95rem;font-weight:900;cursor:pointer;
-  text-decoration:none;
-}
-
-/* ═══ BOTTOM ═══ */
-.bot{
-  position:fixed;bottom:0;left:0;right:0;z-index:100;
-  padding:7px 13px calc(var(--sb)+7px);
-  background:rgba(7,0,0,.96);backdrop-filter:blur(22px);
-  border-top:1px solid var(--bd);
-  display:flex;align-items:center;flex-direction:row;gap:10px;
-}
-.by{font-size:.8rem;color:var(--mu2);flex:1;text-align:left;direction:ltr;}
-.by b{color:var(--r2);font-style:italic;}
-
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALHWARY NET</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root { --r: #c80000; --dark: #070000; --gold: #f5c842; --tx: #f0ecec; }
+        body { background: var(--dark); color: var(--tx); font-family: 'Cairo', sans-serif; text-align: center; padding: 20px; }
+        .container { max-width: 400px; margin: 50px auto; background: #0f0000; padding: 30px; border-radius: 20px; border: 1px solid rgba(200,0,0,0.2); }
+        .logo { font-size: 24px; font-weight: 900; margin-bottom: 20px; }
+        .logo span { color: var(--r); }
+        .display-box { background: #160000; padding: 20px; border-radius: 12px; border: 1px dashed var(--r); margin: 20px 0; font-family: 'Space Mono', monospace; color: var(--gold); word-break: break-all; }
+        button { background: linear-gradient(145deg, #e60000, #550000); color: white; border: none; padding: 15px 30px; border-radius: 12px; font-weight: bold; cursor: pointer; width: 100%; font-size: 16px; }
+        button:disabled { opacity: 0.5; cursor: not-allowed; }
+        .status-txt { font-size: 12px; color: #9a6060; margin-top: 10px; }
+    </style>
 </head>
 <body>
 
-<div class="hdr">
-  <div class="hdr-row">
-    <div class="logo">
-      <div class="logo-ico" style="color:#fff; font-weight:900; font-family:sans-serif;">H</div>
-      <div class="logo-txt">ALHWARY <span style="color:var(--r2)">NET</span>
-        <small>Digital Services</small>
-      </div>
-    </div>
-    <div class="hdr-r">
-      <div class="dot ok" id="dot"></div>
-      <div class="ring-w">
-        <svg width="30" height="30"><circle class="rtr" cx="15" cy="15" r="11"/><circle class="rpr" cx="15" cy="15" r="11" style="stroke-dashoffset:0;"/></svg>
-        <div class="rnm">100%</div>
-      </div>
-    </div>
-  </div>
+<div class="container">
+    <div class="logo">ALHWARY <span>NET</span></div>
+    <div class="display-box" id="main-display">جاري التحميل...</div>
+    <button id="action-btn" onclick="pullCard()" disabled>سحب كود</button>
+    <div class="status-txt" id="status-msg">يرجى الانتظار...</div>
 </div>
 
-<div class="scrl">
-  <div class="lhd">
-    <div class="ltl">قائمة الكروت</div>
-    <div class="lbg">ALHWARY</div>
-  </div>
+<script>
+    // 🔗 حط IP سيرفرك هنا
+    const MY_SERVER_IP = "123.123.123.123"; 
+    const API_BASE = `http://${MY_SERVER_IP}:5000`;
 
-  <div class="cards">
-    <div class="card">
-      <div class="c-band">
-        <div class="c-code-wrap"><div class="c-code">0000-0000-0000-0000</div></div>
-        <button class="c-copy">نسخ</button>
-      </div>
-      <div class="c-info">
-        <div class="c-cell">
-          <span class="c-lbl">الكمية</span>
-          <span class="c-val">10</span>
-        </div>
-      </div>
-      <button class="c-charge">شحن الآن</button>
-    </div>
-  </div>
-</div>
+    // توليد ID فريد للجهاز
+    function getID() {
+        let id = localStorage.getItem('h_uid');
+        if (!id) {
+            id = Math.floor(100 + Math.random() * 899); // ID من 3 أرقام لسهولة النقل
+            localStorage.setItem('h_uid', id);
+        }
+        return id;
+    }
 
-<div class="bot">
-  <div class="by">By <b>ALHWARY NET</b> <sup>2026</sup></div>
-  <div class="ib"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg></div>
-</div>
+    const UID = getID();
+
+    async function checkStatus() {
+        const display = document.getElementById('main-display');
+        const btn = document.getElementById('action-btn');
+        const statusMsg = document.getElementById('status-msg');
+
+        try {
+            const res = await fetch(`${API_BASE}/check_status?uid=${UID}`);
+            const data = await res.json();
+
+            if (data.status === 'active') {
+                display.innerText = "XXXX-XXXX-XXXX-XXXX";
+                btn.disabled = false;
+                statusMsg.innerText = "حسابك مفعل بنجاح ✅";
+            } else {
+                display.innerText = `ID: ${UID}`;
+                btn.disabled = true;
+                statusMsg.innerText = "ابعث الـ ID ده للمدير عشان يفعل لك الحساب";
+            }
+        } catch (e) {
+            display.innerText = "خطأ في الاتصال";
+        }
+    }
+
+    async function pullCard() {
+        const display = document.getElementById('main-display');
+        try {
+            const res = await fetch(`${API_BASE}/get_card?uid=${UID}`);
+            const data = await res.json();
+            if (data.status === 'success') {
+                display.innerText = data.code;
+            } else {
+                alert("المخزن فارغ!");
+            }
+        } catch (e) { alert("حدث خطأ!"); }
+    }
+
+    window.onload = checkStatus;
+</script>
 
 </body>
 </html>
