@@ -3,116 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ALHWARY NET | طلب تفعيل</title>
+    <title>ALHWARY NET</title>
     <style>
-        body {
-            background-color: #050000;
-            color: #ffffff;
-            font-family: 'Segoe UI', Tahoma, sans-serif;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        .container {
-            background: linear-gradient(145deg, #0f0000, #1a0000);
-            border: 2px solid #25d366; /* لون أخضر واتساب */
-            border-radius: 25px;
-            padding: 40px;
-            text-align: center;
-            box-shadow: 0 0 30px rgba(37, 211, 102, 0.3);
-            width: 90%;
-            max-width: 400px;
-        }
-
-        h1 { color: #25d366; font-size: 32px; margin-bottom: 5px; }
-        h1 span { color: #ffffff; }
-        p { color: #cccccc; margin-bottom: 20px; }
-
-        .id-box {
-            background: #000;
-            border: 1px dashed #f5c842;
-            padding: 15px;
-            border-radius: 15px;
-            font-size: 28px;
-            color: #f5c842;
-            margin-bottom: 20px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .btn-whatsapp {
-            background: linear-gradient(45deg, #25d366, #128c7e);
-            color: white;
-            border: none;
-            padding: 15px;
-            border-radius: 12px;
-            font-size: 18px;
-            font-weight: bold;
-            text-decoration: none;
-            display: block;
-            transition: 0.3s;
-        }
-
-        .btn-whatsapp:hover {
-            box-shadow: 0 0 20px #25d366;
-            transform: scale(1.05);
-        }
-
-        .note { font-size: 13px; color: #888; margin-top: 15px; }
+        body { background: #050000; color: white; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: #0a0a0a; border: 2px solid #25d366; border-radius: 20px; padding: 30px; text-align: center; width: 85%; box-shadow: 0 0 20px rgba(37, 211, 102, 0.4); }
+        h1 { color: #25d366; margin: 0; font-size: 28px; text-shadow: 0 0 10px #25d366; }
+        .id-box { background: #000; border: 1px dashed #f5c842; padding: 20px; border-radius: 10px; font-size: 32px; color: #f5c842; margin: 20px 0; font-weight: bold; }
+        .btn { background: linear-gradient(45deg, #25d366, #128c7e); color: white; border: none; padding: 15px; border-radius: 10px; font-size: 18px; font-weight: bold; width: 100%; cursor: pointer; display: block; text-decoration: none; }
     </style>
 </head>
 <body>
-
-<div class="container">
-    <h1>ALHWARY <span>NET</span></h1>
-    <p>تفعيل الكود عبر الواتساب</p>
-    
-    <div class="id-box" id="displayID" onclick="copyID()">
-        جاري التحميل...
+    <div class="card">
+        <h1>ALHWARY <span>NET</span></h1>
+        <p>انسخ الـ ID واضغط للإرسال للمدير</p>
+        
+        <div class="id-box" id="user_id">...</div>
+        
+        <button class="btn" onclick="goToWhatsApp()">إرسال الـ ID عبر واتساب</button>
     </div>
-    
-    <p style="font-size: 14px;">انسخ الـ ID واضغط بالأسفل لإرساله للمدير.</p>
 
-    <button onclick="sendToWhatsApp()" class="btn-whatsapp">
-        إرسال الـ ID عبر واتساب
-    </button>
-
-    <div class="note">سيتم إرسال رسالة جاهزة للمدير لتفعيل كودك.</div>
-</div>
-
-<script>
-    // حط رقمك هنا بالصيغة الدولية (بدون أصفار في الأول وبدون علامة +)
-    // مثال: 201234567890 (لمصر)
-    const MY_PHONE = "201556853817"; 
-
-    function setupID() {
-        let userID = localStorage.getItem('alhwary_user_id');
-        if (!userID) {
-            userID = Math.floor(100000 + Math.random() * 900000);
-            localStorage.setItem('alhwary_user_id', userID);
+    <script>
+        // 1. توليد الـ ID فوراً وحفظه في الجهاز
+        let savedID = localStorage.getItem('alhwary_id');
+        if (!savedID) {
+            savedID = Math.floor(100000 + Math.random() * 900000);
+            localStorage.setItem('alhwary_id', savedID);
         }
-        document.getElementById('displayID').innerText = userID;
-    }
+        document.getElementById('user_id').innerText = savedID;
 
-    function copyID() 
-        let idText = document.getElementById('displayID').innerText;
-        navigator.clipboard.writeText(idText);
-        alert("تم نسخ الـ ID: " + idText);
-    }
-
-    function sendToWhatsApp() {
-        let idText = document.getElementById('displayID').innerText;
-        let message = "يا مدير، ده الـ ID بتاعي وعايز كود التفعيل: " + idText;
-        // رابط واتساب السريع
-        let url = "https://wa.me/" + MY_PHONE + "?text=" + encodeURIComponent(message);
-        window.open(url, '_blank');
-    }
-
-    window.onload = setupID;
-</script>
-
+        // 2. وظيفة فتح الواتساب (ضع رقمك مكان 201012345678)
+        function goToWhatsApp() {
+            const myPhone = "201012345678"; // رقمك بالصيغة الدولية
+            const message = "يا مدير، ده الـ ID بتاعي وعايز كود التفعيل: " + savedID;
+            window.location.href = "whatsapp://send?phone=" + myPhone + "&text=" + encodeURIComponent(message);
+        }
+    </script>
 </body>
 </html>
