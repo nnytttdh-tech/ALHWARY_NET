@@ -3,216 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ALHWARY NET | SECURE SYSTEM</title>
+    <title>ALHWARY NET | ULTIMATE SYSTEM</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#000000">
+
     <style>
-        /* التنسيق العام المظلم */
-        body { 
-            background: #000; 
-            color: #ccc; 
-            font-family: 'Courier New', monospace; 
-            margin: 0; 
-            padding: 0; /* تم إزالة الحشو لإفساح المجال للخلفية */
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            min-height: 100vh; 
-            user-select: none; 
-            overflow: hidden; /* لمنع ظهور أشرطة التمرير على الخلفية */
-        }
-        
-        /* قماش الخلفية (مصفوفة المطر) */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #000; color: #ccc; font-family: 'Courier New', monospace; overflow: hidden; }
+
+        /* الخلفية المتحركة (Matrix) */
         #matrixCanvas {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1; /* لجعلها خلف المحتوى */
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1;
         }
 
-        /* حاوية المحتوى الرئيسي */
-        .main-container {
+        /* الطبقة العلوية للمحتوى */
+        .main-wrapper {
+            position: relative;
+            z-index: 2;
+            height: 100vh;
             width: 100%;
+            overflow-y: auto;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 15px;
-            box-sizing: border-box;
-            overflow-y: auto; /* للسماح بالتمرير داخل المحتوى */
-            height: 100vh;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
         }
 
-        /* شاشة التحميل (مثل الصورة تماماً) */
-        #loadingScreen { 
-            display: none; 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%; 
-            background: rgba(0, 0, 0, 0.9); /* خلفية شبه شفافة */
-            z-index: 9999; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: center; 
+        /* شاشة التحميل الاحترافية */
+        #loadingScreen {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; z-index: 9999;
+            flex-direction: column; align-items: center; justify-content: center;
         }
-        .loading-text { 
-            color: #00ff00; 
-            font-size: 18px; 
-            margin-bottom: 20px; 
-            font-weight: bold; 
-            text-shadow: 0 0 10px #00ff00; 
-        }
-        .progress-bar { 
-            width: 85%; 
-            max-width: 450px; 
-            height: 18px; 
-            border: 1px solid #00ff00; 
-            position: relative; 
-            background: #050505; 
-        }
-        .progress-fill { 
-            width: 0%; 
-            height: 100%; 
-            background: #00ff00; 
-            box-shadow: 0 0 20px #00ff00; 
-            transition: width 0.1s; 
-        }
-        .console-box { 
-            width: 85%; 
-            max-width: 450px; 
-            height: 180px; 
-            border-left: 2px solid #00ff00; 
-            margin-top: 25px; 
-            padding: 12px; 
-            font-size: 11px; 
-            color: #008800; 
-            overflow: hidden; 
-            line-height: 1.6; 
-            background: rgba(0,255,0,0.02); 
-        }
+        .loading-msg { color: #0f0; font-size: 18px; margin-bottom: 15px; font-weight: bold; text-shadow: 0 0 10px #0f0; }
+        .bar-container { width: 80%; max-width: 400px; height: 12px; border: 1px solid #0f0; background: #050505; }
+        .bar-fill { width: 0%; height: 100%; background: #0f0; box-shadow: 0 0 15px #0f0; transition: 0.1s; }
 
-        /* تصميم الكروت الجديد بالكامل */
-        h1 { 
-            color: #ff0000; 
-            text-transform: uppercase; 
-            letter-spacing: 2px; 
-            font-size: 22px; 
-            margin-bottom: 25px; 
-            text-shadow: 0 0 8px rgba(255,0,0,0.4); 
+        /* تصميم الكروت الجديد */
+        h1 { color: #ff0000; text-shadow: 0 0 15px #f00; margin-bottom: 20px; text-transform: uppercase; }
+        .card-container { width: 100%; max-width: 480px; }
+        .code-card {
+            background: rgba(10, 10, 10, 0.9);
+            border: 1px solid #1a1a1a;
+            border-top: 3px solid #ff0000;
+            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.8);
         }
-        .card-container { 
-            width: 100%; 
-            max-width: 480px; 
+        .line { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #222; }
+        .label { color: #888; font-size: 12px; }
+        .value { color: #fff; font-weight: bold; font-size: 16px; }
+        .units { color: #0f0; font-weight: bold; }
+        
+        .copy-btn {
+            background: #ff0000; color: #fff; border: none; padding: 15px;
+            width: 100%; border-radius: 5px; font-weight: bold; cursor: pointer;
+            margin-top: 15px; transition: 0.3s; text-transform: uppercase;
         }
-        .code-card { 
-            background: rgba(8, 8, 8, 0.9); /* خلفية شبه شفافة للكرت */
-            border: 1px solid #1a1a1a; 
-            margin-bottom: 20px; 
-            padding: 20px; 
-            display: flex; 
-            flex-direction: column; 
-            position: relative; 
-            border-radius: 8px; 
-            box-shadow: 0 6px 15px rgba(0,0,0,0.6); 
-            transition: 0.3s; 
-            border-top: 2px solid transparent; 
-        }
-        .code-card:hover { 
-            border-top-color: #ff0000; 
-            transform: translateY(-5px); 
-        }
-        .copy-btn { 
-            border: 2px solid #ff0000; 
-            color: #fff; 
-            background: #ff0000; 
-            font-size: 12px; 
-            padding: 10px 15px; 
-            cursor: pointer; 
-            border-radius: 5px; 
-            font-weight: bold; 
-            transition: 0.3s; 
-            width: 100%; 
-            margin-top: 15px; 
-            text-transform: uppercase; 
-            letter-spacing: 1px; 
-        }
-        .copy-btn:hover { 
-            background: transparent; 
-            color: #ff0000; 
-        }
-        .code-details { 
-            text-align: left; 
-            display: flex; 
-            flex-direction: column; 
-        }
-        .line { 
-            margin: 8px 0; 
-            font-weight: bold; 
-            font-size: 15px; 
-            display: flex; 
-            align-items: center; 
-            gap: 10px; 
-            border-bottom: 1px solid #1a1a1a; 
-            padding-bottom: 8px; 
-        }
-        .label { 
-            color: #ccc; 
-            font-size: 12px; 
-            text-transform: uppercase; 
-        }
-        .value { 
-            color: #fff; 
-            font-size: 18px; 
-            letter-spacing: 1.5px; 
-            font-weight: bold; 
-        } 
-        .units-val { 
-            color: #00ff00; 
-            font-size: 16px; 
-            font-weight: bold; 
-        }
-        .rem-val { 
-            color: #3498db; 
-            font-size: 14px; 
-            font-weight: bold; 
-        }
-        .high-priority { 
-            background: #ff0000; 
-            color: #fff; 
-            font-size: 10px; 
-            padding: 4px 10px; 
-            position: absolute; 
-            top: -12px; 
-            left: 20px; 
-            font-weight: bold; 
-            border-radius: 3px; 
-            text-transform: uppercase; 
-            letter-spacing: 1px; 
-        }
+        .copy-btn:active { transform: scale(0.95); }
 
         /* صفحة الدخول */
-        #loginPage { 
-            text-align: center; 
-            margin-top: 25%; 
-            width: 100%; 
-            max-width: 400px; 
+        #loginPage { text-align: center; margin-top: 30%; width: 100%; }
+        .id-box { 
+            font-size: 32px; color: #f1c40f; border: 2px dashed #444; 
+            padding: 25px; margin: 25px 0; background: rgba(0,0,0,0.8); 
+            border-radius: 10px; font-weight: bold;
         }
-        .id-display { 
-            font-size: 34px; 
-            color: #f1c40f; 
-            margin: 25px 0; 
-            border: 2px dashed #333; 
-            padding: 25px; 
-            background: rgba(10, 10, 10, 0.9); /* خلفية شبه شفافة */
-            border-radius: 12px; 
-            font-weight: bold; 
-            letter-spacing: 2px; 
-        }
-        #contentPage { 
-            display: none; 
-            width: 100%; 
-            text-align: center; 
+        .priority-tag {
+            background: #ff0000; color: #fff; font-size: 9px;
+            padding: 3px 10px; position: absolute; top: -12px; left: 20px;
+            border-radius: 3px; font-weight: bold;
         }
     </style>
 </head>
@@ -221,178 +90,109 @@
 <canvas id="matrixCanvas"></canvas>
 
 <div id="loadingScreen">
-    <div class="loading-text">[!] جاري فك التشفير واستخراج الكروت ..</div>
-    <div class="progress-bar"><div class="progress-fill" id="fill"></div></div>
-    <div style="color: #00ff00; font-size: 11px; margin-top: 15px;">الامن المتوقع للحرق: <span id="timer">5</span> ثواني ...</div>
-    <div class="console-box" id="console"></div>
+    <div class="loading-msg">[!] جاري فك تشفير البيانات...</div>
+    <div class="bar-container"><div id="bar" class="bar-fill"></div></div>
+    <div id="status" style="color:#0f0; font-size:10px; margin-top:10px;">Initializing...</div>
 </div>
 
-<div class="main-container">
-
+<div class="main-wrapper">
     <div id="loginPage">
         <h1>ALHWARY NET</h1>
-        <p style="color: #555; font-size: 12px;">SYSTEM: <span style="color: #ff0000;">ENCRYPTED_DATABASE</span></p>
-        <div class="id-display" id="myID">------</div>
-        <button class="copy-btn" onclick="requestAccess()" style="padding: 18px; font-size: 15px; width: 100%;">طلب التفعيل الآن (WhatsApp)</button>
+        <p style="color:#666; font-size:12px;">ENCRYPTED ACCESS ONLY</p>
+        <div class="id-box" id="myID">------</div>
+        <button class="copy-btn" onclick="window.location.href='https://wa.me/201556853817'">تفعيل الحساب الآن</button>
     </div>
 
-    <div id="contentPage">
-        <h1>EXTRACTED_CARDS</h1>
-        <p style="color: #444; font-size: 10px; margin-bottom: 20px;">SUCCESS: DATABASE DECRYPTED (DARK POWERED)</p>
+    <div id="contentPage" style="display:none; width: 100%; text-align: center;">
+        <h1>DECRYPTED_CODES</h1>
         <div id="codesContainer" class="card-container"></div>
     </div>
-
 </div>
 
 <script>
-    // --- كود خلفية مصفوفة المطر (Matrix Rain) ---
+    // --- 1. تأثير الماتريكس (المضمون) ---
     const canvas = document.getElementById('matrixCanvas');
-    const ctx = canvas.getContext('ctx');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+    const alphabet = "0101010101010101";
+    const fontSize = 16;
+    const columns = canvas.width / fontSize;
+    const drops = Array(Math.floor(columns)).fill(1);
 
-    // تعيين حجم القماش لملء الشاشة
-    canvas.height = window.innerHeight;
-    canvas.width = window.innerWidth;
-
-    // الأحرف والأرقام التي ستتساقط
-    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()_+-=[]{}|;:,.<>?";
-    const charArray = characters.split("");
-
-    const fontSize = 14;
-    const columns = canvas.width / fontSize; // عدد الأعمدة
-
-    // مصفوفة لتخزين موقع 'y' لكل عمود
-    const drops = [];
-    // تهيئة المصفوفة
-    for (let x = 0; x < columns; x++) {
-        drops[x] = 1;
-    }
-
-    // دالة الرسم
-    function drawMatrix() {
-        // رسم خلفية سوداء شبه شفافة لتأثير التلاشي
-        ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        // تعيين لون النص لللون الأخضر
-        ctx.fillStyle = "#0f0"; // أخضر هاكر
-        ctx.font = fontSize + "px Courier New";
-
-        // حلقة عبر الأعمدة ورسم الأحرف
-        for (let i = 0; i < drops.length; i++) {
-            // اختيار حرف عشوائي
-            const text = charArray[Math.floor(Math.random() * charArray.length)];
-            // رسم الحرف
-            ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-            // تحريك القطرة لأسفل
-            // إذا وصلت القطرة إلى أسفل الشاشة، قم بإعادتها إلى الأعلى بشكل عشوائي
-            if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                drops[i] = 0;
-            }
-
-            // زيادة موقع 'y'
+    function draw() {
+        ctx.fillStyle = "rgba(0, 0, 0, 0.05)"; ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#0F0"; ctx.font = fontSize + "px monospace";
+        drops.forEach((y, i) => {
+            const text = alphabet[Math.floor(Math.random() * alphabet.length)];
+            ctx.fillText(text, i * fontSize, y * fontSize);
+            if (y * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
             drops[i]++;
-        }
+        });
     }
+    setInterval(draw, 35);
 
-    // تحديث الرسم كل 33 مللي ثانية (حوالي 30 إطارًا في الثانية)
-    setInterval(drawMatrix, 33);
-
-    // --- كود الحماية والوظائف القائمة ---
-
-    // حماية ضد النسخ وفحص الصفحة
-    document.onkeydown = function(e) {
-        if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || (e.ctrlKey && e.keyCode == 85)) return false;
-    };
-
+    // --- 2. نظام الـ ID والتحكم ---
     let userID = localStorage.getItem('h_user_id') || Math.floor(100000 + Math.random() * 900000).toString();
     localStorage.setItem('h_user_id', userID);
     document.getElementById('myID').innerText = userID;
 
-    const logs = [
-        "Cleaning Logs <", "Syncing with Dark Net API <", "Validating BIN Codes <", 
-        "Decrypting AES-256 Packets <", "Extracting Encrypted Card Data <", 
-        "Handshake with Proxy Node-7 <", "Accessing Database Cluster-A <", 
-        "Bypassing Cloudflare Firewall <", "Initializing SQL Injection <"
-    ];
+    async function checkAccess() {
+        try {
+            const res = await fetch(`codes.json?v=${Date.now()}`);
+            const data = await res.json();
+            
+            if (data.site_status === "open" || data.active_users.includes(userID)) {
+                if (document.getElementById('contentPage').style.display !== "block" && document.getElementById('loadingScreen').style.display !== "flex") {
+                    startLoading(data);
+                }
+            }
+        } catch(e) {}
+    }
 
     function startLoading(data) {
         document.getElementById('loginPage').style.display = "none";
         document.getElementById('loadingScreen').style.display = "flex";
+        let progress = 0;
+        const statusLines = ["Bypassing Firewall...", "Accessing Database...", "Decrypting AES-256...", "Finalizing..."];
         
-        let width = 0;
-        let timeLeft = 5;
-        const fill = document.getElementById('fill');
-        const consoleBox = document.getElementById('console');
-        
-        const interval = setInterval(() => {
-            width += 2;
-            fill.style.width = width + "%";
+        const timer = setInterval(() => {
+            progress += 4;
+            document.getElementById('bar').style.width = progress + "%";
+            document.getElementById('status').innerText = statusLines[Math.floor(progress/30)] || "Done!";
             
-            if (width % 12 === 0) {
-                const logItem = document.createElement('div');
-                logItem.innerText = "... " + logs[Math.floor(Math.random() * logs.length)];
-                consoleBox.prepend(logItem);
+            if (progress >= 100) {
+                clearInterval(timer);
+                setTimeout(() => {
+                    document.getElementById('loadingScreen').style.display = "none";
+                    document.getElementById('contentPage').style.display = "block";
+                    renderCodes(data);
+                }, 500);
             }
-
-            if (width >= 100) {
-                clearInterval(interval);
-                setTimeout(() => showContent(data), 500);
-            }
-        }, 80);
-
-        const timerInterval = setInterval(() => {
-            timeLeft--;
-            document.getElementById('timer').innerText = (timeLeft < 0) ? 0 : timeLeft;
-            if (timeLeft <= 0) clearInterval(timerInterval);
-        }, 1000);
+        }, 100);
     }
 
-    function showContent(data) {
-        document.getElementById('loadingScreen').style.display = "none";
-        document.getElementById('contentPage').style.display = "block";
-        
+    function renderCodes(data) {
         let html = "";
-        data.net_codes.forEach((item, index) => {
-            const originalCode = atob(item.code); // فك التشفير لـ Base 64
-            const priorityLabel = index < 3 ? '<div class="high-priority">HIGH PRIORITY</div>' : '';
+        data.net_codes.forEach((item, i) => {
+            const realCode = atob(item.code);
             html += `
             <div class="code-card">
-                ${priorityLabel}
-                <div class="code-details">
-                    <div class="line"><span class="label">CODE:</span> <span class="value">${originalCode}</span> 💳</div>
-                    <div class="line"><span class="label">UNITS:</span> <span class="units-val">${item.units}</span> 📦</div>
-                    <div class="line" style="font-size:11px; border-bottom: none;"><span class="label">remaining people :</span> <span class="rem-val">${Math.floor(Math.random() * 45) + 5}</span> 👥</div>
-                </div>
-                <button class="copy-btn" onclick="copyToClipboard('${originalCode}')">COPY_CODE</button>
+                ${i < 2 ? '<div class="priority-tag">TOP PRIORITY</div>' : ''}
+                <div class="line"><span class="label">CODE:</span> <span class="value">${realCode}</span></div>
+                <div class="line"><span class="label">UNITS:</span> <span class="units">${item.units}</span></div>
+                <div class="line" style="border:none; font-size:10px; color:#444;"><span>REMAINING:</span> <span>${Math.floor(Math.random()*20)+2} people</span></div>
+                <button class="copy-btn" onclick="copyCode('${realCode}')">نسخ الكود 💳</button>
             </div>`;
         });
         document.getElementById('codesContainer').innerHTML = html;
     }
 
-    async function checkSystem() {
-        try {
-            const res = await fetch(`codes.json?nocache=${Date.now()}`, { cache: "no-store" });
-            const data = await res.json();
-            
-            if (data.site_status === "open" || (data.active_users && data.active_users.includes(userID))) {
-                if (document.getElementById('contentPage').style.display !== "block" && document.getElementById('loadingScreen').style.display !== "flex") {
-                    startLoading(data);
-                }
-            }
-        } catch (e) { console.log("جاري الاتصال بالسيرفر..."); }
-    }
-
-    function copyToClipboard(text) {
+    function copyCode(text) {
         navigator.clipboard.writeText(text);
-        alert("تم نسخ كود الشحن بنجاح!");
+        alert("✅ تم النسخ: " + text);
     }
 
-    function requestAccess() {
-        window.location.href = `https://wa.me/201556853817?text=تفعيل_اي_دي:${userID}`;
-    }
-
-    setInterval(checkSystem, 2000);
+    setInterval(checkAccess, 3000);
 </script>
 </body>
 </html>
