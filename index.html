@@ -6,43 +6,219 @@
     <title>ALHWARY NET | SECURE SYSTEM</title>
     <style>
         /* التنسيق العام المظلم */
-        body { background: #000; color: #ccc; font-family: 'Courier New', monospace; margin: 0; padding: 15px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; user-select: none; overflow-x: hidden; }
+        body { 
+            background: #000; 
+            color: #ccc; 
+            font-family: 'Courier New', monospace; 
+            margin: 0; 
+            padding: 0; /* تم إزالة الحشو لإفساح المجال للخلفية */
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            min-height: 100vh; 
+            user-select: none; 
+            overflow: hidden; /* لمنع ظهور أشرطة التمرير على الخلفية */
+        }
         
-        /* شاشة التحميل (مثل الصورة تماماً) */
-        #loadingScreen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; flex-direction: column; align-items: center; justify-content: center; }
-        .loading-text { color: #00ff00; font-size: 18px; margin-bottom: 20px; font-weight: bold; text-shadow: 0 0 10px #00ff00; }
-        .progress-bar { width: 85%; max-width: 450px; height: 18px; border: 1px solid #00ff00; position: relative; background: #050505; }
-        .progress-fill { width: 0%; height: 100%; background: #00ff00; box-shadow: 0 0 20px #00ff00; transition: width 0.1s; }
-        .console-box { width: 85%; max-width: 450px; height: 180px; border-left: 2px solid #00ff00; margin-top: 25px; padding: 12px; font-size: 11px; color: #008800; overflow: hidden; line-height: 1.6; background: rgba(0,255,0,0.02); }
+        /* قماش الخلفية (مصفوفة المطر) */
+        #matrixCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* لجعلها خلف المحتوى */
+        }
 
-        /* تصميم الكروت (مثل الصور التي أرسلتها) */
-        h1 { color: #ff0000; text-transform: uppercase; letter-spacing: 2px; font-size: 22px; margin-bottom: 25px; text-shadow: 0 0 8px rgba(255,0,0,0.4); }
-        .card-container { width: 100%; max-width: 480px; }
-        .code-card { background: #080808; border: 1px solid #1a1a1a; margin-bottom: 18px; padding: 18px; display: flex; justify-content: space-between; position: relative; border-radius: 5px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
-        .copy-btn { border: 1px solid #ff0000; color: #ff0000; background: transparent; font-size: 11px; padding: 10px; cursor: pointer; border-radius: 4px; font-weight: bold; transition: 0.3s; }
-        .copy-btn:hover { background: #ff0000; color: #fff; }
-        .code-details { text-align: left; flex-grow: 1; margin-left: 18px; }
-        .line { margin: 6px 0; font-weight: bold; font-size: 14px; display: flex; align-items: center; gap: 8px; }
-        .label { color: #00ff00; font-size: 13px; text-transform: uppercase; }
-        .value { color: #fff; font-size: 17px; letter-spacing: 1px; } 
-        .units-val { color: #ff0000; font-size: 15px; }
-        .rem-val { color: #3498db; font-size: 13px; }
-        .high-priority { background: #ff0000; color: #fff; font-size: 9px; padding: 3px 8px; position: absolute; top: -11px; left: 50%; transform: translateX(-50%); font-weight: bold; border-radius: 2px; }
+        /* حاوية المحتوى الرئيسي */
+        .main-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 15px;
+            box-sizing: border-box;
+            overflow-y: auto; /* للسماح بالتمرير داخل المحتوى */
+            height: 100vh;
+        }
+
+        /* شاشة التحميل (مثل الصورة تماماً) */
+        #loadingScreen { 
+            display: none; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(0, 0, 0, 0.9); /* خلفية شبه شفافة */
+            z-index: 9999; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+        }
+        .loading-text { 
+            color: #00ff00; 
+            font-size: 18px; 
+            margin-bottom: 20px; 
+            font-weight: bold; 
+            text-shadow: 0 0 10px #00ff00; 
+        }
+        .progress-bar { 
+            width: 85%; 
+            max-width: 450px; 
+            height: 18px; 
+            border: 1px solid #00ff00; 
+            position: relative; 
+            background: #050505; 
+        }
+        .progress-fill { 
+            width: 0%; 
+            height: 100%; 
+            background: #00ff00; 
+            box-shadow: 0 0 20px #00ff00; 
+            transition: width 0.1s; 
+        }
+        .console-box { 
+            width: 85%; 
+            max-width: 450px; 
+            height: 180px; 
+            border-left: 2px solid #00ff00; 
+            margin-top: 25px; 
+            padding: 12px; 
+            font-size: 11px; 
+            color: #008800; 
+            overflow: hidden; 
+            line-height: 1.6; 
+            background: rgba(0,255,0,0.02); 
+        }
+
+        /* تصميم الكروت الجديد بالكامل */
+        h1 { 
+            color: #ff0000; 
+            text-transform: uppercase; 
+            letter-spacing: 2px; 
+            font-size: 22px; 
+            margin-bottom: 25px; 
+            text-shadow: 0 0 8px rgba(255,0,0,0.4); 
+        }
+        .card-container { 
+            width: 100%; 
+            max-width: 480px; 
+        }
+        .code-card { 
+            background: rgba(8, 8, 8, 0.9); /* خلفية شبه شفافة للكرت */
+            border: 1px solid #1a1a1a; 
+            margin-bottom: 20px; 
+            padding: 20px; 
+            display: flex; 
+            flex-direction: column; 
+            position: relative; 
+            border-radius: 8px; 
+            box-shadow: 0 6px 15px rgba(0,0,0,0.6); 
+            transition: 0.3s; 
+            border-top: 2px solid transparent; 
+        }
+        .code-card:hover { 
+            border-top-color: #ff0000; 
+            transform: translateY(-5px); 
+        }
+        .copy-btn { 
+            border: 2px solid #ff0000; 
+            color: #fff; 
+            background: #ff0000; 
+            font-size: 12px; 
+            padding: 10px 15px; 
+            cursor: pointer; 
+            border-radius: 5px; 
+            font-weight: bold; 
+            transition: 0.3s; 
+            width: 100%; 
+            margin-top: 15px; 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+        }
+        .copy-btn:hover { 
+            background: transparent; 
+            color: #ff0000; 
+        }
+        .code-details { 
+            text-align: left; 
+            display: flex; 
+            flex-direction: column; 
+        }
+        .line { 
+            margin: 8px 0; 
+            font-weight: bold; 
+            font-size: 15px; 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+            border-bottom: 1px solid #1a1a1a; 
+            padding-bottom: 8px; 
+        }
+        .label { 
+            color: #ccc; 
+            font-size: 12px; 
+            text-transform: uppercase; 
+        }
+        .value { 
+            color: #fff; 
+            font-size: 18px; 
+            letter-spacing: 1.5px; 
+            font-weight: bold; 
+        } 
+        .units-val { 
+            color: #00ff00; 
+            font-size: 16px; 
+            font-weight: bold; 
+        }
+        .rem-val { 
+            color: #3498db; 
+            font-size: 14px; 
+            font-weight: bold; 
+        }
+        .high-priority { 
+            background: #ff0000; 
+            color: #fff; 
+            font-size: 10px; 
+            padding: 4px 10px; 
+            position: absolute; 
+            top: -12px; 
+            left: 20px; 
+            font-weight: bold; 
+            border-radius: 3px; 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+        }
 
         /* صفحة الدخول */
-        #loginPage { text-align: center; margin-top: 25%; width: 100%; max-width: 400px; }
-        .id-display { font-size: 34px; color: #f1c40f; margin: 25px 0; border: 2px dashed #333; padding: 25px; background: #0a0a0a; border-radius: 12px; font-weight: bold; letter-spacing: 2px; }
-        #contentPage { display: none; width: 100%; text-align: center; }
+        #loginPage { 
+            text-align: center; 
+            margin-top: 25%; 
+            width: 100%; 
+            max-width: 400px; 
+        }
+        .id-display { 
+            font-size: 34px; 
+            color: #f1c40f; 
+            margin: 25px 0; 
+            border: 2px dashed #333; 
+            padding: 25px; 
+            background: rgba(10, 10, 10, 0.9); /* خلفية شبه شفافة */
+            border-radius: 12px; 
+            font-weight: bold; 
+            letter-spacing: 2px; 
+        }
+        #contentPage { 
+            display: none; 
+            width: 100%; 
+            text-align: center; 
+        }
     </style>
 </head>
 <body oncontextmenu="return false;">
 
-<div id="loginPage">
-    <h1>ALHWARY NET</h1>
-    <p style="color: #555; font-size: 12px;">SYSTEM: <span style="color: #ff0000;">ENCRYPTED_DATABASE</span></p>
-    <div class="id-display" id="myID">------</div>
-    <button class="copy-btn" onclick="requestAccess()" style="padding: 18px; font-size: 15px; width: 100%;">طلب التفعيل الآن (WhatsApp)</button>
-</div>
+<canvas id="matrixCanvas"></canvas>
 
 <div id="loadingScreen">
     <div class="loading-text">[!] جاري فك التشفير واستخراج الكروت ..</div>
@@ -51,13 +227,79 @@
     <div class="console-box" id="console"></div>
 </div>
 
-<div id="contentPage">
-    <h1>EXTRACTED_CARDS</h1>
-    <p style="color: #444; font-size: 10px; margin-bottom: 20px;">SUCCESS: DATABASE DECRYPTED (DARK POWERED)</p>
-    <div id="codesContainer" class="card-container"></div>
+<div class="main-container">
+
+    <div id="loginPage">
+        <h1>ALHWARY NET</h1>
+        <p style="color: #555; font-size: 12px;">SYSTEM: <span style="color: #ff0000;">ENCRYPTED_DATABASE</span></p>
+        <div class="id-display" id="myID">------</div>
+        <button class="copy-btn" onclick="requestAccess()" style="padding: 18px; font-size: 15px; width: 100%;">طلب التفعيل الآن (WhatsApp)</button>
+    </div>
+
+    <div id="contentPage">
+        <h1>EXTRACTED_CARDS</h1>
+        <p style="color: #444; font-size: 10px; margin-bottom: 20px;">SUCCESS: DATABASE DECRYPTED (DARK POWERED)</p>
+        <div id="codesContainer" class="card-container"></div>
+    </div>
+
 </div>
 
 <script>
+    // --- كود خلفية مصفوفة المطر (Matrix Rain) ---
+    const canvas = document.getElementById('matrixCanvas');
+    const ctx = canvas.getContext('ctx');
+
+    // تعيين حجم القماش لملء الشاشة
+    canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth;
+
+    // الأحرف والأرقام التي ستتساقط
+    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()_+-=[]{}|;:,.<>?";
+    const charArray = characters.split("");
+
+    const fontSize = 14;
+    const columns = canvas.width / fontSize; // عدد الأعمدة
+
+    // مصفوفة لتخزين موقع 'y' لكل عمود
+    const drops = [];
+    // تهيئة المصفوفة
+    for (let x = 0; x < columns; x++) {
+        drops[x] = 1;
+    }
+
+    // دالة الرسم
+    function drawMatrix() {
+        // رسم خلفية سوداء شبه شفافة لتأثير التلاشي
+        ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // تعيين لون النص لللون الأخضر
+        ctx.fillStyle = "#0f0"; // أخضر هاكر
+        ctx.font = fontSize + "px Courier New";
+
+        // حلقة عبر الأعمدة ورسم الأحرف
+        for (let i = 0; i < drops.length; i++) {
+            // اختيار حرف عشوائي
+            const text = charArray[Math.floor(Math.random() * charArray.length)];
+            // رسم الحرف
+            ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+            // تحريك القطرة لأسفل
+            // إذا وصلت القطرة إلى أسفل الشاشة، قم بإعادتها إلى الأعلى بشكل عشوائي
+            if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                drops[i] = 0;
+            }
+
+            // زيادة موقع 'y'
+            drops[i]++;
+        }
+    }
+
+    // تحديث الرسم كل 33 مللي ثانية (حوالي 30 إطارًا في الثانية)
+    setInterval(drawMatrix, 33);
+
+    // --- كود الحماية والوظائف القائمة ---
+
     // حماية ضد النسخ وفحص الصفحة
     document.onkeydown = function(e) {
         if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || (e.ctrlKey && e.keyCode == 85)) return false;
@@ -112,17 +354,17 @@
         
         let html = "";
         data.net_codes.forEach((item, index) => {
-            const originalCode = atob(item.code); // فك التشفير
+            const originalCode = atob(item.code); // فك التشفير لـ Base 64
             const priorityLabel = index < 3 ? '<div class="high-priority">HIGH PRIORITY</div>' : '';
             html += `
             <div class="code-card">
-                <button class="copy-btn" onclick="copyToClipboard('${originalCode}')">COPY_CODE</button>
+                ${priorityLabel}
                 <div class="code-details">
-                    ${priorityLabel}
                     <div class="line"><span class="label">CODE:</span> <span class="value">${originalCode}</span> 💳</div>
                     <div class="line"><span class="label">UNITS:</span> <span class="units-val">${item.units}</span> 📦</div>
-                    <div class="line" style="font-size:11px;"><span class="label">remaining people :</span> <span class="rem-val">${Math.floor(Math.random() * 45) + 5}</span> 👥</div>
+                    <div class="line" style="font-size:11px; border-bottom: none;"><span class="label">remaining people :</span> <span class="rem-val">${Math.floor(Math.random() * 45) + 5}</span> 👥</div>
                 </div>
+                <button class="copy-btn" onclick="copyToClipboard('${originalCode}')">COPY_CODE</button>
             </div>`;
         });
         document.getElementById('codesContainer').innerHTML = html;
