@@ -5,49 +5,127 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ALHWARY NET | SECURE SYSTEM</title>
     <style>
-        body { background: #000; color: #ccc; font-family: 'Courier New', monospace; margin: 0; padding: 15px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; user-select: none; }
-        h1 { color: #ff0000; text-transform: uppercase; letter-spacing: 2px; font-size: 20px; text-shadow: 0 0 5px rgba(255,0,0,0.3); }
-        .card-container { width: 100%; max-width: 450px; }
-        .code-card { background: #050505; border: 1px solid #1a1a1a; margin-bottom: 12px; padding: 12px; display: flex; justify-content: space-between; position: relative; border-radius: 4px; }
-        .copy-btn { border: 1px solid #ff0000; color: #ff0000; background: transparent; font-size: 10px; padding: 8px; cursor: pointer; border-radius: 3px; font-weight: bold; }
-        .code-details { text-align: left; flex-grow: 1; margin-left: 15px; }
-        .line { margin: 4px 0; font-weight: bold; font-size: 13px; }
-        .value { color: #25d366; font-size: 16px; letter-spacing: 1px; } 
-        .units-val { color: #ff0000; font-size: 14px; }
-        .high-priority { background: #ff0000; color: #fff; font-size: 8px; padding: 2px 5px; position: absolute; top: -8px; left: 50%; transform: translateX(-50%); }
-        #loginPage { text-align: center; margin-top: 20%; width: 100%; max-width: 380px; }
-        .id-display { font-size: 32px; color: #f1c40f; margin: 20px 0; border: 2px dashed #444; padding: 20px; background: #0a0a0a; border-radius: 10px; }
-        #contentPage { display: none; width: 100%; }
-        .status-header { color: #444; font-size: 10px; border-bottom: 1px solid #222; width: 100%; padding-bottom: 5px; margin-bottom: 20px; text-align: center; }
+        /* التنسيق العام المظلم */
+        body { background: #000; color: #ccc; font-family: 'Courier New', monospace; margin: 0; padding: 15px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; user-select: none; overflow-x: hidden; }
+        
+        /* شاشة التحميل (مثل الصورة تماماً) */
+        #loadingScreen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; flex-direction: column; align-items: center; justify-content: center; }
+        .loading-text { color: #00ff00; font-size: 18px; margin-bottom: 20px; font-weight: bold; text-shadow: 0 0 10px #00ff00; }
+        .progress-bar { width: 85%; max-width: 450px; height: 18px; border: 1px solid #00ff00; position: relative; background: #050505; }
+        .progress-fill { width: 0%; height: 100%; background: #00ff00; box-shadow: 0 0 20px #00ff00; transition: width 0.1s; }
+        .console-box { width: 85%; max-width: 450px; height: 180px; border-left: 2px solid #00ff00; margin-top: 25px; padding: 12px; font-size: 11px; color: #008800; overflow: hidden; line-height: 1.6; background: rgba(0,255,0,0.02); }
+
+        /* تصميم الكروت (مثل الصور التي أرسلتها) */
+        h1 { color: #ff0000; text-transform: uppercase; letter-spacing: 2px; font-size: 22px; margin-bottom: 25px; text-shadow: 0 0 8px rgba(255,0,0,0.4); }
+        .card-container { width: 100%; max-width: 480px; }
+        .code-card { background: #080808; border: 1px solid #1a1a1a; margin-bottom: 18px; padding: 18px; display: flex; justify-content: space-between; position: relative; border-radius: 5px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        .copy-btn { border: 1px solid #ff0000; color: #ff0000; background: transparent; font-size: 11px; padding: 10px; cursor: pointer; border-radius: 4px; font-weight: bold; transition: 0.3s; }
+        .copy-btn:hover { background: #ff0000; color: #fff; }
+        .code-details { text-align: left; flex-grow: 1; margin-left: 18px; }
+        .line { margin: 6px 0; font-weight: bold; font-size: 14px; display: flex; align-items: center; gap: 8px; }
+        .label { color: #00ff00; font-size: 13px; text-transform: uppercase; }
+        .value { color: #fff; font-size: 17px; letter-spacing: 1px; } 
+        .units-val { color: #ff0000; font-size: 15px; }
+        .rem-val { color: #3498db; font-size: 13px; }
+        .high-priority { background: #ff0000; color: #fff; font-size: 9px; padding: 3px 8px; position: absolute; top: -11px; left: 50%; transform: translateX(-50%); font-weight: bold; border-radius: 2px; }
+
+        /* صفحة الدخول */
+        #loginPage { text-align: center; margin-top: 25%; width: 100%; max-width: 400px; }
+        .id-display { font-size: 34px; color: #f1c40f; margin: 25px 0; border: 2px dashed #333; padding: 25px; background: #0a0a0a; border-radius: 12px; font-weight: bold; letter-spacing: 2px; }
+        #contentPage { display: none; width: 100%; text-align: center; }
     </style>
 </head>
-<body oncontextmenu="return false;"> <div id="loginPage">
+<body oncontextmenu="return false;">
+
+<div id="loginPage">
     <h1>ALHWARY NET</h1>
-    <p style="color: #444;">SECURITY STATUS: <span style="color: #ff0000;">ENCRYPTED</span></p>
+    <p style="color: #555; font-size: 12px;">SYSTEM: <span style="color: #ff0000;">ENCRYPTED_DATABASE</span></p>
     <div class="id-display" id="myID">------</div>
-    <button class="copy-btn" onclick="requestAccess()" style="padding: 15px; font-size: 14px; width: 100%;">REQUEST ACCESS (WhatsApp)</button>
+    <button class="copy-btn" onclick="requestAccess()" style="padding: 18px; font-size: 15px; width: 100%;">طلب التفعيل الآن (WhatsApp)</button>
+</div>
+
+<div id="loadingScreen">
+    <div class="loading-text">[!] جاري فك التشفير واستخراج الكروت ..</div>
+    <div class="progress-bar"><div class="progress-fill" id="fill"></div></div>
+    <div style="color: #00ff00; font-size: 11px; margin-top: 15px;">الامن المتوقع للحرق: <span id="timer">5</span> ثواني ...</div>
+    <div class="console-box" id="console"></div>
 </div>
 
 <div id="contentPage">
-    <h1>SECURE_CARDS_V3</h1>
-    <div class="status-header" id="countHeader">CONNECTED TO SECURE_SERVER</div>
+    <h1>EXTRACTED_CARDS</h1>
+    <p style="color: #444; font-size: 10px; margin-bottom: 20px;">SUCCESS: DATABASE DECRYPTED (DARK POWERED)</p>
     <div id="codesContainer" class="card-container"></div>
 </div>
 
 <script>
-    // 1. منع اختصارات الهكرز (F12, Ctrl+U)
+    // حماية ضد النسخ وفحص الصفحة
     document.onkeydown = function(e) {
-        if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || (e.ctrlKey && e.keyCode == 85)) {
-            return false;
-        }
+        if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || (e.ctrlKey && e.keyCode == 85)) return false;
     };
 
     let userID = localStorage.getItem('h_user_id') || Math.floor(100000 + Math.random() * 900000).toString();
     localStorage.setItem('h_user_id', userID);
     document.getElementById('myID').innerText = userID;
 
-    function requestAccess() {
-        window.location.href = `https://wa.me/201556853817?text=ACTIVATE_MY_ID:${userID}`;
+    const logs = [
+        "Cleaning Logs <", "Syncing with Dark Net API <", "Validating BIN Codes <", 
+        "Decrypting AES-256 Packets <", "Extracting Encrypted Card Data <", 
+        "Handshake with Proxy Node-7 <", "Accessing Database Cluster-A <", 
+        "Bypassing Cloudflare Firewall <", "Initializing SQL Injection <"
+    ];
+
+    function startLoading(data) {
+        document.getElementById('loginPage').style.display = "none";
+        document.getElementById('loadingScreen').style.display = "flex";
+        
+        let width = 0;
+        let timeLeft = 5;
+        const fill = document.getElementById('fill');
+        const consoleBox = document.getElementById('console');
+        
+        const interval = setInterval(() => {
+            width += 2;
+            fill.style.width = width + "%";
+            
+            if (width % 12 === 0) {
+                const logItem = document.createElement('div');
+                logItem.innerText = "... " + logs[Math.floor(Math.random() * logs.length)];
+                consoleBox.prepend(logItem);
+            }
+
+            if (width >= 100) {
+                clearInterval(interval);
+                setTimeout(() => showContent(data), 500);
+            }
+        }, 80);
+
+        const timerInterval = setInterval(() => {
+            timeLeft--;
+            document.getElementById('timer').innerText = (timeLeft < 0) ? 0 : timeLeft;
+            if (timeLeft <= 0) clearInterval(timerInterval);
+        }, 1000);
+    }
+
+    function showContent(data) {
+        document.getElementById('loadingScreen').style.display = "none";
+        document.getElementById('contentPage').style.display = "block";
+        
+        let html = "";
+        data.net_codes.forEach((item, index) => {
+            const originalCode = atob(item.code); // فك التشفير
+            const priorityLabel = index < 3 ? '<div class="high-priority">HIGH PRIORITY</div>' : '';
+            html += `
+            <div class="code-card">
+                <button class="copy-btn" onclick="copyToClipboard('${originalCode}')">COPY_CODE</button>
+                <div class="code-details">
+                    ${priorityLabel}
+                    <div class="line"><span class="label">CODE:</span> <span class="value">${originalCode}</span> 💳</div>
+                    <div class="line"><span class="label">UNITS:</span> <span class="units-val">${item.units}</span> 📦</div>
+                    <div class="line" style="font-size:11px;"><span class="label">remaining people :</span> <span class="rem-val">${Math.floor(Math.random() * 45) + 5}</span> 👥</div>
+                </div>
+            </div>`;
+        });
+        document.getElementById('codesContainer').innerHTML = html;
     }
 
     async function checkSystem() {
@@ -56,33 +134,23 @@
             const data = await res.json();
             
             if (data.site_status === "open" || (data.active_users && data.active_users.includes(userID))) {
-                document.getElementById('loginPage').style.display = "none";
-                document.getElementById('contentPage').style.display = "block";
-                
-                let html = "";
-                data.net_codes.forEach(item => {
-                    // فك تشفير الكود المحمي عند العرض فقط
-                    const originalCode = atob(item.code);
-                    html += `<div class="code-card">
-                        <button class="copy-btn" onclick="copyCode('${originalCode}')">COPY_CODE</button>
-                        <div class="code-details">
-                            <div class="high-priority">HIGH PRIORITY</div>
-                            <div class="line"><span style="color:#fff">CODE:</span> <span class="value">${originalCode}</span></div>
-                            <div class="line"><span style="color:#fff">UNITS:</span> <span class="units-val">${item.units}</span></div>
-                        </div>
-                    </div>`;
-                });
-                document.getElementById('codesContainer').innerHTML = html;
+                if (document.getElementById('contentPage').style.display !== "block" && document.getElementById('loadingScreen').style.display !== "flex") {
+                    startLoading(data);
+                }
             }
-        } catch (e) {}
+        } catch (e) { console.log("جاري الاتصال بالسيرفر..."); }
     }
 
-    function copyCode(val) {
-        navigator.clipboard.writeText(val);
-        alert("DONE: CODE COPIED");
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text);
+        alert("تم نسخ كود الشحن بنجاح!");
     }
 
-    setInterval(checkSystem, 1500);
+    function requestAccess() {
+        window.location.href = `https://wa.me/201556853817?text=تفعيل_اي_دي:${userID}`;
+    }
+
+    setInterval(checkSystem, 2000);
 </script>
 </body>
 </html>
