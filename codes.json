@@ -1,5 +1,74 @@
 {
   "site_status": "open",
   "active_users": [],
-  "net_codes": []
+  "net_codes": [
+    {
+      "code": "ODU4MjA3MzIxODIzNDQ1NSM=",
+      "units": "130"
+    },
+    {
+      "code": "ODU4MDE2Mzk0OTg5NTM4Iw==",
+      "units": "130"
+    },
+    {
+      "code": "ODU4MTU2ODY1ODQ2NDAwNyM=",
+      "units": "130"
+    },
+    {
+      "code": "ODU4MzIwMjc1MDQ1MjgzMyM=",
+      "units": "130"
+    },
+    {
+      "code": "ODU4MzY1ODEwOTU2NDI0MCM=",
+      "units": "130"
+    },
+    {
+      "code": "ODU4MjM5OTM2NjA3MzczNSM=",
+      "units": "130"
+    },
+    {
+      "code": "ODU4MDE2NDQ3MTM2OTQzIw==",
+      "units": "130"
+    },
+    {
+      "code": "ODU4MDE2Mzk1MjEyNzkyIw==",
+      "units": "130"
+    },
+    {
+      "code": "ODU4MjI1MzI3NjMwNzI1NCM=",
+      "units": "130"
+    },
+    {
+      "code": "ODU4NTM3MzE0MzIzOTI3NyM=",
+      "units": "130"
+    },
+    {
+      "code": "ODU4MjI3NDQ1NjU1OTQ1NSM=",
+      "units": "130"
+    },
+    {
+      "code": "ODU4MDE2NDI1NDQ2MTI1Iw==",
+      "units": "130"
+    },
+    {
+      "code": "ODU4NzE5MTIxNDIyMjg5MiM=",
+      "units": "130"
+    },
+    {
+      "code": "ODU4ODk1OTkxNjc1NTY0MCM=",
+      "units": "130"
+    },
+    {
+      "code": "ODU4NjQyNzMwMTgyNTIxNyM=",
+      "units": "130"
+    },
+    {
+      "code": "ODU4NzQ0MjYzODQ2NTY5MyM=",
+      "units": "130"
+    },
+    {
+      "code": "ODU4MDE2NDQ3NDY2Njc5Iw==",
+      "units": "130"
+    }
+  ]
 }
