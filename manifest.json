@@ -1,0 +1,16 @@
+{
+  "name": "ALHWARY NET VIP",
+  "short_name": "ALHWARY",
+  "description": "نظام الهواري لتوزيع الأكواد المشفرة",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#ff0000",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/711/711769.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
