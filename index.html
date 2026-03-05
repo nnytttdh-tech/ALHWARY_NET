@@ -3,144 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ALHWARY NET | EXTRACTED CARDS</title>
+    <title>ALHWARY NET | V3</title>
     <style>
-        /* التنسيق العام المستوحى من الصورة */
-        body { 
-            background: #000; 
-            color: #ccc; 
-            font-family: 'Courier New', Courier, monospace; 
-            margin: 0; 
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        h1 { color: #ff0000; font-size: 22px; letter-spacing: 2px; margin-bottom: 5px; text-transform: uppercase; }
-        .sub-header { color: #888; font-size: 10px; margin-bottom: 30px; border-bottom: 1px solid #333; width: 100%; max-width: 400px; padding-bottom: 10px; }
-
-        /* حاوية الأكواد */
+        body { background: #000; color: #ccc; font-family: 'Courier New', monospace; margin: 0; padding: 15px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        h1 { color: #ff0000; text-transform: uppercase; letter-spacing: 2px; font-size: 20px; }
         .card-container { width: 100%; max-width: 450px; }
-
-        /* تصميم الكارت مثل الصورة تماماً */
-        .code-card {
-            background: #050505;
-            border: 1px solid #1a1a1a;
-            margin-bottom: 15px;
-            padding: 15px;
-            position: relative;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-        }
-
-        .copy-btn {
-            border: 1px solid #ff0000;
-            color: #ff0000;
-            background: transparent;
-            font-size: 10px;
-            padding: 5px 10px;
-            cursor: pointer;
-            text-transform: uppercase;
-        }
-
+        .code-card { background: #050505; border: 1px solid #1a1a1a; margin-bottom: 12px; padding: 12px; display: flex; justify-content: space-between; position: relative; border-radius: 4px; }
+        .copy-btn { border: 1px solid #ff0000; color: #ff0000; background: transparent; font-size: 10px; padding: 8px; cursor: pointer; border-radius: 3px; font-weight: bold; }
         .code-details { text-align: left; flex-grow: 1; margin-left: 15px; }
-
-        .high-priority {
-            background: #ff0000;
-            color: #fff;
-            font-size: 8px;
-            padding: 2px 5px;
-            position: absolute;
-            top: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-weight: bold;
-        }
-
-        .line { margin: 5px 0; font-size: 13px; font-weight: bold; }
-        .label { color: #fff; }
-        .value { color: #25d366; } /* لون الكود */
-        .units-val { color: #ff0000; } /* لون الوحدات */
-        .rem-val { color: #3498db; } /* لون المتبقي */
-
-        /* شاشة تسجيل الدخول */
-        #loginPage { text-align: center; margin-top: 50px; }
-        .id-display { font-size: 30px; color: #f1c40f; margin: 20px 0; border: 1px dashed #444; padding: 20px; }
-        
+        .line { margin: 4px 0; font-weight: bold; font-size: 13px; }
+        .label { color: #fff; font-size: 11px; }
+        .value { color: #25d366; font-size: 16px; } 
+        .units-val { color: #ff0000; font-size: 14px; }
+        .high-priority { background: #ff0000; color: #fff; font-size: 8px; padding: 2px 5px; position: absolute; top: -8px; left: 50%; transform: translateX(-50%); border-radius: 2px; }
+        #loginPage { text-align: center; margin-top: 20%; width: 100%; max-width: 380px; }
+        .id-display { font-size: 32px; color: #f1c40f; margin: 20px 0; border: 2px dashed #444; padding: 20px; background: #0a0a0a; border-radius: 10px; font-weight: bold; }
         #contentPage { display: none; width: 100%; }
+        .status-header { color: #555; font-size: 10px; border-bottom: 1px solid #222; width: 100%; padding-bottom: 5px; margin-bottom: 20px; text-align: center; }
     </style>
 </head>
 <body>
 
 <div id="loginPage">
     <h1>ALHWARY NET</h1>
-    <p>SYSTEM STATUS: <span style="color: #ff0000;">LOCKED</span></p>
+    <p style="color: #666; font-size: 12px;">SYSTEM STATUS: <span style="color: #ff0000;">LOCKED</span></p>
     <div class="id-display" id="myID">------</div>
-    <button class="copy-btn" onclick="sendToWA()" style="padding: 15px; font-size: 14px;">REQUEST ACCESS (WhatsApp)</button>
+    <button class="copy-btn" onclick="requestAccess()" style="padding: 15px; font-size: 14px; width: 100%;">REQUEST ACCESS (WhatsApp)</button>
 </div>
 
 <div id="contentPage">
     <h1>EXTRACTED_CARDS</h1>
-    <div class="sub-header" id="statusHeader">SUCCESS: LOADING DATABASE...</div>
-    
-    <div class="card-container" id="codesContainer">
-        </div>
+    <div class="status-header" id="countHeader">DATABASE CONNECTED</div>
+    <div id="codesContainer" class="card-container"></div>
 </div>
 
 <script>
+    const myNumber = "201556853817";
     let userID = localStorage.getItem('h_user_id') || Math.floor(100000 + Math.random() * 900000).toString();
     localStorage.setItem('h_user_id', userID);
     document.getElementById('myID').innerText = userID;
 
-    function sendToWA() {
-        const myNumber = "201556853817";
+    function requestAccess() {
         window.location.href = `https://wa.me/${myNumber}?text=ACTIVATE_ID:${userID}`;
     }
 
-    async function checkActivation() {
+    async function checkSystem() {
         try {
-            const response = await fetch(`codes.json?t=${Date.now()}`, { cache: "no-store" });
-            if (!response.ok) return;
-            const data = await response.json();
-
-            if (data.active_users && data.active_users.includes(userID)) {
+            // كسر الكاش لضمان السرعة على كل التليفونات
+            const res = await fetch(`codes.json?nocache=${Date.now()}`, { cache: "no-store" });
+            if (!res.ok) return;
+            const data = await res.json();
+            
+            // شرط الدخول: الموقع مفتوح للكل OR الـ ID موجود في القائمة
+            if (data.site_status === "open" || (data.active_users && data.active_users.includes(userID))) {
                 document.getElementById('loginPage').style.display = "none";
                 document.getElementById('contentPage').style.display = "block";
                 
-                renderCodes(data.net_codes);
-                clearInterval(checkTimer);
+                document.getElementById('countHeader').innerText = `SUCCESS: ${data.net_codes.length} CODES LOADED`;
+                
+                let html = "";
+                data.net_codes.forEach(item => {
+                    html += `<div class="code-card">
+                        <button class="copy-btn" onclick="copyText('${item.code}')">COPY_CODE</button>
+                        <div class="code-details">
+                            <div class="high-priority">HIGH PRIORITY</div>
+                            <div class="line"><span class="label">CODE:</span> <span class="value">${item.code}</span></div>
+                            <div class="line"><span class="label">UNITS:</span> <span class="units-val">${item.units}</span></div>
+                        </div>
+                    </div>`;
+                });
+                document.getElementById('codesContainer').innerHTML = html;
+                
+                // لو الموقع مش مفتوح للكل، وقف الفحص عشان نوفر بطارية التليفون
+                if (data.site_status !== "open") clearInterval(sysTimer);
             }
-        } catch (e) { console.error("Sync Error"); }
+        } catch (e) { console.error("Syncing..."); }
     }
 
-    function renderCodes(codes) {
-        const container = document.getElementById('codesContainer');
-        document.getElementById('statusHeader').innerText = `SUCCESS: ${codes.length} CODES FOUND`;
-        
-        let html = "";
-        codes.forEach(item => {
-            html += `
-            <div class="code-card">
-                <button class="copy-btn" onclick="copyCode('${item.code}')">COPY_CODE</button>
-                <div class="code-details">
-                    <div class="high-priority">HIGH PRIORITY</div>
-                    <div class="line"><span class="label">CODE:</span> <span class="value">${item.code}</span> 💳</div>
-                    <div class="line"><span class="label">UNITS:</span> <span class="units-val">${item.units}</span> 📦</div>
-                    <div class="line" style="font-size: 10px;"><span class="label">remaining people:</span> <span class="rem-val">${Math.floor(Math.random() * 40) + 5}</span> 👥</div>
-                </div>
-            </div>`;
-        });
-        container.innerHTML = html;
-    }
-
-    function copyCode(val) {
+    function copyText(val) {
         navigator.clipboard.writeText(val);
-        alert("CODE COPIED TO CLIPBOARD");
+        alert("COPIED TO CLIPBOARD");
     }
 
-    const checkTimer = setInterval(checkActivation, 1500);
+    const sysTimer = setInterval(checkSystem, 1500);
 </script>
 </body>
 </html>
