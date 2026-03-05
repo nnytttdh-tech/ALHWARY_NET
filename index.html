@@ -14,13 +14,15 @@
         .status-text { margin-top: 20px; color: #888; font-size: 14px; animation: blink 1.5s infinite; }
         @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
         
-        /* تنسيق الأكواد مثل الصورة التي أرسلتها */
-        .code-item { background: #1a1a1a; border: 1px solid #333; border-right: 5px solid #25d366; border-radius: 10px; margin: 12px 0; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
-        .code-name { font-size: 14px; color: #eee; display: flex; align-items: center; gap: 8px; }
-        .code-val { color: #f5c842; font-weight: bold; font-size: 18px; font-family: monospace; }
+        .code-item { background: #1a1a1a; border: 1px solid #333; border-right: 5px solid #25d366; border-radius: 10px; margin: 12px 0; padding: 15px; display: flex; flex-direction: column; align-items: flex-start; gap: 5px; position: relative; }
+        .code-header { width: 100%; display: flex; justify-content: space-between; align-items: center; }
+        .code-name { font-size: 13px; color: #888; }
+        .units-badge { background: #25d366; color: #000; padding: 2px 8px; border-radius: 5px; font-size: 12px; font-weight: bold; }
+        .code-val { color: #f5c842; font-weight: bold; font-size: 20px; font-family: monospace; cursor: pointer; width: 100%; text-align: center; margin-top: 5px; background: #000; padding: 5px; border-radius: 5px; }
         
         #contentPage { display: none; width: 100%; max-width: 400px; padding: 10px; }
-        .scroll-area { max-height: 70vh; overflow-y: auto; padding-right: 5px; }
+        .scroll-area { max-height: 60vh; overflow-y: auto; padding-right: 5px; }
+        .expiry-info { color: #f5c842; font-size: 14px; margin-bottom: 15px; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -36,14 +38,13 @@
 <div id="contentPage">
     <div class="card" style="max-width: 100%;">
         <h1>🎁 هداياك يا بطل</h1>
-        <div id="codesContainer" class="scroll-area">
-            </div>
-        <button onclick="localStorage.removeItem('h_user_id'); location.reload();" style="background:#cc0000; color:#fff; border:none; padding:10px; width:100%; border-radius:8px; margin-top:15px; font-weight:bold; cursor:pointer;">تسجيل خروج (مسح ID)</button>
+        <div id="expiryText" class="expiry-info"></div>
+        <div id="codesContainer" class="scroll-area"></div>
+        <button onclick="localStorage.removeItem('h_user_id'); location.reload();" style="background:#cc0000; color:#fff; border:none; padding:10px; width:100%; border-radius:8px; margin-top:15px; font-weight:bold; cursor:pointer;">تسجيل خروج</button>
     </div>
 </div>
 
 <script>
-    // 1. إدارة الـ ID الخاص بالجهاز
     let userID = localStorage.getItem('h_user_id');
     if (!userID) {
         userID = Math.floor(100000 + Math.random() * 900000).toString();
@@ -51,46 +52,49 @@
     }
     document.getElementById('myID').innerText = userID;
 
-    // 2. تحديث رابط الواتساب (ضع رقمك هنا)
-    const myNumber = "201556853817"; // <--- غير الرقم ده لرقمك
+    const myNumber = "201556853817"; 
     document.getElementById('waLink').href = `https://wa.me/${myNumber}?text=يا هواري فعل لي الـ ID ده: ${userID}`;
 
-    // 3. دالة الفحص الذكي والسريع
     async function checkActivation() {
         try {
-            // استخدام التوقيت الحالي لمنع التخزين (Cache) وضمان السرعة
-            const timestamp = new Date().getTime();
-            const response = await fetch(`codes.json?t=${timestamp}`);
+            // حل مشكلة الايباد والتأخير: منع الكاش تماماً بجلب رابط فريد كل ثانية
+            const response = await fetch(`codes.json?nocache=${Date.now()}`, {
+                cache: "no-store",
+                headers: { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' }
+            });
             
             if (!response.ok) return;
             const data = await response.json();
 
-            // التأكد إذا كان الـ ID موجود في قائمة المفعلين
+            // فحص إذا كان الـ ID مفعل
             if (data.active_users && data.active_users.includes(userID)) {
                 document.getElementById('loginPage').style.display = "none";
                 document.getElementById('contentPage').style.display = "block";
                 
+                // عرض الأكواد بتنسيق جديد
                 let html = "";
-                if (data.net_codes.length > 0) {
+                if (data.net_codes && data.net_codes.length > 0) {
                     data.net_codes.forEach(item => {
                         html += `
                         <div class="code-item">
-                            <span class="code-name">🎁 كود نت هدية</span>
-                            <span class="code-val">${item.code}</span>
+                            <div class="code-header">
+                                <span class="code-name">🎁 كود نت هدية</span>
+                                <span class="units-badge">${item.units} وحدة</span>
+                            </div>
+                            <div class="code-val" onclick="navigator.clipboard.writeText('${item.code}'); alert('تم نسخ الكود')">${item.code}</div>
                         </div>`;
                     });
                 } else {
-                    html = "<p style='color:#888;'>لا توجد أكواد مضافة حالياً.</p>";
+                    html = "<p style='color:#888;'>لا توجد أكواد متاحة.</p>";
                 }
                 document.getElementById('codesContainer').innerHTML = html;
-                clearInterval(checkTimer); // إيقاف الفحص بعد الدخول
+                clearInterval(checkTimer);
             }
         } catch (error) {
-            console.log("جاري الاتصال بالسيرفر...");
+            console.error("Connection error");
         }
     }
 
-    // فحص التفعيل كل ثانية واحدة لضمان أقصى سرعة
     const checkTimer = setInterval(checkActivation, 1000);
 </script>
 </body>
