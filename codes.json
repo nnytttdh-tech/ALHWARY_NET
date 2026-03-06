@@ -1,6 +1,15 @@
 {
-  "site_status": "locked",
+  "site_status": "open",
   "active_users": {},
-  "net_codes": [],
-  "user_stats": {}
+  "user_stats": {},
+  "net_codes": [
+    {
+      "code": "MTIzNDU2Nzg5",
+      "units": "1GB"
+    },
+    {
+      "code": "OTg3NjU0MzIx",
+      "units": "500MB"
+    }
+  ]
 }
