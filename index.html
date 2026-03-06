@@ -3,24 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ALHWARY NET | SECURE SYSTEM</title>
+    <title>ALHWARY NET | MATRIX SYSTEM</title>
+    <link rel="manifest" href="manifest.json">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: #000; color: #ccc; font-family: 'Courier New', monospace; overflow: hidden; }
-        #matrixCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
-        .main-wrapper { position: relative; z-index: 2; height: 100vh; width: 100%; overflow-y: auto; display: flex; flex-direction: column; align-items: center; padding: 20px; background: rgba(0, 0, 0, 0.3); }
-        
-        #loadingScreen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; flex-direction: column; align-items: center; justify-content: center; }
-        .bar-container { width: 80%; max-width: 400px; height: 12px; border: 1px solid #0f0; background: #050505; margin-top: 15px; }
-        .bar-fill { width: 0%; height: 100%; background: #0f0; box-shadow: 0 0 15px #0f0; transition: 0.1s; }
 
-        .code-card { background: rgba(10, 10, 10, 0.9); border: 1px solid #1a1a1a; border-top: 3px solid #f00; margin-bottom: 20px; padding: 20px; border-radius: 8px; width: 100%; max-width: 450px; }
-        .copy-btn { background: #f00; color: #fff; border: none; padding: 15px; width: 100%; border-radius: 5px; font-weight: bold; cursor: pointer; margin-top: 15px; }
+        /* الخلفية المتحركة - Matrix */
+        #matrixCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
+
+        .main-wrapper { position: relative; z-index: 2; height: 100vh; width: 100%; overflow-y: auto; display: flex; flex-direction: column; align-items: center; padding: 20px; background: rgba(0, 0, 0, 0.4); }
+
+        /* شاشة التحميل */
+        #loadingScreen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; flex-direction: column; align-items: center; justify-content: center; }
+        .loading-text { color: #0f0; font-size: 20px; margin-bottom: 20px; text-shadow: 0 0 10px #0f0; font-weight: bold; }
+        .bar-container { width: 85%; max-width: 400px; height: 15px; border: 1px solid #0f0; background: #050505; }
+        .bar-fill { width: 0%; height: 100%; background: #0f0; box-shadow: 0 0 20px #0f0; transition: 0.1s; }
+
+        /* تنسيق الهيدر والكروت */
+        .ascii-art { color: #f00; font-size: 8px; white-space: pre; text-align: center; margin-bottom: 20px; text-shadow: 0 0 5px #f00; }
+        .success-msg { color: #0f0; background: rgba(0, 255, 0, 0.1); padding: 10px; border: 1px solid #0f0; margin-bottom: 20px; width: 100%; max-width: 450px; text-align: center; font-size: 14px; }
         
+        .code-card { background: rgba(10, 10, 10, 0.85); border: 1px solid #1a1a1a; border-top: 3px solid #f00; margin-bottom: 20px; padding: 20px; border-radius: 8px; width: 100%; max-width: 450px; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,1); }
+        .priority-tag { background: #f00; color: #fff; font-size: 10px; padding: 4px 10px; position: absolute; top: -12px; left: 20px; border-radius: 3px; font-weight: bold; }
+        .line { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #222; }
+        .copy-btn { background: #f00; color: #fff; border: none; padding: 15px; width: 100%; border-radius: 5px; font-weight: bold; cursor: pointer; margin-top: 15px; text-transform: uppercase; }
+
         #loginPage { text-align: center; margin-top: 30%; width: 100%; }
-        .id-box { font-size: 32px; color: #f1c40f; border: 2px dashed #444; padding: 20px; margin: 20px 0; background: rgba(0,0,0,0.8); }
-        h1 { color: #f00; text-shadow: 0 0 10px #f00; }
-        .status-msg { color: #555; font-size: 12px; margin-top: 10px; }
+        .id-box { font-size: 32px; color: #f1c40f; border: 2px dashed #444; padding: 25px; margin: 25px 0; background: rgba(0,0,0,0.8); }
     </style>
 </head>
 <body oncontextmenu="return false;">
@@ -28,99 +38,41 @@
 <canvas id="matrixCanvas"></canvas>
 
 <div id="loadingScreen">
-    <div style="color:#0f0; font-weight:bold;">[!] جاري التحقق من الصلاحية...</div>
+    <div class="loading-text">[!] جاري التحقق من الصلاحية . . .</div>
     <div class="bar-container"><div id="bar" class="bar-fill"></div></div>
 </div>
 
 <div class="main-wrapper">
     <div id="loginPage">
-        <h1>ALHWARY NET</h1>
+        <h1 style="color:#f00; text-shadow: 0 0 10px #f00;">ALHWARY NET</h1>
         <div class="id-box" id="myID">------</div>
-        <button class="copy-btn" onclick="requestActivation()">تفعيل عبر WhatsApp</button>
-        <div class="status-msg" id="statusMsg">في انتظار التفعيل...</div>
+        <button class="copy-btn" onclick="window.location.href='https://wa.me/201556853817?text=تفعيل_ID:'+document.getElementById('myID').innerText">تفعيل الحساب (واتساب)</button>
     </div>
 
     <div id="contentPage" style="display:none; width: 100%; text-align: center;">
-        <h1>DECRYPTED CODES</h1>
+        <div class="ascii-art">
+  _____ _      _   _ _____ _   _ _____ 
+ / ____| |    | \ | |_   _| \ | | ____|
+| (___ | |    |  \| | | | |  \| |  _|  
+ \___ \| |    | . ` | | | | . ` | |___ 
+ ____) | |____| |\  |_| |_| |\  |_____|
+|_____/|______|_| \_|_____|_| \_|     
+        </div>
+        <div class="success-msg" id="countMsg">SUCCESS: 0 CODES FOUND (DARK POWERED)</div>
         <div id="codesContainer"></div>
-        <button class="copy-btn" onclick="location.reload()" style="background:#333;">تحديث</button>
     </div>
 </div>
 
 <script>
-    // تأثير الماتريكس
+    // --- كود الماتريكس (خلفية الهكر) ---
     const canvas = document.getElementById('matrixCanvas');
     const ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-    const drops = Array(Math.floor(canvas.width/16)).fill(1);
+    const alphabet = "01";
+    const fontSize = 16;
+    const columns = canvas.width / fontSize;
+    const drops = Array(Math.floor(columns)).fill(1);
     function draw() {
-        ctx.fillStyle = "rgba(0,0,0,0.05)"; ctx.fillRect(0,0,canvas.width,canvas.height);
-        ctx.fillStyle = "#0f0"; ctx.font = "16px monospace";
-        drops.forEach((y, i) => {
-            ctx.fillText(Math.floor(Math.random()*2), i*16, y*16);
-            if (y*16 > canvas.height && Math.random() > 0.975) drops[i] = 0;
-            drops[i]++;
-        });
-    }
-    setInterval(draw, 40);
-
-    // إدارة المستخدم
-    let userID = localStorage.getItem('h_user_id') || Math.floor(100000 + Math.random() * 900000).toString();
-    localStorage.setItem('h_user_id', userID);
-    document.getElementById('myID').innerText = userID;
-
-    // --- الجزء الخاص بالتليجرام (تم إخفاء التوكن عن روبوت GitHub) ---
-    async function notifyAdmin(uid) {
-        // قمنا بتقسيم التوكن لجزئين حتى لا يكتشفه GitHub كـ "Secret"
-        const part1 = "7737242130"; 
-        const part2 = "AAECXvX_Y37L9X..."; // استبدل هذا بالجزء الثاني من التوكن الجديد
-        const fullToken = part1 + ":" + part2;
-        
-        const chatId = "654321000"; // استبدل بـ ID الشات الخاص بك
-        const msg = `🔔 دخول جديد للموقع:\nID: ${uid}`;
-        
-        try {
-            await fetch(`https://api.telegram.org/bot${fullToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(msg)}`);
-        } catch(e) {}
-    }
-
-    function requestActivation() {
-        window.location.href = `https://wa.me/201556853817?text=تفعيل_اي_دي:${userID}`;
-    }
-
-    async function checkAccess() {
-        try {
-            const res = await fetch(`codes.json?v=${Date.now()}`);
-            const data = await res.json();
+        ctx.fillStyle = "rgba(0, 0, 0, 0.05)"; ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#0F0"; ctx.font = fontSize + "px monospace
             
-            let hasAccess = false;
-            if (data.site_status === "open") hasAccess = true;
-            else if (data.active_users && data.active_users[userID]) {
-                if (new Date(data.active_users[userID]) > new Date()) hasAccess = true;
-            }
-
-            if (hasAccess) {
-                notifyAdmin(userID); 
-                startLoading();
-            }
-        } catch(e) {}
-    }
-
-    function startLoading() {
-        document.getElementById('loginPage').style.display = "none";
-        document.getElementById('loadingScreen').style.display = "flex";
-        let p = 0;
-        const int = setInterval(() => {
-            p += 10; document.getElementById('bar').style.width = p + "%";
-            if (p >= 100) { 
-                clearInterval(int); 
-                document.getElementById('loadingScreen').style.display = "none";
-                document.getElementById('contentPage').style.display = "block";
-            }
-        }, 150);
-    }
-
-    checkAccess();
-</script>
-</body>
-</html>
