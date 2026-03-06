@@ -3,17 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
     <title>الهواري نت | ALHWARY NET VIP</title>
-    <meta name="description" content="موقع الهواري نت - ALHWARY NET VIP لتوزيع الكروت والخدمات الحصرية بأفضل جودة">
-    <meta name="keywords" content="الهواري نت, ALHWARY NET, كروت شحن, الهواري VIP, فودافون, اتصالات">
-    <meta name="author" content="ALHWARY">
-
+    
     <style>
         :root {
-            /* الألوان الجديدة: أزرق نيون */
             --neon-blue: #00f2fe;
-            --neon-shadow: #4facfe;
             --dark-bg: #000000;
             --card-bg: rgba(10, 10, 10, 0.9);
             --text-color: #ccc;
@@ -21,11 +15,8 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        /* منع اختيار النص نهائياً لحماية الكود */
         body { 
             -webkit-user-select: none; 
-            -moz-user-select: none; 
-            -ms-user-select: none; 
             user-select: none; 
             background-color: var(--dark-bg); 
             color: var(--text-color); 
@@ -47,7 +38,6 @@
             background: rgba(0, 0, 0, 0.6); 
         }
 
-        /* تنسيق كروت الشحن */
         .code-card { 
             background: var(--card-bg); 
             border: 1px solid #222; 
@@ -58,14 +48,8 @@
             width: 100%; 
             max-width: 450px; 
             box-shadow: 0 0 15px rgba(0, 242, 254, 0.2);
-            transition: 0.3s;
-        }
-        
-        .code-card:hover {
-            box-shadow: 0 0 25px rgba(0, 242, 254, 0.4);
         }
 
-        /* تنسيق الأزرار بالأزرق */
         .btn { 
             background: transparent; 
             color: var(--neon-blue); 
@@ -76,105 +60,85 @@
             font-weight: bold; 
             cursor: pointer; 
             margin-top: 10px; 
-            text-transform: uppercase;
             transition: 0.3s;
             text-shadow: 0 0 5px var(--neon-blue);
         }
         
-        .btn:hover {
-            background: var(--neon-blue);
-            color: #000;
-            box-shadow: 0 0 20px var(--neon-blue);
-            text-shadow: none;
-        }
+        .btn:hover { background: var(--neon-blue); color: #000; box-shadow: 0 0 20px var(--neon-blue); }
 
-        /* شعار الهواري النصي - ASCII Art المحدث */
         .ascii-logo { 
             color: var(--neon-blue); 
             font-size: 8px; 
             white-space: pre; 
             margin-bottom: 15px; 
             text-shadow: 0 0 10px var(--neon-blue); 
-            font-weight: bold; 
             text-align: center;
         }
 
-        /* تنسيق الـ ID */
         .id-box {
             font-size: 28px;
-            color: #f1c40f; /* الحفاظ على اللون الذهبي للـ ID لتمييزه */
+            color: #f1c40f; 
             border: 2px dashed #444;
             padding: 20px;
             margin: 20px 0;
             background: rgba(0,0,0,0.7);
-            text-shadow: 0 0 5px #f1c40f;
         }
     </style>
 </head>
-<body oncontextmenu="return false;"> <canvas id="matrixCanvas"></canvas>
+<body oncontextmenu="return false;">
+
+<canvas id="matrixCanvas"></canvas>
 
 <div class="overlay">
-    <div id="loginPage" style="text-align:center; margin-top:20%;">
+    <div id="loginPage" style="text-align:center; margin-top:15%;">
         <div class="ascii-logo">
       _    _      _    ___        ___    ____ __   __
      / \  | |    | |  | \ \      / / \  |  _ \\ \ / /
     / _ \ | |    | |__| |\ \ /\ / / _ \ | |_) |\ V / 
    / ___ \| |___ |  __  | \ V  V / ___ \|  _ <  | |  
   /_/   \_\_____||_|  |_|  \_/\_/_/   \_\_| \_\ |_|  
-                                                     
-          _   _  ___ ____  
-         | | | |/ _ \  _ \ 
-         | | | | | | | |_) |
-         | |_| | |_| |  __/ 
-          \___/ \___/|_|    
         </div>
-        <h1 style="color:var(--neon-blue); text-shadow: 0 0 10px var(--neon-blue);">ALHWARY NET VIP</h1>
-        <p style="margin-top:10px; color:#aaa;">نظام التوزيع الحصري - إصدار الحماية الفولاذية</p>
+        <h1 style="color:var(--neon-blue);">ALHWARY NET VIP</h1>
+        <p>نظام التوزيع المتصل بالبوت</p>
         <div class="id-box" id="myID">------</div>
-        <button class="btn" id="activeBtn">طلب تفعيل الحساب</button>
+        <button class="btn" id="activeBtn">إرسال طلب تفعيل للبوت</button>
     </div>
 
     <div id="contentPage" style="display:none; width: 100%; text-align: center;">
-        <h2 style="color:var(--neon-blue); margin-bottom:20px; text-shadow: 0 0 10px var(--neon-blue);">SYSTEM_ONLINE</h2>
+        <h2 style="color:var(--neon-blue); margin-bottom:20px;">SYSTEM_ONLINE</h2>
         <div id="codesContainer"></div>
     </div>
 </div>
 
 <script>
-    // --- بيانات الربط (GitHub) ---
-    // تم وضع التوكن الخاص بك هنا
+    // --- البيانات التي قدمتها ---
+    const BOT_TOKEN = '7910901014:AAGnHUMgwXH5Tn5zgOgk4jCC0FCYGeujUFo'; 
+    const ADMIN_ID = '6979648492';
     const G_TOKEN = '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';
     const REPO = 'nnytttdh-tech/ALHWARY_NET';
     const FILE = 'codes.json';
 
-    // --- نظام الحماية المطور للمشرف الهواري ---
-    
-    // 1. تعطيل الاختصارات (F12, Ctrl+U, Ctrl+Shift+I)
-    document.onkeydown = function(e) {
-        if (e.keyCode == 123 || (e.ctrlKey && (e.keyCode == 85 || e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)))) {
-            return false;
-        }
-    };
-
-    // 2. قنبلة الـ Debugger (إيقاف المتصفح لو فُتحت أدوات المطور)
-    setInterval(function() { (function() { return false; }['constructor']('debugger')['call']()); }, 50);
-
-    // 3. منع تظليل النصوص نهائياً
-    document.onselectstart = function() { return false; };
-
-    // --- إدارة المستخدم والـ ID ---
     let userId = localStorage.getItem('h_user_id') || Math.floor(100000 + Math.random() * 900000).toString();
     localStorage.setItem('h_user_id', userId);
     document.getElementById('myID').innerText = userId;
-    
-    // رابط الواتساب للتفعيل
-    document.getElementById('activeBtn').onclick = () => {
-        window.location.href=`https://wa.me/201556853817?text=طلب تفعيل الـ ID الخاص بي: ${userId}`;
+
+    async function sendTelegram(msg) {
+        try {
+            await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: ADMIN_ID, text: msg })
+            });
+        } catch (e) { console.error("Telegram Error"); }
+    }
+
+    document.getElementById('activeBtn').onclick = async () => {
+        await sendTelegram(`🔔 طلب تفعيل جديد!\n👤 ID للمستخدم: ${userId}`);
+        alert('تم إرسال طلب التفعيل للبوت بنجاح!');
     };
 
     let currentSHA = "";
 
-    // --- جلب البيانات والتحقق من التفعيل ---
     async function checkAuthorization() {
         try {
             const res = await fetch(`https://api.github.com/repos/${REPO}/contents/${FILE}?v=${Date.now()}`, {
@@ -186,127 +150,55 @@
                 currentSHA = fileData.sha;
                 const content = JSON.parse(atob(fileData.content));
 
-                // التحقق هل الموقع مفتوح للجميع أو هذا المستخدم مفعل
-                let isAuthorized = content.site_status === "open" || (content.active_users && content.active_users[userId] && new Date(content.active_users[userId]) > new Date());
+                // فحص إذا كان المستخدم مفعل في ملف الـ JSON
+                let isAuthorized = content.site_status === "open" || (content.active_users && content.active_users[userId]);
                 
-                if (isAuthorized && document.getElementById('contentPage').style.display !== "block") {
+                if (isAuthorized) {
                     document.getElementById('loginPage').style.display = "none";
                     document.getElementById('contentPage').style.display = "block";
                     renderCodes(content);
                 }
             }
-        } catch(e) {
-            console.error("خطأ في الاتصال بالسيرفر");
-        }
+        } catch(e) { console.log("GitHub Connection Error"); }
     }
 
-    // --- عرض الكروت في الصفحة ---
     function renderCodes(data) {
         let htmlContent = "";
-        // التأكد من وجود كروت
-        if (!data.net_codes || data.net_codes.length === 0) {
-            htmlContent = "<div style='color:#ff3e3e; margin-top:50px;'>⚠️ لا توجد كروت متاحة حالياً.</div>";
-        } else {
-            data.net_codes.forEach(item => {
-                const decryptedCode = atob(item.code); // فك تشفير الكود القادم من السيرفر
-                htmlContent += `
-                    <div class="code-card">
-                        <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
-                            <span style="color:#888;">💳 CODE:</span> 
-                            <span style="color:#fff; font-weight:bold; letter-spacing:1px;">${decryptedCode}</span>
-                        </div>
-                        <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
-                            <span style="color:#888;">📦 UNITS:</span> 
-                            <span style="color:var(--neon-blue); font-weight:bold;">${item.units}</span>
-                        </div>
-                        <button class="btn" onclick="claimCode('${decryptedCode}', ${JSON.stringify(data)})">نسخ الكود وتسجيل الشحن</button>
-                    </div>`;
-            });
-        }
+        data.net_codes.forEach(item => {
+            const cleanCode = atob(item.code);
+            htmlContent += `
+                <div class="code-card">
+                    <p style="color:#888;">الكود: <b style="color:#fff;">${cleanCode}</b></p>
+                    <p style="color:#888;">الوحدات: <b style="color:var(--neon-blue);">${item.units}</b></p>
+                    <button class="btn" onclick="claim('${cleanCode}')">نسخ الكود</button>
+                </div>`;
+        });
         document.getElementById('codesContainer').innerHTML = htmlContent;
     }
 
-    // --- عملية نسخ الكود وتسجيل الإحصائيات ---
-    async function claimCode(codeText, currentData) {
-        // 1. نسخ الكود للمحفظة
-        navigator.clipboard.writeText(codeText);
-        alert('تم نسخ الكود بنجاح! جاري تسجيل العملية...');
-        
-        // 2. تحديث إحصائيات الشحن لهذا المستخدم
-        if(!currentData.user_stats) currentData.user_stats = {};
-        currentData.user_stats[userId] = (currentData.user_stats[userId] || 0) + 1;
-
-        // 3. إرسال البيانات المحدثة لـ GitHub
-        try {
-            await fetch(`https://api.github.com/repos/${REPO}/contents/${FILE}`, {
-                method: 'PUT',
-                headers: { 
-                    'Authorization': `token ${G_TOKEN}`, 
-                    'Content-Type': 'application/json' 
-                },
-                body: JSON.stringify({
-                    message: `كود مشحون بواسطة ID: ${userId}`,
-                    content: btoa(JSON.stringify(currentData, null, 2)), // تشفير البيانات قبل الإرسال
-                    sha: currentSHA
-                })
-            });
-        } catch(e) {
-            console.error("خطأ في تحديث الإحصائيات");
-        }
+    async function claim(code) {
+        navigator.clipboard.writeText(code);
+        alert('تم النسخ وإبلاغ الإدارة.');
+        await sendTelegram(`✅ تم سحب كود!\n👤 ID: ${userId}\n🎫 الكود: ${code}`);
     }
 
-    // بدء التحقق الدوري كل 5 ثواني
-    setInterval(checkAuthorization, 5000);
-    // تحقق أولي عند تحميل الصفحة
-    checkAuthorization();
-
-    // --- كود تأثير خلفية الماتريكس (باللون الأزرق) ---
+    // تأثير الماتريكس
     const canvas = document.getElementById('matrixCanvas');
     const ctx = canvas.getContext('2d');
-    
-    // ضبط حجم الكانفاس لملء الشاشة
-    function resizeCanvas() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-    }
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
-
-    // الكلمات التي ستسقط (0 و 1)
-    const words = ["0", "1"];
-    const fontSize = 16;
-    const columns = Math.floor(canvas.width / fontSize);
-    const drops = Array(columns).fill(1);
-
-    function drawMatrix() {
-        // خلفية شبه شفافة لخلق تأثير الذيل
-        ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        
-        // لون النص الأزرق النيون
-        ctx.fillStyle = "#00f2fe"; 
-        ctx.font = fontSize + "px monospace";
-        // إضافة تأثير توهج للنص
-        ctx.shadowBlur = 8;
-        ctx.shadowColor = "#4facfe";
-
+    canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+    const drops = Array(Math.floor(canvas.width / 16)).fill(1);
+    function draw() {
+        ctx.fillStyle = "rgba(0, 0, 0, 0.05)"; ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#00f2fe"; ctx.font = "16px monospace";
         drops.forEach((y, i) => {
-            const text = words[Math.floor(Math.random() * words.length)];
-            const x = i * fontSize;
-            ctx.fillText(text, x, y * fontSize);
-            
-            // إعادة تعيين السقوط بعد الوصول للنهاية
-            if (y * fontSize > canvas.height && Math.random() > 0.975) {
-                drops[i] = 0;
-            }
+            ctx.fillText(Math.floor(Math.random()*2), i * 16, y * 16);
+            if (y * 16 > canvas.height && Math.random() > 0.975) drops[i] = 0;
             drops[i]++;
         });
-        // إعادة تعيين التوهج للعناصر الأخرى
-        ctx.shadowBlur = 0;
     }
-    
-    // تشغيل التأثير
-    setInterval(drawMatrix, 35);
+    setInterval(draw, 35);
+    setInterval(checkAuthorization, 7000);
+    checkAuthorization();
 </script>
 </body>
 </html>
