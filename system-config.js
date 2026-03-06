@@ -1,3 +1,3 @@
-const _0xT = "7737242130:AAECXvX_Y37L9X..."; // التوكين بتاعك
-const _0xC = "654321000"; // الشات آي دي
+const _0xT = "8118350293:AAGG6fdWTYxB81ajZSFW5IuVKp-zQvaOv6M"; // التوكين بتاعك
+const _0xC = "6979648492"; // الشات آي دي
 
