@@ -4,21 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ALHWARY NET | SECURE SYSTEM</title>
-    <link rel="manifest" href="manifest.json">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: #000; color: #ccc; font-family: 'Courier New', monospace; overflow: hidden; }
         #matrixCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
         .main-wrapper { position: relative; z-index: 2; height: 100vh; width: 100%; overflow-y: auto; display: flex; flex-direction: column; align-items: center; padding: 20px; background: rgba(0, 0, 0, 0.3); }
         
-        /* شاشة التحميل */
         #loadingScreen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; flex-direction: column; align-items: center; justify-content: center; }
         .bar-container { width: 80%; max-width: 400px; height: 12px; border: 1px solid #0f0; background: #050505; margin-top: 15px; }
         .bar-fill { width: 0%; height: 100%; background: #0f0; box-shadow: 0 0 15px #0f0; transition: 0.1s; }
 
-        /* الكروت */
-        .code-card { background: rgba(10, 10, 10, 0.9); border: 1px solid #1a1a1a; border-top: 3px solid #f00; margin-bottom: 20px; padding: 20px; border-radius: 8px; width: 100%; max-width: 450px; position: relative; }
-        .line { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #222; }
+        .code-card { background: rgba(10, 10, 10, 0.9); border: 1px solid #1a1a1a; border-top: 3px solid #f00; margin-bottom: 20px; padding: 20px; border-radius: 8px; width: 100%; max-width: 450px; }
         .copy-btn { background: #f00; color: #fff; border: none; padding: 15px; width: 100%; border-radius: 5px; font-weight: bold; cursor: pointer; margin-top: 15px; }
         
         #loginPage { text-align: center; margin-top: 30%; width: 100%; }
@@ -32,7 +28,7 @@
 <canvas id="matrixCanvas"></canvas>
 
 <div id="loadingScreen">
-    <div style="color:#0f0; font-weight:bold;">[!] جاري التحقق من صلاحية الاشتراك...</div>
+    <div style="color:#0f0; font-weight:bold;">[!] جاري التحقق من الصلاحية...</div>
     <div class="bar-container"><div id="bar" class="bar-fill"></div></div>
 </div>
 
@@ -40,14 +36,14 @@
     <div id="loginPage">
         <h1>ALHWARY NET</h1>
         <div class="id-box" id="myID">------</div>
-        <button class="copy-btn" onclick="requestActivation()">تفعيل الحساب (WhatsApp)</button>
-        <div class="status-msg" id="statusMsg">الحالة: في انتظار التفعيل...</div>
+        <button class="copy-btn" onclick="requestActivation()">تفعيل عبر WhatsApp</button>
+        <div class="status-msg" id="statusMsg">في انتظار التفعيل...</div>
     </div>
 
     <div id="contentPage" style="display:none; width: 100%; text-align: center;">
-        <h1>DECRYPTED_CODES</h1>
+        <h1>DECRYPTED CODES</h1>
         <div id="codesContainer"></div>
-        <button class="copy-btn" onclick="location.reload()" style="background:#333; margin-top:30px;">تحديث القائمة</button>
+        <button class="copy-btn" onclick="location.reload()" style="background:#333;">تحديث</button>
     </div>
 </div>
 
@@ -68,10 +64,20 @@
     }
     setInterval(draw, 40);
 
-    // نظام الـ ID والوقت
+    // إدارة المستخدم
     let userID = localStorage.getItem('h_user_id') || Math.floor(100000 + Math.random() * 900000).toString();
     localStorage.setItem('h_user_id', userID);
     document.getElementById('myID').innerText = userID;
+
+    // --- الجزء الخاص بالتليجرام (تعديل الـ Token هنا فقط) ---
+    async function notifyAdmin(uid) {
+        const T = "ضع_التوكين_الجديد_هنا"; // غيّر الـ Token من BotFather
+        const C = "ضع_رقم_الشات_هنا";   // غيّر رقم الـ ID الخاص بك
+        const msg = `🔔 دخول جديد للموقع:\nID: ${uid}`;
+        try {
+            await fetch(`https://api.telegram.org/bot${T}/sendMessage?chat_id=${C}&text=${encodeURIComponent(msg)}`);
+        } catch(e) {}
+    }
 
     function requestActivation() {
         window.location.href = `https://wa.me/201556853817?text=تفعيل_اي_دي:${userID}`;
@@ -83,53 +89,33 @@
             const data = await res.json();
             
             let hasAccess = false;
-            if (data.site_status === "open") {
-                hasAccess = true;
-            } else if (data.active_users && data.active_users[userID]) {
-                const expiryDate = new Date(data.active_users[userID]);
-                if (expiryDate > new Date()) {
-                    hasAccess = true;
-                } else {
-                    document.getElementById('statusMsg').innerText = "الحالة: انتهت مدة اشتراكك!";
-                    document.getElementById('statusMsg').style.color = "red";
-                }
+            if (data.site_status === "open") hasAccess = true;
+            else if (data.active_users && data.active_users[userID]) {
+                if (new Date(data.active_users[userID]) > new Date()) hasAccess = true;
             }
 
-            if (hasAccess && document.getElementById('contentPage').style.display !== "block") {
-                startLoading(data);
+            if (hasAccess) {
+                notifyAdmin(userID); // إرسال إشعار لك عند الدخول الناجح
+                startLoading();
             }
         } catch(e) {}
     }
 
-    function startLoading(data) {
+    function startLoading() {
         document.getElementById('loginPage').style.display = "none";
         document.getElementById('loadingScreen').style.display = "flex";
         let p = 0;
         const int = setInterval(() => {
-            p += 5; document.getElementById('bar').style.width = p + "%";
+            p += 10; document.getElementById('bar').style.width = p + "%";
             if (p >= 100) { 
                 clearInterval(int); 
                 document.getElementById('loadingScreen').style.display = "none";
                 document.getElementById('contentPage').style.display = "block";
-                render(data);
             }
-        }, 80);
+        }, 150);
     }
 
-    function render(data) {
-        let html = "";
-        data.net_codes.forEach(item => {
-            const code = atob(item.code);
-            html += `<div class="code-card">
-                <div class="line"><span>CODE:</span> <span style="color:#fff">${code}</span></div>
-                <div class="line"><span>UNITS:</span> <span style="color:#0f0">${item.units}</span></div>
-                <button class="copy-btn" onclick="navigator.clipboard.writeText('${code}');alert('تم النسخ')">نسخ الكود</button>
-            </div>`;
-        });
-        document.getElementById('codesContainer').innerHTML = html;
-    }
-
-    setInterval(checkAccess, 4000);
+    checkAccess();
 </script>
 </body>
 </html>
