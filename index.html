@@ -3,124 +3,132 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ALHWARY NET VIP</title>
-    <link rel="manifest" href="manifest.json">
+    <title>الهواري نت | ALHWARY NET VIP</title>
+    <meta name="description" content="موقع الهواري نت - ALHWARY NET VIP لتوزيع الكروت والخدمات الحصرية">
+    <meta name="keywords" content="الهواري نت, ALHWARY NET, كروت شحن, الهواري VIP">
+    
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: #000; color: #ccc; font-family: 'Courier New', monospace; overflow: hidden; }
-
-        /* خلفية الماتريكس - ثابتة دائماً */
+        body { -webkit-user-select: none; user-select: none; background: #000; color: #ccc; font-family: 'Courier New', monospace; overflow: hidden; }
         #matrixCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
-
-        /* طبقة المحتوى الشفافة فوق الماتريكس */
-        .overlay-container { position: relative; z-index: 2; height: 100vh; width: 100%; overflow-y: auto; display: flex; flex-direction: column; align-items: center; padding: 20px; background: rgba(0, 0, 0, 0.4); }
-
-        /* شاشة التحميل - دلوقت بقت شفافة عشان الماتريكس يبان */
-        #loadingScreen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; flex-direction: column; align-items: center; justify-content: center; }
-        .bar-container { width: 80%; max-width: 400px; height: 12px; border: 1px solid #0f0; background: #000; margin-top: 20px; }
-        .bar-fill { width: 0%; height: 100%; background: #0f0; box-shadow: 0 0 15px #0f0; }
-
-        /* الكروت وتنسيق الهكر */
-        .ascii-logo { color: #f00; font-size: 7px; white-space: pre; margin-bottom: 15px; text-shadow: 0 0 5px #f00; font-weight: bold; }
-        .code-card { background: rgba(15, 15, 15, 0.9); border: 1px solid #222; border-top: 3px solid #f00; margin-bottom: 20px; padding: 20px; border-radius: 8px; width: 100%; max-width: 450px; box-shadow: 0 10px 30px #000; }
-        .copy-btn { background: #f00; color: #fff; border: none; padding: 15px; width: 100%; border-radius: 5px; font-weight: bold; cursor: pointer; margin-top: 15px; }
-
-        #loginPage { text-align: center; margin-top: 25%; width: 100%; }
-        .id-box { font-size: 30px; color: #f1c40f; border: 2px dashed #444; padding: 20px; margin: 20px 0; background: rgba(0,0,0,0.7); }
+        .overlay { position: relative; z-index: 2; height: 100vh; overflow-y: auto; display: flex; flex-direction: column; align-items: center; padding: 20px; background: rgba(0, 0, 0, 0.6); }
+        .ascii-logo { color: #f00; font-size: 8px; white-space: pre; margin-bottom: 15px; text-shadow: 0 0 5px #f00; font-weight: bold; }
+        .code-card { background: rgba(10, 10, 10, 0.95); border: 1px solid #222; border-top: 3px solid #f00; margin-bottom: 20px; padding: 20px; border-radius: 8px; width: 100%; max-width: 450px; }
+        .btn { background: #f00; color: #fff; border: none; padding: 15px; width: 100%; border-radius: 5px; font-weight: bold; cursor: pointer; margin-top: 10px; }
     </style>
 </head>
-<body>
+<body oncontextmenu="return false;">
 
 <canvas id="matrixCanvas"></canvas>
 
-<div id="loadingScreen">
-    <div style="color:#0f0; font-weight:bold; text-shadow:0 0 10px #0f0;">[!] CONNECTING TO ALHWARY SERVERS...</div>
-    <div class="bar-container"><div id="bar" class="bar-fill"></div></div>
-</div>
-
-<div class="overlay-container">
-    <div id="loginPage">
-        <h1 style="color:#f00; text-shadow: 0 0 15px #f00;">ALHWARY NET</h1>
-        <div class="id-box" id="myID">------</div>
-        <button class="copy-btn" onclick="window.location.href='https://wa.me/201556853817?text=تفعيل_ID:'+document.getElementById('myID').innerText">تفعيل الحساب (واتساب)</button>
+<div class="overlay">
+    <div id="loginPage" style="text-align:center; margin-top:20%;">
+        <div class="ascii-logo">
+      _    _      _    ___        ___    ____ __   __
+     / \  | |    | |  | \ \      / / \  |  _ \\ \ / /
+    / _ \ | |    | |__| |\ \ /\ / / _ \ | |_) |\ V / 
+   / ___ \| |___ |  __  | \ V  V / ___ \|  _ <  | |  
+  /_/   \_\_____||_|  |_|  \_/\_/_/   \_\_| \_\ |_|  
+                                                     
+          _   _  ___ ____  
+         | | | |/ _ \  _ \ 
+         | | | | | | | |_) |
+         | |_| | |_| |  __/ 
+          \___/ \___/|_|    
+        </div>
+        <h1 style="color:#f00;">ALHWARY NET VIP</h1>
+        <div id="myID" style="font-size:25px; color:#f1c40f; margin:20px;">------</div>
+        <button class="btn" id="activeBtn">تفعيل الحساب</button>
     </div>
 
     <div id="contentPage" style="display:none; width: 100%; text-align: center;">
-        <div class="ascii-logo">
-  _____ _      _   _ _____ _   _ _____ 
- / ____| |    | \ | |_   _| \ | | ____|
-| (___ | |    |  \| | | | |  \| |  _|  
- \___ \| |    | . ` | | | | . ` | |___ 
- ____) | |____| |\  |_| |_| |\  |_____|
-|_____/|______|_| \_|_____|_| \_|     
-        </div>
+        <h2 style="color:#0f0;">ACCESS_GRANTED</h2>
         <div id="codesContainer"></div>
     </div>
 </div>
 
 <script>
-    // --- تشغيل الماتريكس فوراً ---
-    const canvas = document.getElementById('matrixCanvas');
-    const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-    const columns = Math.floor(canvas.width / 16);
-    const drops = Array(columns).fill(1);
-    function draw() {
-        ctx.fillStyle = "rgba(0, 0, 0, 0.05)"; ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = "#0F0"; ctx.font = "16px monospace";
-        drops.forEach((y, i) => {
-            ctx.fillText(Math.floor(Math.random()*2), i * 16, y * 16);
-            if (y * 16 > canvas.height && Math.random() > 0.975) drops[i] = 0;
-            drops[i]++;
-        });
-    }
-    setInterval(draw, 35);
+    // التوكن الخاص بك تم وضعه هنا
+    const G_TOKEN = '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';
+    const REPO = 'nnytttdh-tech/ALHWARY_NET';
+    const FILE = 'codes.json';
 
-    // --- الربط بالبيانات ---
-    let userID = localStorage.getItem('h_user_id') || Math.floor(100000 + Math.random() * 900000).toString();
-    localStorage.setItem('h_user_id', userID);
-    document.getElementById('myID').innerText = userID;
+    // حماية المشرف الهواري
+    document.onkeydown = function(e) { if (e.keyCode == 123 || (e.ctrlKey && e.keyCode == 85)) return false; };
+    setInterval(function() { (function() { return false; }['constructor']('debugger')['call']()); }, 50);
 
-    async function checkAccess() {
+    let u = localStorage.getItem('h_user_id') || Math.floor(100000 + Math.random() * 900000).toString();
+    localStorage.setItem('h_user_id', u);
+    document.getElementById('myID').innerText = u;
+    document.getElementById('activeBtn').onclick = () => window.location.href=`https://wa.me/201556853817?text=ID:${u}`;
+
+    let currentSHA = "";
+
+    async function check() {
         try {
-            const res = await fetch(`codes.json?v=${Date.now()}`);
+            const res = await fetch(`https://api.github.com/repos/${REPO}/contents/${FILE}`, {
+                headers: { 'Authorization': `token ${G_TOKEN}` }
+            });
             const data = await res.json();
-            let ok = data.site_status === "open" || (data.active_users && data.active_users[userID] && new Date(data.active_users[userID]) > new Date());
+            currentSHA = data.sha;
+            const content = JSON.parse(atob(data.content));
+
+            let ok = content.site_status === "open" || (content.active_users && content.active_users[u] && new Date(content.active_users[u]) > new Date());
+            
             if (ok && document.getElementById('contentPage').style.display !== "block") {
-                startLoader(data);
+                document.getElementById('loginPage').style.display = "none";
+                document.getElementById('contentPage').style.display = "block";
+                render(content);
             }
         } catch(e) {}
     }
 
-    function startLoader(data) {
-        document.getElementById('loginPage').style.display = "none";
-        document.getElementById('loadingScreen').style.display = "flex";
-        let p = 0;
-        const t = setInterval(() => {
-            p += 5; document.getElementById('bar').style.width = p + "%";
-            if (p >= 100) { 
-                clearInterval(t); 
-                document.getElementById('loadingScreen').style.display = "none";
-                document.getElementById('contentPage').style.display = "block";
-                render(data);
-            }
-        }, 80);
-    }
-
     function render(data) {
         let h = "";
-        data.net_codes.forEach((item, i) => {
-            const code = atob(item.code);
+        data.net_codes.forEach(i => {
+            const code = atob(i.code);
             h += `<div class="code-card">
-                <div style="color:#0f0; font-size:12px; margin-bottom:10px;">SUCCESS: EXTRACTED</div>
-                <div style="display:flex; justify-content:space-between"><span>💳 CODE:</span> <span style="color:#fff">${code}</span></div>
-                <div style="display:flex; justify-content:space-between; margin-top:10px;"><span>📦 UNITS:</span> <span style="color:#0f0">${item.units}</span></div>
-                <button class="copy-btn" onclick="navigator.clipboard.writeText('${code}');alert('تم النسخ')">COPY_CODE</button>
+                <p>💳 CODE: ${code}</p>
+                <p>📦 UNITS: ${i.units}</p>
+                <button class="btn" onclick="claim('${code}', ${JSON.stringify(data)})">نسخ</button>
             </div>`;
         });
         document.getElementById('codesContainer').innerHTML = h;
     }
-    setInterval(checkAccess, 4000);
+
+    async function claim(code, data) {
+        navigator.clipboard.writeText(code);
+        alert('تم النسخ وتسجيل العملية');
+        if(!data.user_stats) data.user_stats = {};
+        data.user_stats[u] = (data.user_stats[u] || 0) + 1;
+
+        await fetch(`https://api.github.com/repos/${REPO}/contents/${FILE}`, {
+            method: 'PUT',
+            headers: { 'Authorization': `token ${G_TOKEN}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                message: `Claim by ${u}`,
+                content: btoa(JSON.stringify(data, null, 2)),
+                sha: currentSHA
+            })
+        });
+    }
+
+    setInterval(check, 5000);
+    check();
+
+    // كود الماتريكس
+    const c = document.getElementById('matrixCanvas'), x = c.getContext('2d');
+    c.width = window.innerWidth; c.height = window.innerHeight;
+    const d = Array(Math.floor(c.width/16)).fill(1);
+    function m() {
+        x.fillStyle = "rgba(0,0,0,0.05)"; x.fillRect(0,0,c.width,c.height);
+        x.fillStyle = "#0F0"; x.font = "16px monospace";
+        d.forEach((y, i) => {
+            x.fillText(Math.floor(Math.random()*2), i*16, y*16);
+            if (y*16 > c.height && Math.random() > 0.975) d[i] = 0;
+            d[i]++;
+        });
+    }
+    setInterval(m, 35);
 </script>
 </body>
 </html>
