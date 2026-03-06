@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>الهواري نت | ALHWARY NET VIP</title>
-    
     <style>
         :root {
             --neon-blue: #00f2fe;
@@ -12,9 +11,7 @@
             --card-bg: rgba(10, 10, 10, 0.9);
             --text-color: #ccc;
         }
-
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
         body { 
             -webkit-user-select: none; 
             user-select: none; 
@@ -23,66 +20,25 @@
             font-family: 'Courier New', monospace; 
             overflow: hidden; 
         }
-
         #matrixCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
-
         .overlay { 
-            position: relative; 
-            z-index: 2; 
-            height: 100vh; 
-            overflow-y: auto; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            padding: 20px; 
-            background: rgba(0, 0, 0, 0.6); 
+            position: relative; z-index: 2; height: 100vh; overflow-y: auto; 
+            display: flex; flex-direction: column; align-items: center; 
+            padding: 20px; background: rgba(0, 0, 0, 0.6); 
         }
-
         .code-card { 
-            background: var(--card-bg); 
-            border: 1px solid #222; 
-            border-top: 3px solid var(--neon-blue); 
-            margin-bottom: 20px; 
-            padding: 20px; 
-            border-radius: 8px; 
-            width: 100%; 
-            max-width: 450px; 
-            box-shadow: 0 0 15px rgba(0, 242, 254, 0.2);
+            background: var(--card-bg); border: 1px solid #222; 
+            border-top: 3px solid var(--neon-blue); margin-bottom: 20px; 
+            padding: 20px; border-radius: 8px; width: 100%; max-width: 450px; 
         }
-
         .btn { 
-            background: transparent; 
-            color: var(--neon-blue); 
-            border: 2px solid var(--neon-blue); 
-            padding: 15px; 
-            width: 100%; 
-            border-radius: 5px; 
-            font-weight: bold; 
-            cursor: pointer; 
-            margin-top: 10px; 
-            transition: 0.3s;
-            text-shadow: 0 0 5px var(--neon-blue);
+            background: transparent; color: var(--neon-blue); border: 2px solid var(--neon-blue); 
+            padding: 15px; width: 100%; border-radius: 5px; font-weight: bold; 
+            cursor: pointer; margin-top: 10px; transition: 0.3s;
         }
-        
         .btn:hover { background: var(--neon-blue); color: #000; box-shadow: 0 0 20px var(--neon-blue); }
-
-        .ascii-logo { 
-            color: var(--neon-blue); 
-            font-size: 8px; 
-            white-space: pre; 
-            margin-bottom: 15px; 
-            text-shadow: 0 0 10px var(--neon-blue); 
-            text-align: center;
-        }
-
-        .id-box {
-            font-size: 28px;
-            color: #f1c40f; 
-            border: 2px dashed #444;
-            padding: 20px;
-            margin: 20px 0;
-            background: rgba(0,0,0,0.7);
-        }
+        .ascii-logo { color: var(--neon-blue); font-size: 8px; white-space: pre; text-align: center; margin-bottom: 15px; }
+        .id-box { font-size: 28px; color: #f1c40f; border: 2px dashed #444; padding: 20px; margin: 20px 0; }
     </style>
 </head>
 <body oncontextmenu="return false;">
@@ -99,9 +55,8 @@
   /_/   \_\_____||_|  |_|  \_/\_/_/   \_\_| \_\ |_|  
         </div>
         <h1 style="color:var(--neon-blue);">ALHWARY NET VIP</h1>
-        <p>نظام التوزيع المتصل بالبوت</p>
         <div class="id-box" id="myID">------</div>
-        <button class="btn" id="activeBtn">إرسال طلب تفعيل للبوت</button>
+        <button class="btn" id="activeBtn">إرسال طلب تفعيل للبوت الجديد</button>
     </div>
 
     <div id="contentPage" style="display:none; width: 100%; text-align: center;">
@@ -111,8 +66,8 @@
 </div>
 
 <script>
-    // --- البيانات التي قدمتها ---
-    const BOT_TOKEN = '8118350293:AAGG6fdWTYxB81ajZSFW5IuVKp-zQvaOv6M'; 
+    // --- البيانات المحدثة ---
+    const BOT_TOKEN = '8118350293:AAGG6fdWTYxB81ajZSFW5IuVKp-zQvaOv6M'; // التوكن الجديد
     const ADMIN_ID = '6979648492';
     const G_TOKEN = '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';
     const REPO = 'nnytttdh-tech/ALHWARY_NET';
@@ -129,57 +84,48 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ chat_id: ADMIN_ID, text: msg })
             });
-        } catch (e) { console.error("Telegram Error"); }
+        } catch (e) { console.error("Error Telegram"); }
     }
 
     document.getElementById('activeBtn').onclick = async () => {
-        await sendTelegram(`🔔 طلب تفعيل جديد!\n👤 ID للمستخدم: ${userId}`);
-        alert('تم إرسال طلب التفعيل للبوت بنجاح!');
+        await sendTelegram(`🔔 طلب تفعيل جديد على البوت المحدث!\n👤 ID المستخدم: ${userId}`);
+        alert('تم إرسال الـ ID بنجاح!');
     };
 
-    let currentSHA = "";
-
-    async function checkAuthorization() {
+    async function checkAuth() {
         try {
             const res = await fetch(`https://api.github.com/repos/${REPO}/contents/${FILE}?v=${Date.now()}`, {
                 headers: { 'Authorization': `token ${G_TOKEN}` }
             });
-            
             if (res.status === 200) {
-                const fileData = await res.json();
-                currentSHA = fileData.sha;
-                const content = JSON.parse(atob(fileData.content));
-
-                // فحص إذا كان المستخدم مفعل في ملف الـ JSON
-                let isAuthorized = content.site_status === "open" || (content.active_users && content.active_users[userId]);
-                
-                if (isAuthorized) {
+                const data = await res.json();
+                const content = JSON.parse(atob(data.content));
+                if (content.site_status === "open" || (content.active_users && content.active_users[userId])) {
                     document.getElementById('loginPage').style.display = "none";
                     document.getElementById('contentPage').style.display = "block";
-                    renderCodes(content);
+                    render(content);
                 }
             }
-        } catch(e) { console.log("GitHub Connection Error"); }
+        } catch(e) {}
     }
 
-    function renderCodes(data) {
-        let htmlContent = "";
-        data.net_codes.forEach(item => {
-            const cleanCode = atob(item.code);
-            htmlContent += `
-                <div class="code-card">
-                    <p style="color:#888;">الكود: <b style="color:#fff;">${cleanCode}</b></p>
-                    <p style="color:#888;">الوحدات: <b style="color:var(--neon-blue);">${item.units}</b></p>
-                    <button class="btn" onclick="claim('${cleanCode}')">نسخ الكود</button>
-                </div>`;
+    function render(data) {
+        let h = "";
+        data.net_codes.forEach(c => {
+            const code = atob(c.code);
+            h += `<div class="code-card">
+                <p>الكود: <b>${code}</b></p>
+                <p>الوحدات: <b style="color:var(--neon-blue);">${c.units}</b></p>
+                <button class="btn" onclick="claim('${code}')">نسخ واستلام</button>
+            </div>`;
         });
-        document.getElementById('codesContainer').innerHTML = htmlContent;
+        document.getElementById('codesContainer').innerHTML = h;
     }
 
     async function claim(code) {
         navigator.clipboard.writeText(code);
-        alert('تم النسخ وإبلاغ الإدارة.');
-        await sendTelegram(`✅ تم سحب كود!\n👤 ID: ${userId}\n🎫 الكود: ${code}`);
+        alert('تم النسخ!');
+        await sendTelegram(`✅ تم سحب كود من الموقع!\n👤 ID: ${userId}\n🎫 الكود: ${code}`);
     }
 
     // تأثير الماتريكس
@@ -188,18 +134,17 @@
     canvas.width = window.innerWidth; canvas.height = window.innerHeight;
     const drops = Array(Math.floor(canvas.width / 16)).fill(1);
     function draw() {
-        ctx.fillStyle = "rgba(0, 0, 0, 0.05)"; ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "rgba(0,0,0,0.05)"; ctx.fillRect(0,0,canvas.width,canvas.height);
         ctx.fillStyle = "#00f2fe"; ctx.font = "16px monospace";
         drops.forEach((y, i) => {
-            ctx.fillText(Math.floor(Math.random()*2), i * 16, y * 16);
-            if (y * 16 > canvas.height && Math.random() > 0.975) drops[i] = 0;
+            ctx.fillText(Math.floor(Math.random()*2), i*16, y*16);
+            if (y*16 > canvas.height && Math.random() > 0.975) drops[i] = 0;
             drops[i]++;
         });
     }
     setInterval(draw, 35);
-    setInterval(checkAuthorization, 7000);
-    checkAuthorization();
+    setInterval(checkAuth, 10000);
+    checkAuth();
 </script>
 </body>
 </html>
-
