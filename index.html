@@ -3,150 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TERMINAL ACCESS | VIP</title>
+    <title>ALHWARY RADAR | VIP</title>
     <style>
-        :root {
-            --neon-green: #00ff41;
-            --dark-bg: #050505;
-            --glass-bg: rgba(10, 10, 10, 0.85);
-        }
-
-        body, html {
-            margin: 0; padding: 0; width: 100%; height: 100%;
-            background-color: var(--dark-bg);
-            font-family: 'Courier New', Courier, monospace;
-            overflow: hidden; color: var(--neon-green);
-        }
-
-        #matrix-canvas { position: fixed; top: 0; left: 0; z-index: 1; }
-
-        .main-container {
-            position: relative; z-index: 2;
-            display: flex; justify-content: center; align-items: center; height: 100vh;
-        }
-
-        .terminal-card {
-            background: var(--glass-bg);
-            border: 1px solid var(--neon-green);
-            padding: 30px; border-radius: 5px;
-            box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
-            width: 90%; max-width: 450px; text-align: center;
-            backdrop-filter: blur(10px);
-        }
-
-        .glitch-text { font-size: 24px; font-weight: bold; margin-bottom: 5px; animation: pulse 2s infinite; }
-
-        @keyframes pulse {
-            0% { text-shadow: 0 0 5px var(--neon-green); }
-            50% { text-shadow: 0 0 20px var(--neon-green); }
-            100% { text-shadow: 0 0 5px var(--neon-green); }
-        }
-
-        .status-bar { font-size: 13px; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 10px; }
-        .status-open { color: var(--neon-green); }
-        .status-locked { color: #ff3e3e; }
-
-        .id-section {
-            background: rgba(0, 0, 0, 0.6); border: 1px dashed var(--neon-green);
-            padding: 15px; margin: 20px 0; cursor: pointer; transition: 0.3s;
-        }
-
-        .code-box {
-            background: #111; border: 1px solid var(--neon-green);
-            padding: 10px; margin: 10px 0; font-size: 18px; color: white;
-        }
-
-        .btn-action {
-            display: block; width: 100%; padding: 12px; margin-top: 10px;
-            border: 1px solid var(--neon-green); background: transparent;
-            color: var(--neon-green); font-weight: bold; cursor: pointer; text-transform: uppercase;
-        }
-
-        .btn-action:hover { background: var(--neon-green); color: black; }
-        footer { margin-top: 20px; font-size: 10px; opacity: 0.5; }
+        :root { --neon: #00ff41; --bg: #050505; }
+        body, html { margin: 0; padding: 0; background: var(--bg); font-family: monospace; overflow: hidden; color: var(--neon); }
+        #matrix { position: fixed; top: 0; left: 0; z-index: 1; opacity: 0.3; }
+        .container { position: relative; z-index: 2; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .terminal { background: rgba(0,0,0,0.9); border: 1px solid var(--neon); padding: 20px; width: 90%; max-width: 500px; box-shadow: 0 0 20px var(--neon); }
+        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 12px; margin-top: 15px; border-top: 1px solid #333; padding-top: 10px; }
+        .code-box { border: 1px solid var(--neon); margin: 5px 0; padding: 10px; background: rgba(0,255,65,0.05); }
+        .alert { color: #ff3e3e; font-weight: bold; animation: blink 1s infinite; }
+        @keyframes blink { 50% { opacity: 0; } }
     </style>
 </head>
-<body>
+<body oncontextmenu="reportAttack(); return false;">
 
-<canvas id="matrix-canvas"></canvas>
+<canvas id="matrix"></canvas>
 
-<div class="main-container">
-    <div class="terminal-card" id="mainCard">
-        <div id="loading">جاري فحص حالة النظام...</div>
+<div class="container">
+    <div class="terminal" id="screen">
+        <div style="font-size: 20px;">🛡️ SYSTEM MONITORING...</div>
+        <div id="status">> CONNECTING TO DATABASE...</div>
+        <div id="content"></div>
+        
+        <div class="stat-grid">
+            <div>PING: <span id="ping">0</span>ms</div>
+            <div>THREATS: <span id="threats">0</span></div>
+            <div>DATA LEAK: <span style="color:white">SECURE</span></div>
+            <div>UPTIME: <span id="uptime">0</span>s</div>
+        </div>
     </div>
 </div>
 
 <script>
-    // --- تأثير الماتريكس (Matrix) ---
-    const canvas = document.getElementById('matrix-canvas');
+    // --- Matrix Background ---
+    const canvas = document.getElementById('matrix');
     const ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*";
-    const fontSize = 14;
-    const columns = canvas.width / fontSize;
-    const drops = [];
-    for (let i = 0; i < columns; i++) drops[i] = 1;
-
-    function drawMatrix() {
-        ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = "#00ff41";
-        ctx.font = fontSize + "px monospace";
-        for (let i = 0; i < drops.length; i++) {
-            const text = characters.charAt(Math.floor(Math.random() * characters.length));
-            ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-            if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+    const chars = "0123456789ABCDEF";
+    const drops = Array(Math.floor(canvas.width/14)).fill(1);
+    function draw() {
+        ctx.fillStyle = "rgba(0,0,0,0.05)"; ctx.fillRect(0,0,canvas.width,canvas.height);
+        ctx.fillStyle = "#00ff41"; ctx.font = "14px monospace";
+        drops.forEach((y, i) => {
+            ctx.fillText(chars[Math.floor(Math.random()*chars.length)], i*14, y*14);
+            if(y*14 > canvas.height && Math.random() > 0.975) drops[i] = 0;
             drops[i]++;
-        }
+        });
     }
-    setInterval(drawMatrix, 35);
+    setInterval(draw, 35);
 
-    // --- الربط مع جيت هاب ---
+    // --- Monitoring Logic ---
+    let attacks = 0;
+    let startTime = Date.now();
     const GITHUB_URL = "https://raw.githubusercontent.com/nnytttdh-tech/ALHWARY_NET/main/codes.json";
 
-    async function checkSystem() {
-        const card = document.getElementById('mainCard');
-        try {
-            // إضافة طابع زمني لمنع التخزين المؤقت (Cache)
-            const response = await fetch(GITHUB_URL + "?t=" + new Date().getTime());
-            const data = await response.json();
-
-            if (data.site_status === "open") {
-                // لو الموقع مفتوح
-                let codesHtml = `<div class="glitch-text">SYSTEM ONLINE</div>
-                                 <div class="status-bar status-open">> ACCESS_GRANTED</div>`;
-                
-                if (data.net_codes.length > 0) {
-                    data.net_codes.forEach(item => {
-                        const decoded = atob(item.code);
-                        codesHtml += `<div class="code-box">${decoded} <br> <small>${item.units} وحدات</small></div>`;
-                    });
-                } else {
-                    codesHtml += `<p>لا توجد أكواد متاحة حالياً.</p>`;
-                }
-                card.innerHTML = codesHtml + `<footer>ALHWARY VIP TERMINAL</footer>`;
-            } else {
-                // لو الموقع مقفول (الواجهة الأصلية بتاعتك)
-                card.innerHTML = `
-                    <div class="glitch-text">SYSTEM RESTRICTED</div>
-                    <div class="status-bar status-locked">> STATUS: UNAUTHORIZED</div>
-                    <p style="font-size: 14px;">يرجى تفعيل معرف الجهاز للوصول للمميزات</p>
-                    <div class="id-section">
-                        <span style="font-size: 10px;">DEVICE ID:</span><br>
-                        <span style="font-size: 22px;">1FAAD869</span>
-                    </div>
-                    <button class="btn-action">مراسلة الإدارة</button>
-                    <footer>DARK NET SECURITY v4.0.1</footer>
-                `;
-            }
-        } catch (error) {
-            card.innerHTML = `<div class="status-locked">خطأ في الاتصال بالسيرفر!</div>`;
-        }
+    function reportAttack() {
+        attacks++;
+        document.getElementById('threats').innerText = attacks;
+        console.log("🚨 UNAUTHORIZED ATTEMPT LOGGED");
     }
 
-    checkSystem();
-    // فحص تلقائي كل 30 ثانية
-    setInterval(checkSystem, 30000);
+    // كشف فتح الـ Console
+    setInterval(() => {
+        const threshold = 160;
+        if (window.outerWidth - window.innerWidth > threshold || window.outerHeight - window.innerHeight > threshold) {
+            reportAttack();
+        }
+        document.getElementById('uptime').innerText = Math.floor((Date.now() - startTime)/1000);
+    }, 1000);
+
+    async function updateUI() {
+        const pStart = performance.now();
+        try {
+            const res = await fetch(GITHUB_URL + "?v=" + Date.now());
+            const data = await res.json();
+            document.getElementById('ping').innerText = Math.floor(performance.now() - pStart);
+            
+            if(data.site_status === "open") {
+                document.getElementById('status').innerHTML = "> <span style='color:white'>ACCESS GRANTED</span>";
+                let html = "";
+                data.net_codes.forEach(c => {
+                    html += `<div class="code-box">${atob(c.code)} - ${c.units}U</div>`;
+                });
+                document.getElementById('content').innerHTML = html || "NO CODES FOUND";
+            } else {
+                document.getElementById('status').innerHTML = "> <span class='alert'>RESTRICTED ACCESS</span>";
+                document.getElementById('content').innerHTML = "<p>يرجى التواصل مع الإدارة للتفعيل.</p>";
+            }
+        } catch(e) { document.getElementById('status').innerText = "> CONNECTION ERROR"; }
+    }
+    setInterval(updateUI, 5000); updateUI();
 </script>
 </body>
 </html>
