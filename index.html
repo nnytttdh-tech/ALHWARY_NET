@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ALHWARY VIP | PROTECTED</title>
+    <title>ALHWARY VIP | SECURE ACCESS</title>
     <style>
         :root { --neon: #00ff41; --bg: #050505; --alert: #ff3e3e; --admin: #00d4ff; }
         body, html { margin: 0; padding: 0; background: var(--bg); font-family: 'Courier New', monospace; color: var(--neon); overflow: hidden; }
         #matrix { position: fixed; top: 0; left: 0; z-index: 1; opacity: 0.15; }
         .container { position: relative; z-index: 2; display: flex; justify-content: center; align-items: center; height: 100vh; padding: 15px; }
-        .terminal { background: rgba(0,0,0,0.95); border: 1px solid var(--neon); padding: 25px; width: 100%; max-width: 420px; box-shadow: 0 0 25px rgba(0,255,65,0.2); text-align: center; }
+        .terminal { background: rgba(0,0,0,0.95); border: 1px solid var(--neon); padding: 25px; width: 100%; max-width: 420px; box-shadow: 0 0 25px rgba(0,255,65,0.2); text-align: center; border-radius: 5px; }
         
         .header { font-size: 24px; border-bottom: 1px solid var(--neon); padding-bottom: 10px; margin-bottom: 20px; font-weight: bold; }
         .screen { display: none; }
@@ -17,21 +17,20 @@
 
         .btn { display: block; width: 100%; padding: 15px; margin: 10px 0; border: none; font-weight: bold; cursor: pointer; font-family: inherit; transition: 0.3s; }
         .btn-green { background: var(--neon); color: black; }
-        .btn-outline { background: transparent; color: var(--neon); border: 1px solid var(--neon); }
         .btn-wa { background: #25d366; color: white; text-decoration: none; display: block; padding: 15px; border-radius: 4px; }
 
         /* صندوق الـ ID وزر الغرفة السرية */
         .id-container { position: relative; margin: 30px 0 15px 0; }
-        .admin-btn { position: absolute; top: -22px; left: 0; font-size: 9px; color: #555; cursor: pointer; border: 1px solid #222; padding: 1px 6px; border-radius: 2px; }
+        .admin-btn { position: absolute; top: -22px; left: 0; font-size: 9px; color: #333; cursor: pointer; border: 1px solid #111; padding: 1px 6px; border-radius: 2px; }
         .admin-btn:hover { color: var(--admin); border-color: var(--admin); }
         .id-box { background: rgba(0,255,65,0.05); border: 1px dashed var(--neon); padding: 15px; cursor: pointer; word-break: break-all; color: #fff; font-size: 14px; }
 
         /* الغرفة السرية */
-        .admin-panel { text-align: right; color: var(--admin); font-size: 12px; max-height: 380px; overflow-y: auto; padding: 10px; border: 1px solid var(--admin); background: rgba(0,0,0,0.9); }
+        .admin-panel { text-align: right; color: var(--admin); font-size: 12px; max-height: 380px; overflow-y: auto; padding: 10px; border: 1px solid var(--admin); background: rgba(0,0,0,0.95); }
         .stat-card { background: rgba(0,212,255,0.05); padding: 10px; margin-bottom: 10px; border-bottom: 1px solid #111; line-height: 1.6; }
         .close-btn { color: var(--alert); float: left; cursor: pointer; font-weight: bold; border: 1px solid var(--alert); padding: 0 5px; }
 
-        .code-item { border: 1px solid var(--neon); margin: 8px 0; padding: 12px; display: flex; justify-content: space-between; background: rgba(0,255,65,0.05); }
+        .code-item { border: 1px solid var(--neon); margin: 8px 0; padding: 12px; display: flex; justify-content: space-between; background: rgba(0,255,65,0.05); text-align: right; }
         .alert { color: var(--alert); font-weight: bold; animation: blink 1s infinite; }
         @keyframes blink { 50% { opacity: 0; } }
     </style>
@@ -45,34 +44,31 @@
         <div class="header">ALHWARY VIP</div>
 
         <div id="screen-auth" class="screen active">
-            <div style="font-size: 45px; margin-bottom: 15px;">🛡️</div>
-            <p id="auth-msg">نظام مشفر.. بانتظار التحقق</p>
-            <button class="btn btn-green" onclick="useBiometric()">فتح بالبصمة / الوجه</button>
-            <button class="btn btn-outline" onclick="verifyServer()">دخول يدوي (ID)</button>
+            <div style="font-size: 45px; margin-bottom: 15px;">📡</div>
+            <p id="auth-msg">بانتظار التحقق من صلاحية الوصول...</p>
+            <button class="btn btn-green" onclick="verifyServer()">دخول النظام ⚡</button>
         </div>
 
         <div id="screen-activation" class="screen">
-            <p class="alert">⚠️ الوصول مرفوض / غير مفعل</p>
-            
+            <p class="alert">⚠️ ACCESS DENIED / غير مفعل</p>
             <div class="id-container">
                 <div class="admin-btn" onclick="openAdminRoom()">[ الغرفة السرية ]</div>
                 <div class="id-box" id="my-id-val" onclick="copyID()">جاري التوليد...</div>
             </div>
-
-            <p style="font-size: 10px; opacity: 0.7;">إضغط على الـ ID لنسخه</p>
+            <p style="font-size: 10px; opacity: 0.7;">إضغط على الـ ID لنسخه وأرسله للمطور</p>
             <a id="wa-link" href="#" class="btn btn-wa">طلب تفعيل VIP</a>
         </div>
 
         <div id="screen-admin" class="screen">
             <div class="admin-panel">
                 <span class="close-btn" onclick="showScreen('screen-activation')">X</span>
-                <h4 style="margin:0 0 15px 0; border-bottom: 1px solid var(--admin);">🔐 لوحة تحكم الإدارة</h4>
-                <div id="admin-data">جاري جلب البيانات من السيرفر...</div>
+                <h4 style="margin:0 0 15px 0; border-bottom: 1px solid var(--admin); padding-bottom: 5px;">🔐 لوحة التحكم العليا</h4>
+                <div id="admin-data">جاري سحب البيانات...</div>
             </div>
         </div>
 
         <div id="screen-content" class="screen">
-            <div style="color: #fff; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 5px;">✅ مرحباً بك.. الأكواد النشطة:</div>
+            <div style="color: #fff; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 5px;">✅ مرحباً بك.. الأكواد المتاحة:</div>
             <div id="codes-list"></div>
         </div>
 
@@ -80,17 +76,20 @@
 </div>
 
 <script>
-    // --- الإعدادات ---
+    // --- الإعدادات الأمنية ---
     const GITHUB_RAW = "https://raw.githubusercontent.com/nnytttdh-tech/ALHWARY_NET/main/codes.json";
-    const ADMIN_PASS = "2011 2011"; // كلمة السر التي طلبتها
-    const WA_NUMBER = "201012345678"; // رقمك هنا
+    const WA_NUMBER = "201012345678"; // رقم الواتساب
+    const PASS_HASH = "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92"; // بصمة "2011 2011"
+    
+    // ⚠️ استبدل HW-XXXX بالـ ID الخاص بك لتعمل الغرفة السرية معك فقط
+    const OWNER_ID = "HW-XXXXXXX"; 
 
-    // حفظ ID الجهاز
+    // توليد ID ثابت للجهاز
     function getID() {
-        let id = localStorage.getItem('HW_V4_ID');
+        let id = localStorage.getItem('HW_V6_SECURE');
         if (!id) {
             id = "HW-" + Math.random().toString(36).substr(2, 9).toUpperCase();
-            localStorage.setItem('HW_V4_ID', id);
+            localStorage.setItem('HW_V6_SECURE', id);
         }
         return id;
     }
@@ -98,56 +97,43 @@
     document.getElementById('my-id-val').innerText = myID;
     document.getElementById('wa-link').href = `https://wa.me/${WA_NUMBER}?text=تفعيل_ID:${myID}`;
 
-    // دخول الغرفة السرية
-    function openAdminRoom() {
+    // وظيفة الغرفة السرية (محمية بـ ID الأدمن + باسوورد مشفر)
+    async function openAdminRoom() {
+        if (myID !== OWNER_ID) {
+            alert("❌ خطأ: هذا الجهاز غير مسجل كمسؤول.");
+            return;
+        }
+
         let pass = prompt("أدخل كلمة مرور الغرفة السرية:");
-        if (pass === ADMIN_PASS) {
+        if (!pass) return;
+
+        // تشفير الباسوورد المدخل لمقارنته
+        const encoded = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pass));
+        const hashHex = Array.from(new Uint8Array(encoded)).map(b => b.toString(16).padStart(2, '0')).join('');
+
+        if (hashHex === PASS_HASH) {
             showScreen('screen-admin');
             loadAdminStats();
-        } else if (pass !== null) {
+        } else {
             alert("⚠️ كلمة المرور خاطئة!");
         }
     }
 
     async function loadAdminStats() {
-        const display = document.getElementById('HW-5X07G6LIL');
+        const display = document.getElementById('admin-data');
         try {
-            const res = await fetch(GITHUB_RAW + "?nocache=" + Date.now());
+            const res = await fetch(GITHUB_RAW + "?v=" + Date.now());
             const data = await res.json();
-            
-            let users = data.authorized_devices || [];
-            let codes = data.net_codes || [];
-
             display.innerHTML = `
-                <div class="stat-card">
-                    <b>📊 حالة السيرفر:</b><br>
-                    • المتصلين (مفعلين): ${users.length}<br>
-                    • الأكواد المرفوعة: ${codes.length}<br>
-                    • الموقع: ${data.site_status === "open" ? "مفتوح ✅" : "مغلق 🚫"}
-                </div>
-                <div class="stat-card">
-                    <b>📱 قائمة المشتركين وتواريخهم:</b><br>
-                    ${users.map(u => `• <code>${u.id}</code> (${u.expire_at})`).join('<br>')}
-                </div>
-                <div class="stat-card">
-                    <b>🔑 الأكواد الحالية:</b><br>
-                    ${codes.map(c => `• ${atob(c.code)} [${c.units}U]`).join('<br>')}
-                </div>
+                <div class="stat-card"><b>📊 إحصائيات:</b> المشتركين: ${data.authorized_devices.length} | الأكواد: ${data.net_codes.length}</div>
+                <div class="stat-card"><b>👥 المشتركين:</b><br>${data.authorized_devices.map(u => `• <code>${u.id}</code> (${u.expire_at})`).join('<br>')}</div>
+                <div class="stat-card"><b>🔑 الأكواد:</b><br>${data.net_codes.map(c => `• ${atob(c.code)} [${c.units}U]`).join('<br>')}</div>
             `;
-        } catch(e) { display.innerText = "فشل في الاتصال بالسيرفر.. تأكد من الإنترنت."; }
-    }
-
-    async function useBiometric() {
-        if (window.PublicKeyCredential) {
-            try { 
-                await navigator.credentials.get({ publicKey: { challenge: new Uint8Array([1,2,3,4]), userVerification: "required" } }); 
-                verifyServer(); 
-            } catch (e) { verifyServer(); }
-        } else { verifyServer(); }
+        } catch(e) { display.innerText = "فشل جلب البيانات."; }
     }
 
     async function verifyServer() {
-        document.getElementById('auth-msg').innerText = "جاري فحص الصلاحية...";
+        document.getElementById('auth-msg').innerText = "جاري الاتصال بالسيرفر...";
         try {
             const res = await fetch(GITHUB_RAW + "?v=" + Date.now());
             const data = await res.json();
@@ -161,8 +147,8 @@
                         <div class="code-item"><span>${atob(c.code)}</span><span>${c.units}U</span></div>
                     `).join('') || "لا توجد أكواد حالياً.";
                 } else { showScreen('screen-activation'); }
-            } else { alert("الموقع مغلق حالياً للصيانة"); }
-        } catch (e) { alert("خطأ في الاتصال بالسيرفر"); }
+            } else { alert("الموقع مغلق حالياً للصيانة."); }
+        } catch (e) { alert("خطأ في جلب البيانات."); }
     }
 
     function showScreen(id) {
@@ -170,12 +156,9 @@
         document.getElementById(id).classList.add('active');
     }
 
-    function copyID() { 
-        navigator.clipboard.writeText(myID); 
-        alert("تم نسخ الـ ID بنجاح ✅"); 
-    }
+    function copyID() { navigator.clipboard.writeText(myID); alert("تم نسخ الـ ID بنجاح ✅"); }
 
-    // تأثير الماتريكس
+    // خلفية الماتريكس
     const canvas = document.getElementById('matrix');
     const ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth; canvas.height = window.innerHeight;
