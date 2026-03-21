@@ -1,8 +1,7 @@
-
-
 {
   "site_status": "open",
-  "active_users": {},
+  "authorized_devices": [],
   "net_codes": [],
+  "active_users": {},
   "user_stats": {}
 }
