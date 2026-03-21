@@ -3,36 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ALHWARY VIP | BIOMETRIC SYSTEM</title>
+    <title>ALHWARY VIP | BIOMETRIC ACCESS</title>
     <style>
         :root { --neon: #00ff41; --bg: #050505; --alert: #ff3e3e; }
         body, html { margin: 0; padding: 0; background: var(--bg); font-family: 'Courier New', monospace; overflow: hidden; color: var(--neon); }
         #matrix { position: fixed; top: 0; left: 0; z-index: 1; opacity: 0.15; }
         .container { position: relative; z-index: 2; display: flex; justify-content: center; align-items: center; height: 100vh; padding: 15px; }
-        .terminal { background: rgba(0,0,0,0.95); border: 1px solid var(--neon); padding: 30px; width: 100%; max-width: 420px; box-shadow: 0 0 30px rgba(0,255,65,0.2); text-align: center; border-radius: 5px; }
-        .header { font-size: 24px; border-bottom: 1px solid var(--neon); padding-bottom: 15px; margin-bottom: 25px; letter-spacing: 4px; font-weight: bold; }
+        .terminal { background: rgba(0,0,0,0.95); border: 1px solid var(--neon); padding: 30px; width: 100%; max-width: 420px; box-shadow: 0 0 20px rgba(0,255,65,0.2); text-align: center; }
+        .header { font-size: 24px; border-bottom: 1px solid var(--neon); padding-bottom: 10px; margin-bottom: 20px; font-weight: bold; letter-spacing: 2px; }
         
-        /* واجهة القفل */
-        .lock-screen { display: block; }
-        .icon-shield { font-size: 60px; margin-bottom: 20px; filter: drop-shadow(0 0 10px var(--neon)); }
-        .btn-bio { background: var(--neon); color: black; border: none; padding: 18px; width: 100%; font-weight: bold; cursor: pointer; font-size: 18px; border-radius: 4px; transition: 0.3s; margin-top: 15px; }
-        .btn-bio:hover { background: #fff; transform: scale(1.02); }
-        
-        /* واجهة التفعيل */
-        .activation-screen { display: none; margin-top: 20px; }
-        .id-box { background: rgba(0,255,65,0.1); border: 1px dashed var(--neon); padding: 15px; margin: 15px 0; font-size: 16px; cursor: pointer; word-break: break-all; color: #fff; }
-        .btn-whatsapp { display: block; width: 100%; padding: 15px; background: #25d366; color: white; text-decoration: none; border-radius: 4px; font-weight: bold; margin-top: 10px; }
-        
-        /* واجهة المحتوى (الأكواد) */
-        .content-screen { display: none; text-align: right; max-height: 400px; overflow-y: auto; }
-        .code-item { border: 1px solid var(--neon); margin: 10px 0; padding: 15px; background: rgba(0,255,65,0.05); display: flex; justify-content: space-between; align-items: center; }
-        .units { color: #888; font-size: 12px; }
+        /* شاشات الواجهة */
+        #auth-screen, #activation-screen, #content-screen { display: none; }
+        .active { display: block !important; }
 
-        .status-msg { font-size: 14px; margin: 15px 0; min-height: 20px; }
-        .alert { color: var(--alert); animation: blink 1s infinite; }
-        @keyframes blink { 50% { opacity: 0; } }
+        /* الأزرار */
+        .btn { display: block; width: 100%; padding: 15px; margin: 10px 0; border: none; font-weight: bold; cursor: pointer; font-family: inherit; transition: 0.3s; }
+        .btn-green { background: var(--neon); color: black; }
+        .btn-outline { background: transparent; color: var(--neon); border: 1px solid var(--neon); }
+        .btn-wa { background: #25d366; color: white; text-decoration: none; border-radius: 4px; }
+
+        .id-box { background: rgba(0,255,65,0.05); border: 1px dashed var(--neon); padding: 15px; margin: 15px 0; cursor: pointer; word-break: break-all; color: #fff; }
+        .code-item { border: 1px solid var(--neon); margin: 10px 0; padding: 15px; background: rgba(0,255,65,0.05); display: flex; justify-content: space-between; align-items: center; text-align: right; }
         
-        .footer-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 11px; margin-top: 30px; border-top: 1px solid #333; padding-top: 10px; opacity: 0.6; }
+        .status-msg { font-size: 14px; margin: 15px 0; color: #888; }
+        .alert { color: var(--alert); font-weight: bold; animation: blink 1s infinite; }
+        @keyframes blink { 50% { opacity: 0; } }
     </style>
 </head>
 <body>
@@ -41,141 +36,122 @@
 
 <div class="container">
     <div class="terminal">
-        <div class="header">ALHWARY SYSTEM</div>
+        <div class="header">ALHWARY VIP □</div>
 
-        <div id="screen-lock" class="lock-screen">
-            <div class="icon-shield">🛡️</div>
-            <div class="status-msg" id="lock-msg">نظام مشفر.. بانتظار البصمة</div>
-            <button class="btn-bio" onclick="startBiometric()">فتح بالبصمة / الوجه</button>
+        <div id="auth-screen" class="active">
+            <div id="icon" style="font-size: 50px; margin-bottom: 20px;">🛡️</div>
+            <p class="status-msg" id="msg">نظام حماية VIP.. اختر وسيلة الدخول</p>
+            <button id="btn-bio" class="btn btn-green" onclick="useBiometric()">بصمة الإصبع / الوجه 👤</button>
+            <button class="btn btn-outline" onclick="verifyDirectly()">دخول عادي بالـ ID 🔑</button>
         </div>
 
-        <div id="screen-activation" class="activation-screen">
-            <p style="color: var(--alert);">⚠️ الوصول مرفوض / غير مفعل</p>
-            <p style="font-size: 13px;">أرسل المعرف الخاص بك للمطور لتفعيل VIP:</p>
-            <div class="id-box" id="my-id-display" onclick="copyID()">جاري التوليد..</div>
-            <a id="whatsapp-link" href="#" class="btn-whatsapp">تفعيل عبر واتساب</a>
+        <div id="activation-screen">
+            <p class="alert">ACCESS DENIED / غير مفعل</p>
+            <p style="font-size: 12px;">أرسل المعرف الخاص بك للمطور للتفعيل:</p>
+            <div class="id-box" id="display-id" onclick="copyID()">جاري التوليد...</div>
+            <a id="wa-link" href="#" class="btn btn-wa">تفعيل عبر واتساب</a>
         </div>
 
-        <div id="screen-content" class="content-screen">
-            <div style="color: #fff; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 5px;">✅ تم التحقق: مرحباً بك في VIP</div>
-            <div id="codes-container"></div>
+        <div id="content-screen">
+            <div style="color: #fff; margin-bottom: 15px; border-bottom: 1px solid #333;">✅ مرحباً بك في النظام النشط</div>
+            <div id="codes-list"></div>
         </div>
 
-        <div class="footer-stats">
-            <div>PING: <span id="ping-val">0</span>ms</div>
-            <div>STATUS: <span id="conn-val">ONLINE</span></div>
-        </div>
+        <div style="font-size: 10px; margin-top: 30px; opacity: 0.5;">SERVER STATUS: <span id="ping">0</span>ms</div>
     </div>
 </div>
 
 <script>
-    // --- الإعدادات الرئيسية ---
-    const GITHUB_JSON = "https://raw.githubusercontent.com/nnytttdh-tech/ALHWARY_NET/main/codes.json";
-    const ADMIN_WA = "201012345678"; // ضع رقمك هنا
+    const GITHUB_URL = "https://raw.githubusercontent.com/nnytttdh-tech/ALHWARY_NET/main/codes.json";
+    const ADMIN_WA = "201012345678"; // رقمك هنا
 
-    // --- 1. توليد وتثبيت الـ ID ---
+    // --- توليد وتثبيت ID الجهاز ---
     function getID() {
-        let id = localStorage.getItem('ALHWARY_ID');
+        let id = localStorage.getItem('DEVICE_SECRET_ID');
         if (!id) {
-            id = "HW-" + Math.random().toString(36).substring(2, 10).toUpperCase();
-            localStorage.setItem('ALHWARY_ID', id);
+            id = "HW-" + Math.random().toString(36).substr(2, 9).toUpperCase();
+            localStorage.setItem('DEVICE_SECRET_ID', id);
         }
         return id;
     }
-    const USER_ID = getID();
-    document.getElementById('my-id-display').innerText = USER_ID;
-    document.getElementById('whatsapp-link').href = `https://wa.me/${ADMIN_WA}?text=تفعيل_ID:${USER_ID}`;
+    const myID = getID();
+    document.getElementById('display-id').innerText = myID;
+    document.getElementById('wa-link').href = `https://wa.me/${ADMIN_WA}?text=تفعيل_ID:${myID}`;
 
-    // --- 2. وظيفة البصمة ---
-    async function startBiometric() {
-        const msg = document.getElementById('lock-msg');
-        
-        // التحقق من دعم البصمة في الجهاز
-        if (window.PublicKeyCredential) {
-            try {
-                msg.innerText = "🔍 جاري فحص البصمة...";
-                // طلب استجابة من مستشعر البصمة في الهاتف
-                // ملاحظة: المتصفح سيفتح نافذة البصمة/الوجه الرسمية للجهاز
-                const credential = await navigator.credentials.get({
-                    publicKey: {
-                        challenge: new Uint8Array([1,2,3,4]),
-                        allowCredentials: [],
-                        userVerification: "required"
-                    }
-                }).catch(() => {
-                    // لو البصمة مفعلة بس الجهاز ملوش ملفات تعريف هيعدي كـ "تأكيد هوية"
-                    console.log("Biometric prompt skipped or handled by OS");
-                });
+    // إخفاء زر البصمة لو الجهاز مبيعرفش يشغلها
+    if (!window.PublicKeyCredential) {
+        document.getElementById('btn-bio').style.display = 'none';
+        document.getElementById('msg').innerText = "جهازك لا يدعم البصمة، ادخل بالـ ID";
+    }
 
-                // بعد تجاوز خطوة البصمة.. نفحص السيرفر
-                fetchAndVerify();
-            } catch (err) {
-                msg.innerHTML = "<span class='alert'>فشل التحقق من الهوية</span>";
-            }
-        } else {
-            // لو المتصفح قديم مش بيدعم بصمة هيفتح بالـ ID عادي
-            fetchAndVerify();
+    // --- وظيفة البصمة / الوجه ---
+    async function useBiometric() {
+        try {
+            document.getElementById('msg').innerText = "جاري التحقق من الهوية...";
+            // طلب نافذة بصمة الهاتف الفعلية
+            await navigator.credentials.get({
+                publicKey: { challenge: new Uint8Array([1,2,3,4]), userVerification: "required" }
+            });
+            // لو نجحت البصمة، كمل فحص السيرفر
+            verifyDirectly();
+        } catch (e) {
+            document.getElementById('msg').innerText = "تم إلغاء البصمة، يمكنك الدخول عادي";
         }
     }
 
-    // --- 3. الفحص من السيرفر (الموافقة + الوقت) ---
-    async function fetchAndVerify() {
-        const t1 = performance.now();
-        const lockScreen = document.getElementById('screen-lock');
-        const actScreen = document.getElementById('screen-activation');
-        const contentScreen = document.getElementById('screen-content');
-        const msg = document.getElementById('lock-msg');
+    // --- الفحص النهائي من السيرفر ---
+    async function verifyDirectly() {
+        const start = performance.now();
+        document.getElementById('msg').innerText = "جارِ فحص الصلاحية في السيرفر...";
 
         try {
-            const response = await fetch(GITHUB_JSON + "?cache=" + Date.now());
-            const data = await response.json();
-            document.getElementById('ping-val').innerText = Math.floor(performance.now() - t1);
+            const res = await fetch(GITHUB_URL + "?v=" + Date.now());
+            const data = await res.json();
+            document.getElementById('ping').innerText = Math.floor(performance.now() - start);
 
+            const user = (data.authorized_devices || []).find(d => d.id === myID);
             const today = new Date().toISOString().split('T')[0];
-            const user = (data.authorized_devices || []).find(d => d.id === USER_ID);
 
             if (data.site_status === "open") {
                 if (user && (user.expire_at === "permanent" || user.expire_at >= today)) {
-                    // نجاح الدخول (موجود في السيرفر ووقتك مخلصش)
-                    lockScreen.style.display = "none";
-                    actScreen.style.display = "none";
-                    contentScreen.style.display = "block";
-                    
-                    let codesHTML = "";
+                    // نجاح الدخول
+                    switchScreen('content-screen');
+                    let html = "";
                     (data.net_codes || []).forEach(c => {
-                        codesHTML += `<div class="code-item">
+                        html += `<div class="code-item">
                             <span>${atob(c.code)}</span>
-                            <span class="units">${c.units} UNITS</span>
+                            <span style="color:#888; font-size:12px;">${c.units}U</span>
                         </div>`;
                     });
-                    document.getElementById('codes-container').innerHTML = codesHTML || "لا توجد أكواد حالياً";
-                } else if (user && user.expire_at < today) {
-                    // الوقت خلص
-                    msg.innerHTML = "<span class='alert'>❌ انتهت صلاحية اشتراكك!</span>";
-                    setTimeout(() => {
-                        lockScreen.style.display = "none";
-                        actScreen.style.display = "block";
-                        document.getElementById('whatsapp-link').innerText = "تجديد الاشتراك الآن";
-                    }, 2000);
+                    document.getElementById('codes-list').innerHTML = html || "لا توجد أكواد حالياً";
                 } else {
-                    // لسه موافقتش عليه من عندك
-                    lockScreen.style.display = "none";
-                    actScreen.style.display = "block";
+                    // فشل الصلاحية أو انتهاء الوقت
+                    switchScreen('activation-screen');
+                    if (user && user.expire_at < today) {
+                        document.querySelector('.alert').innerText = "انتهى وقت اشتراكك: " + user.expire_at;
+                    }
                 }
             } else {
-                msg.innerHTML = "<span class='alert'>الموقع مغلق للصيانة</span>";
+                document.getElementById('msg').innerHTML = "<span class='alert'>النظام مغلق للصيانة 🛠️</span>";
             }
         } catch (e) {
-            msg.innerHTML = "<span class='alert'>خطأ في الاتصال بالسيرفر</span>";
+            document.getElementById('msg').innerHTML = "<span class='alert'>خطأ في الاتصال بالسيرفر!</span>";
         }
     }
 
-    function copyID() {
-        navigator.clipboard.writeText(USER_ID);
-        alert("تم نسخ معرف الجهاز بنجاح");
+    function switchScreen(id) {
+        document.getElementById('auth-screen').classList.remove('active');
+        document.getElementById('activation-screen').classList.remove('active');
+        document.getElementById('content-screen').classList.remove('active');
+        document.getElementById(id).classList.add('active');
     }
 
-    // --- تأثير الماتريكس الخلفي ---
+    function copyID() {
+        navigator.clipboard.writeText(myID);
+        alert("تم نسخ الـ ID بنجاح ✅");
+    }
+
+    // --- خلفية الماتريكس ---
     const canvas = document.getElementById('matrix');
     const ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth; canvas.height = window.innerHeight;
@@ -189,7 +165,7 @@
             drops[i]++;
         });
     }
-    setInterval(draw, 40);
+    setInterval(draw, 45);
 </script>
 </body>
 </html>
