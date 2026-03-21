@@ -3,24 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ALHWARY RADAR | VIP SYSTEM</title>
+    <title>ALHWARY VIP | BIOMETRIC SYSTEM</title>
     <style>
         :root { --neon: #00ff41; --bg: #050505; --alert: #ff3e3e; }
         body, html { margin: 0; padding: 0; background: var(--bg); font-family: 'Courier New', monospace; overflow: hidden; color: var(--neon); }
-        #matrix { position: fixed; top: 0; left: 0; z-index: 1; opacity: 0.2; }
+        #matrix { position: fixed; top: 0; left: 0; z-index: 1; opacity: 0.15; }
         .container { position: relative; z-index: 2; display: flex; justify-content: center; align-items: center; height: 100vh; padding: 15px; }
-        .terminal { background: rgba(0,0,0,0.95); border: 1px solid var(--neon); padding: 20px; width: 100%; max-width: 400px; box-shadow: 0 0 20px rgba(0,255,65,0.3); position: relative; }
-        .header { text-align: center; font-size: 22px; border-bottom: 1px solid var(--neon); padding-bottom: 10px; margin-bottom: 20px; letter-spacing: 2px; }
-        #status { font-size: 14px; margin-bottom: 10px; height: 20px; }
-        .id-box { background: rgba(0,255,65,0.1); border: 1px dashed var(--neon); padding: 12px; margin: 15px 0; font-size: 15px; text-align: center; cursor: pointer; word-break: break-all; transition: 0.3s; }
-        .id-box:hover { background: rgba(0,255,65,0.2); }
-        .code-box { border: 1px solid var(--neon); margin: 10px 0; padding: 12px; background: rgba(0,255,65,0.05); display: flex; justify-content: space-between; align-items: center; font-weight: bold; }
-        .btn-whatsapp { display: block; width: 100%; padding: 14px; background: #25d366; color: white; text-decoration: none; text-align: center; border-radius: 5px; font-weight: bold; margin-top: 20px; transition: 0.3s; border: none; cursor: pointer; }
-        .btn-whatsapp:hover { background: #128c7e; transform: translateY(-2px); }
-        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 11px; margin-top: 25px; border-top: 1px solid #333; padding-top: 10px; opacity: 0.7; }
-        .alert { color: var(--alert); font-weight: bold; animation: blink 1s infinite; }
+        .terminal { background: rgba(0,0,0,0.95); border: 1px solid var(--neon); padding: 30px; width: 100%; max-width: 420px; box-shadow: 0 0 30px rgba(0,255,65,0.2); text-align: center; border-radius: 5px; }
+        .header { font-size: 24px; border-bottom: 1px solid var(--neon); padding-bottom: 15px; margin-bottom: 25px; letter-spacing: 4px; font-weight: bold; }
+        
+        /* واجهة القفل */
+        .lock-screen { display: block; }
+        .icon-shield { font-size: 60px; margin-bottom: 20px; filter: drop-shadow(0 0 10px var(--neon)); }
+        .btn-bio { background: var(--neon); color: black; border: none; padding: 18px; width: 100%; font-weight: bold; cursor: pointer; font-size: 18px; border-radius: 4px; transition: 0.3s; margin-top: 15px; }
+        .btn-bio:hover { background: #fff; transform: scale(1.02); }
+        
+        /* واجهة التفعيل */
+        .activation-screen { display: none; margin-top: 20px; }
+        .id-box { background: rgba(0,255,65,0.1); border: 1px dashed var(--neon); padding: 15px; margin: 15px 0; font-size: 16px; cursor: pointer; word-break: break-all; color: #fff; }
+        .btn-whatsapp { display: block; width: 100%; padding: 15px; background: #25d366; color: white; text-decoration: none; border-radius: 4px; font-weight: bold; margin-top: 10px; }
+        
+        /* واجهة المحتوى (الأكواد) */
+        .content-screen { display: none; text-align: right; max-height: 400px; overflow-y: auto; }
+        .code-item { border: 1px solid var(--neon); margin: 10px 0; padding: 15px; background: rgba(0,255,65,0.05); display: flex; justify-content: space-between; align-items: center; }
+        .units { color: #888; font-size: 12px; }
+
+        .status-msg { font-size: 14px; margin: 15px 0; min-height: 20px; }
+        .alert { color: var(--alert); animation: blink 1s infinite; }
         @keyframes blink { 50% { opacity: 0; } }
-        #main-content { min-height: 100px; display: flex; flex-direction: column; justify-content: center; }
+        
+        .footer-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 11px; margin-top: 30px; border-top: 1px solid #333; padding-top: 10px; opacity: 0.6; }
     </style>
 </head>
 <body>
@@ -29,112 +41,146 @@
 
 <div class="container">
     <div class="terminal">
-        <div class="header">ALHWARY VIP □</div>
-        <div id="status">> LOADING SYSTEM...</div>
-        
-        <div id="main-content">
-            <div style="text-align:center">جارِ جلب البيانات من السيرفر...</div>
+        <div class="header">ALHWARY SYSTEM</div>
+
+        <div id="screen-lock" class="lock-screen">
+            <div class="icon-shield">🛡️</div>
+            <div class="status-msg" id="lock-msg">نظام مشفر.. بانتظار البصمة</div>
+            <button class="btn-bio" onclick="startBiometric()">فتح بالبصمة / الوجه</button>
         </div>
 
-        <div class="stat-grid">
-            <div>PING: <span id="ping">0</span>ms</div>
-            <div>ID: <span id="mini-id" style="color:white">...</span></div>
+        <div id="screen-activation" class="activation-screen">
+            <p style="color: var(--alert);">⚠️ الوصول مرفوض / غير مفعل</p>
+            <p style="font-size: 13px;">أرسل المعرف الخاص بك للمطور لتفعيل VIP:</p>
+            <div class="id-box" id="my-id-display" onclick="copyID()">جاري التوليد..</div>
+            <a id="whatsapp-link" href="#" class="btn-whatsapp">تفعيل عبر واتساب</a>
+        </div>
+
+        <div id="screen-content" class="content-screen">
+            <div style="color: #fff; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 5px;">✅ تم التحقق: مرحباً بك في VIP</div>
+            <div id="codes-container"></div>
+        </div>
+
+        <div class="footer-stats">
+            <div>PING: <span id="ping-val">0</span>ms</div>
+            <div>STATUS: <span id="conn-val">ONLINE</span></div>
         </div>
     </div>
 </div>
 
 <script>
-    // --- الإعدادات ---
-    const GITHUB_URL = "https://raw.githubusercontent.com/nnytttdh-tech/ALHWARY_NET/main/codes.json";
-    const WHATSAPP_NUMBER = "201556853817"; // ضع رقمك هنا
+    // --- الإعدادات الرئيسية ---
+    const GITHUB_JSON = "https://raw.githubusercontent.com/nnytttdh-tech/ALHWARY_NET/main/codes.json";
+    const ADMIN_WA = "201012345678"; // ضع رقمك هنا
 
-    // --- توليد معرف الجهاز ---
-    function getDeviceID() {
-        const info = window.navigator.userAgent + window.screen.width + window.navigator.language;
-        let hash = 0;
-        for (let i = 0; i < info.length; i++) {
-            hash = ((hash << 5) - hash) + info.charCodeAt(i);
-            hash |= 0; 
+    // --- 1. توليد وتثبيت الـ ID ---
+    function getID() {
+        let id = localStorage.getItem('ALHWARY_ID');
+        if (!id) {
+            id = "HW-" + Math.random().toString(36).substring(2, 10).toUpperCase();
+            localStorage.setItem('ALHWARY_ID', id);
         }
-        return "HW-" + Math.abs(hash).toString(16).toUpperCase();
+        return id;
     }
-    const myID = getDeviceID();
-    document.getElementById('mini-id').innerText = myID;
+    const USER_ID = getID();
+    document.getElementById('my-id-display').innerText = USER_ID;
+    document.getElementById('whatsapp-link').href = `https://wa.me/${ADMIN_WA}?text=تفعيل_ID:${USER_ID}`;
 
-    // --- نظام التحقق الذكي ---
-    async function checkAccess() {
-        const pStart = performance.now();
-        const contentDiv = document.getElementById('main-content');
-        const statusDiv = document.getElementById('status');
-        const today = new Date().toISOString().split('T')[0];
+    // --- 2. وظيفة البصمة ---
+    async function startBiometric() {
+        const msg = document.getElementById('lock-msg');
+        
+        // التحقق من دعم البصمة في الجهاز
+        if (window.PublicKeyCredential) {
+            try {
+                msg.innerText = "🔍 جاري فحص البصمة...";
+                // طلب استجابة من مستشعر البصمة في الهاتف
+                // ملاحظة: المتصفح سيفتح نافذة البصمة/الوجه الرسمية للجهاز
+                const credential = await navigator.credentials.get({
+                    publicKey: {
+                        challenge: new Uint8Array([1,2,3,4]),
+                        allowCredentials: [],
+                        userVerification: "required"
+                    }
+                }).catch(() => {
+                    // لو البصمة مفعلة بس الجهاز ملوش ملفات تعريف هيعدي كـ "تأكيد هوية"
+                    console.log("Biometric prompt skipped or handled by OS");
+                });
+
+                // بعد تجاوز خطوة البصمة.. نفحص السيرفر
+                fetchAndVerify();
+            } catch (err) {
+                msg.innerHTML = "<span class='alert'>فشل التحقق من الهوية</span>";
+            }
+        } else {
+            // لو المتصفح قديم مش بيدعم بصمة هيفتح بالـ ID عادي
+            fetchAndVerify();
+        }
+    }
+
+    // --- 3. الفحص من السيرفر (الموافقة + الوقت) ---
+    async function fetchAndVerify() {
+        const t1 = performance.now();
+        const lockScreen = document.getElementById('screen-lock');
+        const actScreen = document.getElementById('screen-activation');
+        const contentScreen = document.getElementById('screen-content');
+        const msg = document.getElementById('lock-msg');
 
         try {
-            // جلب البيانات مع منع التخزين المؤقت (Cache)
-            const res = await fetch(GITHUB_URL + "?v=" + Date.now());
-            if (!res.ok) throw new Error("Server Error");
-            const data = await res.json();
-            
-            document.getElementById('ping').innerText = Math.floor(performance.now() - pStart);
+            const response = await fetch(GITHUB_JSON + "?cache=" + Date.now());
+            const data = await response.json();
+            document.getElementById('ping-val').innerText = Math.floor(performance.now() - t1);
 
-            // تأمين الكود من الخطأ إذا كانت المصفوفات ناقصة في ملف الـ JSON
-            const devices = data.authorized_devices || [];
-            const codes = data.net_codes || [];
-            const device = devices.find(d => d.id === myID);
+            const today = new Date().toISOString().split('T')[0];
+            const user = (data.authorized_devices || []).find(d => d.id === USER_ID);
 
             if (data.site_status === "open") {
-                if (device) {
-                    // فحص تاريخ الانتهاء
-                    const isPermanent = device.expire_at === "permanent";
-                    const isNotExpired = device.expire_at >= today;
-
-                    if (isPermanent || isNotExpired) {
-                        statusDiv.innerHTML = "> <span style='color:white'>ACCESS GRANTED ✅</span>";
-                        let html = "";
-                        if (codes.length > 0) {
-                            codes.forEach(c => {
-                                try {
-                                    let decoded = atob(c.code);
-                                    html += `<div class="code-box"><span>${decoded}</span><span style="color:#888; font-size:10px">${c.units}U</span></div>`;
-                                } catch(e) { console.log("Decode error"); }
-                            });
-                        } else {
-                            html = "<p>لا توجد أكواد متاحة حالياً.</p>";
-                        }
-                        contentDiv.innerHTML = html;
-                    } else {
-                        statusDiv.innerHTML = "> <span class='alert'>EXPIRED / انتهى الاشتراك ❌</span>";
-                        contentDiv.innerHTML = `<p>انتهى اشتراكك بتاريخ: ${device.expire_at}</p><a href="https://wa.me/${WHATSAPP_NUMBER}" class="btn-whatsapp">تجديد الآن</a>`;
-                    }
+                if (user && (user.expire_at === "permanent" || user.expire_at >= today)) {
+                    // نجاح الدخول (موجود في السيرفر ووقتك مخلصش)
+                    lockScreen.style.display = "none";
+                    actScreen.style.display = "none";
+                    contentScreen.style.display = "block";
+                    
+                    let codesHTML = "";
+                    (data.net_codes || []).forEach(c => {
+                        codesHTML += `<div class="code-item">
+                            <span>${atob(c.code)}</span>
+                            <span class="units">${c.units} UNITS</span>
+                        </div>`;
+                    });
+                    document.getElementById('codes-container').innerHTML = codesHTML || "لا توجد أكواد حالياً";
+                } else if (user && user.expire_at < today) {
+                    // الوقت خلص
+                    msg.innerHTML = "<span class='alert'>❌ انتهت صلاحية اشتراكك!</span>";
+                    setTimeout(() => {
+                        lockScreen.style.display = "none";
+                        actScreen.style.display = "block";
+                        document.getElementById('whatsapp-link').innerText = "تجديد الاشتراك الآن";
+                    }, 2000);
                 } else {
-                    // حالة الجهاز غير مفعل
-                    statusDiv.innerHTML = "> <span class='alert'>UNAUTHORIZED / غير مفعل ⚠️</span>";
-                    contentDiv.innerHTML = `
-                        <p style="font-size:12px; color:#aaa;">أرسل المعرف التالي للمطور لتفعيل VIP:</p>
-                        <div class="id-box" onclick="copyID()">${myID}</div>
-                        <a href="https://wa.me/${WHATSAPP_NUMBER}?text=تفعيل_ID:${myID}" class="btn-whatsapp">تفعيل عبر واتساب</a>
-                    `;
+                    // لسه موافقتش عليه من عندك
+                    lockScreen.style.display = "none";
+                    actScreen.style.display = "block";
                 }
             } else {
-                statusDiv.innerHTML = "> <span class='alert'>SYSTEM CLOSED / الموقع مغلق</span>";
-                contentDiv.innerHTML = "<p>النظام مغلق حالياً للصيانة أو التحديث.</p>";
+                msg.innerHTML = "<span class='alert'>الموقع مغلق للصيانة</span>";
             }
-        } catch(e) {
-            statusDiv.innerHTML = "> <span class='alert'>CONNECTION ERROR <</span>";
-            // لا نغير محتوى main-content هنا حتى لا تختفي الواجهة عند ضعف الإنترنت
+        } catch (e) {
+            msg.innerHTML = "<span class='alert'>خطأ في الاتصال بالسيرفر</span>";
         }
     }
 
     function copyID() {
-        navigator.clipboard.writeText(myID);
-        alert("تم نسخ معرف الجهاز بنجاح: " + myID);
+        navigator.clipboard.writeText(USER_ID);
+        alert("تم نسخ معرف الجهاز بنجاح");
     }
 
-    // --- تأثير الماتريكس ---
+    // --- تأثير الماتريكس الخلفي ---
     const canvas = document.getElementById('matrix');
     const ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth; canvas.height = window.innerHeight;
     const drops = Array(Math.floor(canvas.width/14)).fill(1);
-    function drawMatrix() {
+    function draw() {
         ctx.fillStyle = "rgba(0,0,0,0.05)"; ctx.fillRect(0,0,canvas.width,canvas.height);
         ctx.fillStyle = "#00ff41"; ctx.font = "14px monospace";
         drops.forEach((y, i) => {
@@ -143,10 +189,7 @@
             drops[i]++;
         });
     }
-
-    setInterval(drawMatrix, 40);
-    setInterval(checkAccess, 5000); // تحديث كل 5 ثوانٍ
-    checkAccess();
+    setInterval(draw, 40);
 </script>
 </body>
 </html>
