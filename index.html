@@ -3,134 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ALHWARY RADAR | VIP SYSTEM</title>
+    <title>ALHWARY RADAR | VIP</title>
     <style>
         :root { --neon: #00ff41; --bg: #050505; --alert: #ff3e3e; }
         body, html { margin: 0; padding: 0; background: var(--bg); font-family: 'Courier New', monospace; overflow: hidden; color: var(--neon); }
         #matrix { position: fixed; top: 0; left: 0; z-index: 1; opacity: 0.2; }
-        .container { position: relative; z-index: 2; display: flex; justify-content: center; align-items: center; height: 100vh; padding: 10px; }
-        .terminal { background: rgba(0,0,0,0.9); border: 1px solid var(--neon); padding: 20px; width: 100%; max-width: 450px; box-shadow: 0 0 20px rgba(0,255,65,0.2); position: relative; }
-        .header { font-size: 18px; border-bottom: 1px solid var(--neon); padding-bottom: 10px; margin-bottom: 15px; text-align: center; font-weight: bold; }
-        .id-box { background: rgba(0,255,65,0.1); border: 1px dashed var(--neon); padding: 10px; margin: 10px 0; font-size: 13px; word-break: break-all; text-align: center; cursor: pointer; }
-        .code-box { border: 1px solid var(--neon); margin: 8px 0; padding: 12px; background: rgba(0,255,65,0.05); display: flex; justify-content: space-between; align-items: center; }
-        .btn-whatsapp { display: block; width: 100%; padding: 12px; background: #25d366; color: white; text-decoration: none; text-align: center; border-radius: 5px; font-weight: bold; margin-top: 15px; transition: 0.3s; border: none; cursor: pointer; }
-        .btn-whatsapp:hover { background: #128c7e; transform: scale(1.02); }
-        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 11px; margin-top: 20px; border-top: 1px solid #333; padding-top: 10px; opacity: 0.7; }
+        .container { position: relative; z-index: 2; display: flex; justify-content: center; align-items: center; height: 100vh; padding: 15px; }
+        .terminal { background: rgba(0,0,0,0.95); border: 1px solid var(--neon); padding: 20px; width: 100%; max-width: 400px; box-shadow: 0 0 20px rgba(0,255,65,0.2); }
+        .header { text-align: center; font-size: 20px; border-bottom: 1px solid var(--neon); padding-bottom: 10px; margin-bottom: 15px; }
+        .id-box { background: rgba(0,255,65,0.1); border: 1px dashed var(--neon); padding: 10px; margin: 10px 0; font-size: 14px; text-align: center; cursor: pointer; word-break: break-all; }
+        .code-box { border: 1px solid var(--neon); margin: 8px 0; padding: 12px; background: rgba(0,255,65,0.05); display: flex; justify-content: space-between; }
+        .btn-whatsapp { display: block; width: 100%; padding: 12px; background: #25d366; color: white; text-decoration: none; text-align: center; border-radius: 5px; font-weight: bold; margin-top: 15px; }
+        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 11px; margin-top: 20px; border-top: 1px solid #333; padding-top: 10px; opacity: 0.8; }
         .alert { color: var(--alert); font-weight: bold; animation: blink 1s infinite; }
         @keyframes blink { 50% { opacity: 0; } }
-        .loading { text-align: center; padding: 20px; }
     </style>
 </head>
 <body>
-
 <canvas id="matrix"></canvas>
-
 <div class="container">
     <div class="terminal">
-        <div class="header">🛡️ ALHWARY VIP SYSTEM</div>
-        
-        <div id="auth-section">
-            <div id="status">> جارِ التحقق من الصلاحية...</div>
-            <div id="main-content" class="loading">الرجاء الانتظار...</div>
-        </div>
-
+        <div class="header">🛡️ ALHWARY VIP</div>
+        <div id="status">> جارِ الفحص...</div>
+        <div id="main-content" style="text-align:center; padding: 20px;">الرجاء الانتظار...</div>
         <div class="stat-grid">
             <div>PING: <span id="ping">0</span>ms</div>
-            <div>STATUS: <span id="conn-status" style="color:white">ONLINE</span></div>
-            <div>DEVICE ID: <span id="mini-id">...</span></div>
-            <div>UPTIME: <span id="uptime">0</span>s</div>
+            <div>ID: <span id="mini-id">...</span></div>
         </div>
     </div>
 </div>
 
 <script>
-    // --- إعدادات النظام (عدلها حسب بياناتك) ---
     const GITHUB_URL = "https://raw.githubusercontent.com/nnytttdh-tech/ALHWARY_NET/main/codes.json";
-    const WHATSAPP_NUMBER = "201556853817"; // اكتب رقمك هنا بالصيغة الدولية
+    const WHATSAPP_NUMBER = "201012345678"; // رقمك هنا
 
-    // --- توليد معرف الجهاز (Fingerprint) ---
     function getDeviceID() {
-        const info = window.navigator.userAgent + window.screen.width + window.screen.height;
+        const info = window.navigator.userAgent + window.screen.width;
         let hash = 0;
-        for (let i = 0; i < info.length; i++) {
-            hash = ((hash << 5) - hash) + info.charCodeAt(i);
-            hash |= 0; 
-        }
+        for (let i = 0; i < info.length; i++) { hash = ((hash << 5) - hash) + info.charCodeAt(i); hash |= 0; }
         return "HW-" + Math.abs(hash).toString(16).toUpperCase();
     }
-
     const myID = getDeviceID();
     document.getElementById('mini-id').innerText = myID;
 
-    // --- خلفية الماتريكس ---
+    async function checkAccess() {
+        const pStart = performance.now();
+        try {
+            const res = await fetch(GITHUB_URL + "?nocache=" + Math.random());
+            const data = await res.json();
+            document.getElementById('ping').innerText = Math.floor(performance.now() - pStart);
+            
+            const device = data.authorized_devices.find(d => d.id === myID);
+            const today = new Date().toISOString().split('T')[0];
+
+            if (data.site_status === "open") {
+                if (device && (device.expire_at === "permanent" || device.expire_at >= today)) {
+                    document.getElementById('status').innerHTML = "> <span style='color:white'>ACCESS GRANTED ✅</span>";
+                    let html = "";
+                    data.net_codes.forEach(c => {
+                        html += `<div class="code-box"><span>${atob(c.code)}</span><span>${c.units}U</span></div>`;
+                    });
+                    document.getElementById('main-content').innerHTML = html || "لا توجد أكواد حالياً.";
+                } else {
+                    document.getElementById('status').innerHTML = "> <span class='alert'>الجهاز غير مفعل ⚠️</span>";
+                    document.getElementById('main-content').innerHTML = `
+                        <p style="font-size:12px">أرسل الـ ID لتفعيل جهازك:</p>
+                        <div class="id-box" onclick="navigator.clipboard.writeText('${myID}'); alert('تم النسخ');">${myID}</div>
+                        <a href="https://wa.me/${WHATSAPP_NUMBER}?text=تفعيل_ID:${myID}" class="btn-whatsapp">تفعيل عبر واتساب</a>`;
+                }
+            } else {
+                document.getElementById('status').innerHTML = "> <span class='alert'>الموقع مغلق حالياً 🚫</span>";
+                document.getElementById('main-content').innerHTML = "يرجى المحاولة لاحقاً.";
+            }
+        } catch(e) { document.getElementById('status').innerText = "> CONNECTION ERROR"; }
+    }
+
+    // مصفوفة الماتريكس
     const canvas = document.getElementById('matrix');
     const ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-    const chars = "010101";
     const drops = Array(Math.floor(canvas.width/14)).fill(1);
     function draw() {
         ctx.fillStyle = "rgba(0,0,0,0.05)"; ctx.fillRect(0,0,canvas.width,canvas.height);
         ctx.fillStyle = "#00ff41"; ctx.font = "14px monospace";
         drops.forEach((y, i) => {
-            ctx.fillText(chars[Math.floor(Math.random()*chars.length)], i*14, y*14);
+            ctx.fillText("01"[Math.floor(Math.random()*2)], i*14, y*14);
             if(y*14 > canvas.height && Math.random() > 0.975) drops[i] = 0;
             drops[i]++;
         });
     }
     setInterval(draw, 35);
-
-    // --- نظام الفحص والتحقق ---
-    async function checkAccess() {
-        const pStart = performance.now();
-        const contentDiv = document.getElementById('main-content');
-        const statusDiv = document.getElementById('status');
-        
-        try {
-            const res = await fetch(GITHUB_URL + "?v=" + Date.now());
-            if (!res.ok) throw new Error();
-            const data = await res.json();
-            
-            document.getElementById('ping').innerText = Math.floor(performance.now() - pStart);
-
-            // التحقق إذا كان ID الجهاز موجود في قائمة المسموح لهم
-            const isAuthorized = data.authorized_devices && data.authorized_devices.includes(myID);
-
-            if (isAuthorized && data.site_status === "open") {
-                statusDiv.innerHTML = "> <span style='color:white'>تم تفعيل الوصول بنجاح ✅</span>";
-                let html = "";
-                data.net_codes.forEach(c => {
-                    html += `<div class="code-box"><span>${atob(c.code)}</span> <span style="font-size:10px; color:#aaa;">${c.units}U</span></div>`;
-                });
-                contentDiv.innerHTML = html || "لا توجد أكواد حالياً.";
-            } else {
-                statusDiv.innerHTML = "> <span class='alert'>الجهاز غير مفعل ⚠️</span>";
-                contentDiv.innerHTML = `
-                    <div style="text-align:center">
-                        <p style="font-size:13px">عذراً، هذا الجهاز لا يملك صلاحية الوصول. أرسل ID التالي للمطور لتفعيله:</p>
-                        <div class="id-box" onclick="copyID()">${myID}</div>
-                        <small style="color:#888">(اضغط على الـ ID للنسخ)</small>
-                        <a href="https://wa.me/${WHATSAPP_NUMBER}?text=تفعيل_جهاز_ID:${myID}" class="btn-whatsapp">تفعيل عبر واتساب</a>
-                    </div>
-                `;
-            }
-        } catch(e) {
-            statusDiv.innerHTML = "> <span class='alert'>خطأ في الاتصال بالسيرفر!</span>";
-            document.getElementById('conn-status').innerText = "OFFLINE";
-        }
-    }
-
-    function copyID() {
-        navigator.clipboard.writeText(myID);
-        alert("تم نسخ ID الجهاز: " + myID);
-    }
-
-    // التحديث التلقائي
-    setInterval(() => {
-        document.getElementById('uptime').innerText = Math.floor(performance.now()/1000);
-    }, 1000);
-
+    setInterval(checkAccess, 3000); // فحص كل 3 ثواني لسرعة الفتح
     checkAccess();
-    setInterval(checkAccess, 10000); // تحديث كل 10 ثواني
 </script>
 </body>
 </html>
