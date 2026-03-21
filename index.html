@@ -1,46 +1,72 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ALHWARY RADAR | VIP</title>
+    <title>ALHWARY RADAR | VIP SYSTEM</title>
     <style>
-        :root { --neon: #00ff41; --bg: #050505; }
-        body, html { margin: 0; padding: 0; background: var(--bg); font-family: monospace; overflow: hidden; color: var(--neon); }
-        #matrix { position: fixed; top: 0; left: 0; z-index: 1; opacity: 0.3; }
-        .container { position: relative; z-index: 2; display: flex; justify-content: center; align-items: center; height: 100vh; }
-        .terminal { background: rgba(0,0,0,0.9); border: 1px solid var(--neon); padding: 20px; width: 90%; max-width: 500px; box-shadow: 0 0 20px var(--neon); }
-        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 12px; margin-top: 15px; border-top: 1px solid #333; padding-top: 10px; }
-        .code-box { border: 1px solid var(--neon); margin: 5px 0; padding: 10px; background: rgba(0,255,65,0.05); }
-        .alert { color: #ff3e3e; font-weight: bold; animation: blink 1s infinite; }
+        :root { --neon: #00ff41; --bg: #050505; --alert: #ff3e3e; }
+        body, html { margin: 0; padding: 0; background: var(--bg); font-family: 'Courier New', monospace; overflow: hidden; color: var(--neon); }
+        #matrix { position: fixed; top: 0; left: 0; z-index: 1; opacity: 0.2; }
+        .container { position: relative; z-index: 2; display: flex; justify-content: center; align-items: center; height: 100vh; padding: 10px; }
+        .terminal { background: rgba(0,0,0,0.9); border: 1px solid var(--neon); padding: 20px; width: 100%; max-width: 450px; box-shadow: 0 0 20px rgba(0,255,65,0.2); position: relative; }
+        .header { font-size: 18px; border-bottom: 1px solid var(--neon); padding-bottom: 10px; margin-bottom: 15px; text-align: center; font-weight: bold; }
+        .id-box { background: rgba(0,255,65,0.1); border: 1px dashed var(--neon); padding: 10px; margin: 10px 0; font-size: 13px; word-break: break-all; text-align: center; cursor: pointer; }
+        .code-box { border: 1px solid var(--neon); margin: 8px 0; padding: 12px; background: rgba(0,255,65,0.05); display: flex; justify-content: space-between; align-items: center; }
+        .btn-whatsapp { display: block; width: 100%; padding: 12px; background: #25d366; color: white; text-decoration: none; text-align: center; border-radius: 5px; font-weight: bold; margin-top: 15px; transition: 0.3s; border: none; cursor: pointer; }
+        .btn-whatsapp:hover { background: #128c7e; transform: scale(1.02); }
+        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 11px; margin-top: 20px; border-top: 1px solid #333; padding-top: 10px; opacity: 0.7; }
+        .alert { color: var(--alert); font-weight: bold; animation: blink 1s infinite; }
         @keyframes blink { 50% { opacity: 0; } }
+        .loading { text-align: center; padding: 20px; }
     </style>
 </head>
-<body oncontextmenu="reportAttack(); return false;">
+<body>
 
 <canvas id="matrix"></canvas>
 
 <div class="container">
-    <div class="terminal" id="screen">
-        <div style="font-size: 20px;">🛡️ SYSTEM MONITORING...</div>
-        <div id="status">> CONNECTING TO DATABASE...</div>
-        <div id="content"></div>
+    <div class="terminal">
+        <div class="header">🛡️ ALHWARY VIP SYSTEM</div>
         
+        <div id="auth-section">
+            <div id="status">> جارِ التحقق من الصلاحية...</div>
+            <div id="main-content" class="loading">الرجاء الانتظار...</div>
+        </div>
+
         <div class="stat-grid">
             <div>PING: <span id="ping">0</span>ms</div>
-            <div>THREATS: <span id="threats">0</span></div>
-            <div>DATA LEAK: <span style="color:white">SECURE</span></div>
+            <div>STATUS: <span id="conn-status" style="color:white">ONLINE</span></div>
+            <div>DEVICE ID: <span id="mini-id">...</span></div>
             <div>UPTIME: <span id="uptime">0</span>s</div>
         </div>
     </div>
 </div>
 
 <script>
-    // --- Matrix Background ---
+    // --- إعدادات النظام (عدلها حسب بياناتك) ---
+    const GITHUB_URL = "https://raw.githubusercontent.com/nnytttdh-tech/ALHWARY_NET/main/codes.json";
+    const WHATSAPP_NUMBER = "201000000000"; // اكتب رقمك هنا بالصيغة الدولية
+
+    // --- توليد معرف الجهاز (Fingerprint) ---
+    function getDeviceID() {
+        const info = window.navigator.userAgent + window.screen.width + window.screen.height;
+        let hash = 0;
+        for (let i = 0; i < info.length; i++) {
+            hash = ((hash << 5) - hash) + info.charCodeAt(i);
+            hash |= 0; 
+        }
+        return "HW-" + Math.abs(hash).toString(16).toUpperCase();
+    }
+
+    const myID = getDeviceID();
+    document.getElementById('mini-id').innerText = myID;
+
+    // --- خلفية الماتريكس ---
     const canvas = document.getElementById('matrix');
     const ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-    const chars = "0123456789ABCDEF";
+    const chars = "010101";
     const drops = Array(Math.floor(canvas.width/14)).fill(1);
     function draw() {
         ctx.fillStyle = "rgba(0,0,0,0.05)"; ctx.fillRect(0,0,canvas.width,canvas.height);
@@ -53,47 +79,58 @@
     }
     setInterval(draw, 35);
 
-    // --- Monitoring Logic ---
-    let attacks = 0;
-    let startTime = Date.now();
-    const GITHUB_URL = "https://raw.githubusercontent.com/nnytttdh-tech/ALHWARY_NET/main/codes.json";
-
-    function reportAttack() {
-        attacks++;
-        document.getElementById('threats').innerText = attacks;
-        console.log("🚨 UNAUTHORIZED ATTEMPT LOGGED");
-    }
-
-    // كشف فتح الـ Console
-    setInterval(() => {
-        const threshold = 160;
-        if (window.outerWidth - window.innerWidth > threshold || window.outerHeight - window.innerHeight > threshold) {
-            reportAttack();
-        }
-        document.getElementById('uptime').innerText = Math.floor((Date.now() - startTime)/1000);
-    }, 1000);
-
-    async function updateUI() {
+    // --- نظام الفحص والتحقق ---
+    async function checkAccess() {
         const pStart = performance.now();
+        const contentDiv = document.getElementById('main-content');
+        const statusDiv = document.getElementById('status');
+        
         try {
             const res = await fetch(GITHUB_URL + "?v=" + Date.now());
+            if (!res.ok) throw new Error();
             const data = await res.json();
-            document.getElementById('ping').innerText = Math.floor(performance.now() - pStart);
             
-            if(data.site_status === "open") {
-                document.getElementById('status').innerHTML = "> <span style='color:white'>ACCESS GRANTED</span>";
+            document.getElementById('ping').innerText = Math.floor(performance.now() - pStart);
+
+            // التحقق إذا كان ID الجهاز موجود في قائمة المسموح لهم
+            const isAuthorized = data.authorized_devices && data.authorized_devices.includes(myID);
+
+            if (isAuthorized && data.site_status === "open") {
+                statusDiv.innerHTML = "> <span style='color:white'>تم تفعيل الوصول بنجاح ✅</span>";
                 let html = "";
                 data.net_codes.forEach(c => {
-                    html += `<div class="code-box">${atob(c.code)} - ${c.units}U</div>`;
+                    html += `<div class="code-box"><span>${atob(c.code)}</span> <span style="font-size:10px; color:#aaa;">${c.units}U</span></div>`;
                 });
-                document.getElementById('content').innerHTML = html || "NO CODES FOUND";
+                contentDiv.innerHTML = html || "لا توجد أكواد حالياً.";
             } else {
-                document.getElementById('status').innerHTML = "> <span class='alert'>RESTRICTED ACCESS</span>";
-                document.getElementById('content').innerHTML = "<p>يرجى التواصل مع الإدارة للتفعيل.</p>";
+                statusDiv.innerHTML = "> <span class='alert'>الجهاز غير مفعل ⚠️</span>";
+                contentDiv.innerHTML = `
+                    <div style="text-align:center">
+                        <p style="font-size:13px">عذراً، هذا الجهاز لا يملك صلاحية الوصول. أرسل ID التالي للمطور لتفعيله:</p>
+                        <div class="id-box" onclick="copyID()">${myID}</div>
+                        <small style="color:#888">(اضغط على الـ ID للنسخ)</small>
+                        <a href="https://wa.me/${WHATSAPP_NUMBER}?text=تفعيل_جهاز_ID:${myID}" class="btn-whatsapp">تفعيل عبر واتساب</a>
+                    </div>
+                `;
             }
-        } catch(e) { document.getElementById('status').innerText = "> CONNECTION ERROR"; }
+        } catch(e) {
+            statusDiv.innerHTML = "> <span class='alert'>خطأ في الاتصال بالسيرفر!</span>";
+            document.getElementById('conn-status').innerText = "OFFLINE";
+        }
     }
-    setInterval(updateUI, 5000); updateUI();
+
+    function copyID() {
+        navigator.clipboard.writeText(myID);
+        alert("تم نسخ ID الجهاز: " + myID);
+    }
+
+    // التحديث التلقائي
+    setInterval(() => {
+        document.getElementById('uptime').innerText = Math.floor(performance.now()/1000);
+    }, 1000);
+
+    checkAccess();
+    setInterval(checkAccess, 10000); // تحديث كل 10 ثواني
 </script>
 </body>
 </html>
