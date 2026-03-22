@@ -3,70 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ALHWARY VIP</title>
+    <title>ALHWARY VIP | PROTECTED</title>
     <style>
         :root { --neon: #00ff41; --bg: #050505; --alert: #ff3e3e; }
-        body, html { margin: 0; padding: 0; background: var(--bg); font-family: 'Courier New', monospace; color: var(--neon); overflow: hidden; }
+        body, html { margin: 0; padding: 0; background: var(--bg); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: var(--neon); overflow: hidden; user-select: none; }
         #matrix { position: fixed; top: 0; left: 0; z-index: 1; opacity: 0.15; }
         .container { position: relative; z-index: 2; display: flex; justify-content: center; align-items: center; height: 100vh; padding: 15px; }
-        .terminal { background: rgba(0,0,0,0.95); border: 1px solid var(--neon); padding: 25px; width: 100%; max-width: 400px; box-shadow: 0 0 20px rgba(0,255,65,0.2); text-align: center; border-radius: 5px; }
-        .header { font-size: 24px; border-bottom: 1px solid var(--neon); padding-bottom: 10px; margin-bottom: 20px; font-weight: bold; }
+        .terminal { background: rgba(0,0,0,0.9); border: 2px solid var(--neon); padding: 30px; width: 100%; max-width: 400px; box-shadow: 0 0 30px rgba(0,255,65,0.3); text-align: center; border-radius: 15px; backdrop-filter: blur(5px); }
+        .header { font-size: 28px; border-bottom: 2px solid var(--neon); padding-bottom: 15px; margin-bottom: 25px; font-weight: 900; letter-spacing: 2px; }
         .screen { display: none; }
         .active { display: block !important; }
-        .btn { display: block; width: 100%; padding: 15px; margin: 10px 0; border: none; font-weight: bold; cursor: pointer; font-family: inherit; }
-        .btn-green { background: var(--neon); color: black; }
-        .btn-wa { background: #25d366; color: white; text-decoration: none; display: block; padding: 15px; border-radius: 4px; }
-        .id-box { background: rgba(0,255,65,0.05); border: 1px dashed var(--neon); padding: 15px; cursor: pointer; color: #fff; font-size: 14px; margin: 20px 0; }
-        .code-item { border: 1px solid var(--neon); margin: 8px 0; padding: 12px; display: flex; justify-content: space-between; background: rgba(0,255,65,0.05); }
-        .alert { color: var(--alert); font-weight: bold; }
+        
+        /* ضبط الأزرار */
+        .btn { display: block; width: 100%; padding: 18px; margin: 15px 0; border: none; font-weight: bold; cursor: pointer; font-family: inherit; border-radius: 10px; font-size: 16px; transition: 0.3s all; text-decoration: none; }
+        .btn-green { background: var(--neon); color: black; box-shadow: 0 4px 15px rgba(0,255,65,0.4); }
+        .btn-green:hover { transform: scale(1.02); background: #00cc33; }
+        .btn-wa { background: #25d366; color: white; }
+        
+        .id-box { background: rgba(0,255,65,0.05); border: 2px dashed var(--neon); padding: 20px; cursor: pointer; color: #fff; font-size: 18px; margin: 20px 0; border-radius: 8px; font-weight: bold; letter-spacing: 1px; position: relative; }
+        .id-box::after { content: 'إضغط للنسخ'; position: absolute; bottom: -20px; right: 5px; font-size: 10px; color: var(--neon); }
+        
+        .code-item { border: 1px solid var(--neon); margin: 10px 0; padding: 15px; display: flex; justify-content: space-between; background: rgba(0,255,65,0.1); border-radius: 8px; font-size: 18px; }
+        .alert { color: var(--alert); font-weight: bold; font-size: 20px; margin-bottom: 10px; }
     </style>
 </head>
-<body>
-<canvas id="matrix"></canvas>
+<body oncontextmenu="return false;"> <canvas id="matrix"></canvas>
+
 <div class="container">
     <div class="terminal">
         <div class="header">ALHWARY VIP</div>
 
         <div id="screen-auth" class="screen active">
-            <div style="font-size: 45px; margin-bottom: 15px;">📡</div>
-            <p id="auth-msg">جاري فحص تصريح الدخول...</p>
-            <button class="btn btn-green" onclick="verifyServer()">دخول النظام</button>
+            <div style="font-size: 50px; margin-bottom: 20px;">🔒</div>
+            <p id="auth-msg" style="font-size: 18px;">نظام الحماية نشط..</p>
+            <button class="btn btn-green" onclick="verifyServer()">فحص التصريح ⚡</button>
         </div>
 
         <div id="screen-activation" class="screen">
             <p class="alert">⚠️ الحساب غير مفعل</p>
-            <div class="id-box" id="my-id-val" onclick="copyID()">جاري التوليد...</div>
-            <p style="font-size: 11px; opacity: 0.8;">إضغط على الكود للنسخ وأرسله للمطور</p>
+            <div class="id-box" id="my-id-val" onclick="copyID()">جاري استخراج بصمة الجهاز...</div>
             <a id="wa-link" href="#" class="btn btn-wa">طلب تفعيل عبر واتساب</a>
         </div>
 
         <div id="screen-content" class="screen">
-            <div style="color:#fff; margin-bottom:15px; border-bottom:1px solid #333;">✅ الأكواد المتاحة لك:</div>
+            <div style="color:#fff; margin-bottom:20px; border-bottom:1px solid #333; padding-bottom: 10px;">✅ الأكواد المتاحة:</div>
             <div id="codes-list"></div>
+            <button class="btn btn-green" style="margin-top:20px; padding:10px;" onclick="location.reload()">تحديث البيانات</button>
         </div>
     </div>
 </div>
 
 <script>
-    const GITHUB_RAW = "https://raw.githubusercontent.com/nnytttdh-tech/ALHWARY_NET/main/codes.json";
-    const WA_NUMBER = "201012345678"; 
-
-    function getID() {
-        let id = localStorage.getItem('HW_USER_ID');
-        if (!id) {
-            id = "HW-" + Math.random().toString(36).substr(2, 9).toUpperCase();
-            localStorage.setItem('HW_USER_ID', id);
+    // حماية: منع الـ Shortcuts (Ctrl+U, F12, الخ)
+    document.onkeydown = function(e) {
+        if (e.keyCode == 123 || (e.ctrlKey && (e.shiftKey && (e.keyCode == 73 || e.keyCode == 74))) || (e.ctrlKey && e.keyCode == 85)) {
+            return false;
         }
-        return id;
+    };
+
+    const G_DATA = "https://raw.githubusercontent.com/nnytttdh-tech/ALHWARY_NET/main/codes.json";
+    const WA_NUM = "201012345678"; 
+
+    // توليد ID عبارة عن "بصمة جهاز" ثابتة (Fingerprint)
+    async function generatePermanentID() {
+        let stored = localStorage.getItem('HW_HARD_ID');
+        if (stored) return stored;
+
+        // صنع بصمة من معلومات المتصفح والشاشة
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        const info = navigator.userAgent + screen.width + screen.height + new Date().getTimezoneOffset();
+        let hash = 0;
+        for (let i = 0; i < info.length; i++) {
+            hash = ((hash << 5) - hash) + info.charCodeAt(i);
+            hash |= 0;
+        }
+        const finalID = "HW-" + Math.abs(hash).toString(36).toUpperCase() + Math.random().toString(36).substr(2, 3).toUpperCase();
+        localStorage.setItem('HW_HARD_ID', finalID);
+        return finalID;
     }
-    const myID = getID();
-    document.getElementById('my-id-val').innerText = myID;
-    document.getElementById('wa-link').href = `https://wa.me/${WA_NUMBER}?text=تفعيل_ID:${myID}`;
+
+    let myID;
+    generatePermanentID().then(id => {
+        myID = id;
+        document.getElementById('my-id-val').innerText = myID;
+        document.getElementById('wa-link').href = `https://wa.me/${WA_NUM}?text=تفعيل_ID:${myID}`;
+    });
 
     async function verifyServer() {
-        document.getElementById('auth-msg').innerText = "جاري التحقق...";
+        const msg = document.getElementById('auth-msg');
+        msg.innerText = "جاري التحقق من السيرفر...";
+        
         try {
-            const res = await fetch(GITHUB_RAW + "?v=" + Date.now());
+            const res = await fetch(G_DATA + "?nocache=" + Date.now());
             const data = await res.json();
             const user = (data.authorized_devices || []).find(d => d.id === myID);
             const today = new Date().toISOString().split('T')[0];
@@ -77,17 +106,17 @@
                     document.getElementById('codes-list').innerHTML = (data.net_codes || []).map(c => `
                         <div class="code-item">
                             <span>${atob(c.code)}</span>
-                            <span>${c.units}U</span>
+                            <span style="color:white; font-size:14px;">${c.units}U</span>
                         </div>
-                    `).join('') || "لا توجد أكواد حالياً.";
+                    `).join('');
                 } else {
                     showScreen('screen-activation');
                 }
             } else {
-                alert("الموقع مغلق للصيانة حالياً.");
+                alert("الموقع مغلق للصيانة.");
             }
         } catch (e) {
-            alert("خطأ في الاتصال بالسيرفر.");
+            alert("خطأ في جلب البيانات.. تأكد من الإنترنت.");
         }
     }
 
@@ -98,7 +127,7 @@
 
     function copyID() {
         navigator.clipboard.writeText(myID);
-        alert("تم النسخ ✅");
+        alert("تم نسخ بصمة الجهاز ✅");
     }
 
     // تأثير الماتريكس
