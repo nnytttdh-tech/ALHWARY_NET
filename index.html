@@ -3,148 +3,258 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ALHWARY VIP | PROTECTED</title>
+    <title>𝑺𝑳𝑬𝑵𝑫𝑬𝑶 𝑺𝑻𝑶𝑹𝑬™ | المنصة المعتمدة للشحن الفوري</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --neon: #00ff41; --bg: #050505; --alert: #ff3e3e; }
-        body, html { margin: 0; padding: 0; background: var(--bg); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: var(--neon); overflow: hidden; user-select: none; }
-        #matrix { position: fixed; top: 0; left: 0; z-index: 1; opacity: 0.15; }
-        .container { position: relative; z-index: 2; display: flex; justify-content: center; align-items: center; height: 100vh; padding: 15px; }
-        .terminal { background: rgba(0,0,0,0.9); border: 2px solid var(--neon); padding: 30px; width: 100%; max-width: 400px; box-shadow: 0 0 30px rgba(0,255,65,0.3); text-align: center; border-radius: 15px; backdrop-filter: blur(5px); }
-        .header { font-size: 28px; border-bottom: 2px solid var(--neon); padding-bottom: 15px; margin-bottom: 25px; font-weight: 900; letter-spacing: 2px; }
-        .screen { display: none; }
-        .active { display: block !important; }
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap');
+        body { font-family: 'Cairo', sans-serif; background-color: #03050a; overflow-x: hidden; }
         
-        /* ضبط الأزرار */
-        .btn { display: block; width: 100%; padding: 18px; margin: 15px 0; border: none; font-weight: bold; cursor: pointer; font-family: inherit; border-radius: 10px; font-size: 16px; transition: 0.3s all; text-decoration: none; }
-        .btn-green { background: var(--neon); color: black; box-shadow: 0 4px 15px rgba(0,255,65,0.4); }
-        .btn-green:hover { transform: scale(1.02); background: #00cc33; }
-        .btn-wa { background: #25d366; color: white; }
+        .neon-purple { text-shadow: 0 0 12px rgba(168, 85, 247, 0.7), 0 0 25px rgba(168, 85, 247, 0.4); }
         
-        .id-box { background: rgba(0,255,65,0.05); border: 2px dashed var(--neon); padding: 20px; cursor: pointer; color: #fff; font-size: 18px; margin: 20px 0; border-radius: 8px; font-weight: bold; letter-spacing: 1px; position: relative; }
-        .id-box::after { content: 'إضغط للنسخ'; position: absolute; bottom: -20px; right: 5px; font-size: 10px; color: var(--neon); }
+        #bg-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
         
-        .code-item { border: 1px solid var(--neon); margin: 10px 0; padding: 15px; display: flex; justify-content: space-between; background: rgba(0,255,65,0.1); border-radius: 8px; font-size: 18px; }
-        .alert { color: var(--alert); font-weight: bold; font-size: 20px; margin-bottom: 10px; }
+        .premium-card { 
+            background: linear-gradient(135deg, rgba(15, 12, 30, 0.8) 0%, rgba(7, 5, 15, 0.9) 100%);
+            border: 1px solid rgba(168, 85, 247, 0.15);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+        .premium-card:hover { 
+            transform: translateY(-5px); 
+            border-color: rgba(234, 179, 8, 0.5);
+            box-shadow: 0 15px 35px rgba(234, 179, 8, 0.15);
+        }
+
+        @keyframes thunder-ambient { 0%, 95%, 98%, 100% { background-color: transparent; } 96% { background-color: rgba(168, 85, 247, 0.03); } 97% { background-color: rgba(255, 255, 255, 0.05); } }
+        .thunder-layer { position: fixed; inset: 0; z-index: -2; pointer-events: none; animation: thunder-ambient 8s infinite; }
     </style>
 </head>
-<body oncontextmenu="return false;"> <canvas id="matrix"></canvas>
+<body class="text-gray-200 min-h-screen flex flex-col justify-between">
 
-<div class="container">
-    <div class="terminal">
-        <div class="header">ALHWARY VIP</div>
+    <div class="thunder-layer"></div>
+    <canvas id="bg-canvas"></canvas>
 
-        <div id="screen-auth" class="screen active">
-            <div style="font-size: 50px; margin-bottom: 20px;">🔒</div>
-            <p id="auth-msg" style="font-size: 18px;">نظام الحماية نشط..</p>
-            <button class="btn btn-green" onclick="verifyServer()">فحص التصريح ⚡</button>
+    <header class="border-b border-purple-950/40 bg-gray-950/80 backdrop-blur-md sticky top-0 z-40">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <h1 class="text-xl md:text-2xl font-black text-purple-500 italic tracking-wider neon-purple">𝑺𝑳𝑬𝑵𝑫𝑬𝑶 𝑺𝑻𝑶𝑹𝑬™</h1>
+            <button onclick="openAdminModal()" class="bg-purple-900/30 hover:bg-purple-800/50 border border-purple-500/30 text-purple-300 text-xs px-3 py-1.5 rounded-xl transition flex items-center gap-1">
+                <i class="fas fa-user-shield"></i> لوحة الأدمن
+            </button>
         </div>
+    </header>
 
-        <div id="screen-activation" class="screen">
-            <p class="alert">⚠️ الحساب غير مفعل</p>
-            <div class="id-box" id="my-id-val" onclick="copyID()">جاري استخراج بصمة الجهاز...</div>
-            <a id="wa-link" href="#" class="btn btn-wa">طلب تفعيل عبر واتساب</a>
-        </div>
+    <section class="container mx-auto px-4 py-8 text-center max-w-4xl">
+        <span class="bg-yellow-950/50 text-yellow-500 border border-yellow-600/30 text-[9px] font-bold px-4 py-1 rounded-full uppercase tracking-widest">AUTOMATED TELECOM CHECKOUT</span>
+        <h2 class="text-2xl md:text-4xl font-black mt-3 mb-2 tracking-tight text-white shadow-sm">إمبراطورية الشحن الرسمي المعتمد</h2>
+        <p class="text-gray-400 text-xs max-w-md mx-auto">اختر اللعبة والباكج، سيتم توليد الفاتورة فورياً وتحويلك لخط الدفع المباشر.</p>
+    </section>
 
-        <div id="screen-content" class="screen">
-            <div style="color:#fff; margin-bottom:20px; border-bottom:1px solid #333; padding-bottom: 10px;">✅ الأكواد المتاحة:</div>
-            <div id="codes-list"></div>
-            <button class="btn btn-green" style="margin-top:20px; padding:10px;" onclick="location.reload()">تحديث البيانات</button>
+    <main id="productsContainer" class="container mx-auto px-4 py-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl">
+        </main>
+
+    <div id="adminModal" class="fixed inset-0 bg-black/85 backdrop-blur-md hidden flex items-center justify-center z-50 p-4">
+        <div class="bg-gray-950 border border-purple-900/50 rounded-2xl max-w-lg w-full p-6 space-y-4 max-h-[90vh] overflow-y-auto shadow-2xl">
+            <div class="flex justify-between items-center border-b border-gray-900 pb-2">
+                <h3 class="text-sm font-black text-white flex items-center gap-2"><i class="fas fa-lock text-purple-500"></i> غرفة التحكم بالأسعار والمنتجات</h3>
+                <button onclick="closeAdminModal()" class="text-gray-500 hover:text-white text-xl">&times;</button>
+            </div>
+            
+            <div class="space-y-3 bg-gray-900/40 p-3 rounded-xl border border-gray-950">
+                <h4 class="text-xs font-bold text-purple-400"><i class="fas fa-plus-circle"></i> إضافة باقة أو تعديل سعر منتج</h4>
+                <div class="grid grid-cols-2 gap-2">
+                    <input id="adminGameName" type="text" placeholder="اسم اللعبة (مثال: ببجي موبايل)" class="bg-black border border-gray-800 p-2 rounded text-xs text-white focus:border-purple-500 outline-none">
+                    <input id="adminPackage" type="text" placeholder="الباقة (مثال: 660 شدة UC)" class="bg-black border border-gray-800 p-2 rounded text-xs text-white focus:border-purple-500 outline-none">
+                    <input id="adminPrice" type="text" placeholder="السعر (مثال: 430 جنيه)" class="bg-black border border-gray-800 p-2 rounded text-xs text-white focus:border-purple-500 outline-none">
+                    <input id="adminWallet" type="text" placeholder="رقم كاش المستلم" value="01556853817" class="bg-black border border-gray-800 p-2 rounded text-xs text-white focus:border-purple-500 outline-none">
+                </div>
+                <button onclick="addNewProduct()" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 rounded text-xs transition">إدراج وتحديث المتجر فوراً</button>
+            </div>
+
+            <div class="space-y-2">
+                <h4 class="text-xs font-bold text-yellow-500"><i class="fas fa-list"></i> جميع المنتجات المتاحة حالياً (اضغط لحذف المنتجات القديمة):</h4>
+                <div id="adminItemsList" class="space-y-1 max-h-44 overflow-y-auto text-[11px]">
+                    </div>
+            </div>
+            <p class="text-[10px] text-gray-500 text-center">تُحفظ كافة التغيرات تلقائياً داخل المتصفح.</p>
         </div>
     </div>
-</div>
 
-<script>
-    // حماية: منع الـ Shortcuts (Ctrl+U, F12, الخ)
-    document.onkeydown = function(e) {
-        if (e.keyCode == 123 || (e.ctrlKey && (e.shiftKey && (e.keyCode == 73 || e.keyCode == 74))) || (e.ctrlKey && e.keyCode == 85)) {
-            return false;
-        }
-    };
+    <footer class="border-t border-purple-950/30 bg-gray-950 text-center py-4 text-[10px] text-gray-600">
+        <p>© 2026 جميع الحقوق محفوظة لـ <span class="text-purple-500 font-bold">𝑺𝑳𝑬𝑵𝑫𝑬𝑶 𝑺𝑻𝑶𝑹Ｅ™</span></p>
+    </footer>
 
-    const G_DATA = "https://raw.githubusercontent.com/nnytttdh-tech/ALHWARY_NET/main/codes.json";
-    const WA_NUM = "201012345678"; 
+    <script>
+        // 💾 بنك معلومات المنتجات الافتراضية المأخوذة من كودك الأصلي
+        const defaultProducts = [
+            // ببجي
+            { id: 1, game: 'ببجي (PUBG Mobile)', package: '60 شدة UC', price: '50 جنيه', wallet: '01556853817' },
+            { id: 2, game: 'ببجي (PUBG Mobile)', package: '325 شدة UC', price: '220 جنيه', wallet: '01556853817' },
+            { id: 3, game: 'ببجي (PUBG Mobile)', package: '660 شدة UC', price: '430 جنيه', wallet: '01556853817' },
+            { id: 4, game: 'ببجي (PUBG Mobile)', package: '1800 شدة UC', price: '1150 جنيه', wallet: '01556853817' },
+            // فري فاير
+            { id: 5, game: 'فري فاير (Free Fire)', package: '100 جوهرة', price: '45 جنيه', wallet: '01556853817' },
+            { id: 6, game: 'فري فاير (Free Fire)', package: '210 جوهرة', price: '90 جنيه', wallet: '01556853817' },
+            { id: 7, game: 'فري فاير (Free Fire)', package: '530 جوهرة', price: '210 جنيه', wallet: '01556853817' },
+            { id: 8, game: 'فري فاير (Free Fire)', package: '1080 جوهرة', price: '410 جنيه', wallet: '01556853817' },
+            // فيفا
+            { id: 9, game: 'فيفا موبايل (EA FC)', package: '500 نقطة FC', price: '120 جنيه', wallet: '01556853817' },
+            { id: 10, game: 'فيفا موبايل (EA FC)', package: '1050 نقطة FC', price: '240 جنيه', wallet: '01556853817' },
+            { id: 11, game: 'فيفا موبايل (EA FC)', package: '2800 نقطة FC', price: '580 جنيه', wallet: '01556853817' },
+            { id: 12, game: 'فيفا موبايل (EA FC)', package: '5750 نقطة FC', price: '1100 جنيه', wallet: '01556853817' },
+            // بلود سترايك
+            { id: 13, game: 'بلود سترايك (Blood Strike)', package: '100 جولد', price: '60 جنيه', wallet: '01556853817' },
+            { id: 14, game: 'بلود سترايك (Blood Strike)', package: '500 جولد', price: '280 جنيه', wallet: '01556853817' },
+            { id: 15, game: 'بلود سترايك (Blood Strike)', package: '1000 جولد', price: '540 جنيه', wallet: '01556853817' },
+            // روبلوكس
+            { id: 16, game: 'روبلوكس (Roblox)', package: '400 Robux', price: '150 جنيه', wallet: '01556853817' },
+            { id: 17, game: 'روبلوكس (Roblox)', package: '800 Robux', price: '290 جنيه', wallet: '01556853817' },
+            { id: 18, game: 'روبلوكس (Roblox)', package: '1700 Robux', price: '590 جنيه', wallet: '01556853817' },
+            // كود
+            { id: 19, game: 'كول اوف ديوتي (COD)', package: '80 نقطة CP', price: '40 جنيه', wallet: '01556853817' },
+            { id: 20, game: 'كول اوف ديوتي (COD)', package: '420 نقطة CP', price: '190 جنيه', wallet: '01556853817' },
+            { id: 21, game: 'كول اوف ديوتي (COD)', package: '880 نقطة CP', price: '370 جنيه', wallet: '01556853817' }
+        ];
 
-    // توليد ID عبارة عن "بصمة جهاز" ثابتة (Fingerprint)
-    async function generatePermanentID() {
-        let stored = localStorage.getItem('HW_HARD_ID');
-        if (stored) return stored;
+        // قراءة البيانات المحفوظة محلياً أو إرجاع القائمة الافتراضية
+        let currentProducts = JSON.parse(localStorage.getItem('slendeo_master_products')) || defaultProducts;
 
-        // صنع بصمة من معلومات المتصفح والشاشة
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        const info = navigator.userAgent + screen.width + screen.height + new Date().getTimezoneOffset();
-        let hash = 0;
-        for (let i = 0; i < info.length; i++) {
-            hash = ((hash << 5) - hash) + info.charCodeAt(i);
-            hash |= 0;
-        }
-        const finalID = "HW-" + Math.abs(hash).toString(36).toUpperCase() + Math.random().toString(36).substr(2, 3).toUpperCase();
-        localStorage.setItem('HW_HARD_ID', finalID);
-        return finalID;
-    }
+        // دالة عرض المنتجات بواجهة العميل
+        function renderStoreFront() {
+            const container = document.getElementById('productsContainer');
+            container.innerHTML = '';
 
-    let myID;
-    generatePermanentID().then(id => {
-        myID = id;
-        document.getElementById('my-id-val').innerText = myID;
-        document.getElementById('wa-link').href = `https://wa.me/${WA_NUM}?text=تفعيل_ID:${myID}`;
-    });
+            // تجميع الباقات تبعاً لكل لعبة
+            const groups = {};
+            currentProducts.forEach(p => {
+                if (!groups[p.game]) groups[p.game] = [];
+                groups[p.game].push(p);
+            });
 
-    async function verifyServer() {
-        const msg = document.getElementById('auth-msg');
-        msg.innerText = "جاري التحقق من السيرفر...";
-        
-        try {
-            const res = await fetch(G_DATA + "?nocache=" + Date.now());
-            const data = await res.json();
-            const user = (data.authorized_devices || []).find(d => d.id === myID);
-            const today = new Date().toISOString().split('T')[0];
+            // توليد كروت النيون الفخمة لكل لعبة ديناميكياً
+            for (const gameName in groups) {
+                // تحديد لون الأيقونة الافتراضي المناسب لكل لعبة
+                let iconColor = "text-yellow-500";
+                if(gameName.includes("فري فاير")) iconColor = "text-red-500";
+                if(gameName.includes("فيفا")) iconColor = "text-green-500";
+                if(gameName.includes("بلود")) iconColor = "text-orange-500";
+                if(gameName.includes("روبلوكس")) iconColor = "text-cyan-400";
+                if(gameName.includes("كول")) iconColor = "text-gray-400";
 
-            if (data.site_status === "open") {
-                if (user && (user.expire_at === "permanent" || user.expire_at >= today)) {
-                    showScreen('screen-content');
-                    document.getElementById('codes-list').innerHTML = (data.net_codes || []).map(c => `
-                        <div class="code-item">
-                            <span>${atob(c.code)}</span>
-                            <span style="color:white; font-size:14px;">${c.units}U</span>
-                        </div>
-                    `).join('');
-                } else {
-                    showScreen('screen-activation');
-                }
-            } else {
-                alert("الموقع مغلق للصيانة.");
+                let cardHtml = `
+                    <div class="premium-card rounded-2xl p-5 flex flex-col justify-between">
+                        <div>
+                            <h4 class="text-base font-black text-white mb-3 flex items-center gap-2 border-b border-gray-900 pb-2">
+                                <i class="fas fa-gamepad ${iconColor}"></i> ${gameName}
+                            </h4>
+                            <div class="space-y-2.5">
+                `;
+
+                groups[gameName].forEach(item => {
+                    cardHtml += `
+                        <button onclick="checkout('${item.game}', '${item.package}', '${item.price}', '${item.wallet}')" class="w-full bg-gray-950/60 hover:bg-purple-900/20 border border-gray-800 text-right px-3 py-2 rounded-xl text-xs flex justify-between items-center transition">
+                            <span class="font-bold text-gray-200">${item.package}</span> 
+                            <span class="text-yellow-500 font-black">${item.price}</span>
+                        </button>
+                    `;
+                });
+
+                cardHtml += `</div></div></div>`;
+                container.innerHTML += cardHtml;
             }
-        } catch (e) {
-            alert("خطأ في جلب البيانات.. تأكد من الإنترنت.");
         }
-    }
 
-    function showScreen(id) {
-        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-    }
+        // دالة تحديث قائمة لوحة تحكم الأدمن للتحكم بالحذف
+        function renderAdminList() {
+            const listContainer = document.getElementById('adminItemsList');
+            listContainer.innerHTML = '';
+            currentProducts.forEach(p => {
+                listContainer.innerHTML += `
+                    <div class="flex justify-between items-center bg-gray-900 p-2 rounded mb-1 border border-gray-800">
+                        <span>[${p.game}] ➔ ${p.package} (${p.price})</span>
+                        <button onclick="deleteProduct(${p.id})" class="text-red-500 hover:text-red-400 font-bold bg-red-950/40 px-2 py-0.5 rounded transition">حذف</button>
+                    </div>
+                `;
+            });
+        }
 
-    function copyID() {
-        navigator.clipboard.writeText(myID);
-        alert("تم نسخ بصمة الجهاز ✅");
-    }
+        // دالة التحقق وفتح نافذة الأدمن بكلمة مرور مستحيل تخمينها
+        function openAdminModal() {
+            const password = prompt("الرجاء إدخال رمز التحقق السري لغرفة الأدمن:");
+            // كلمة المرور المعقدة والآمنة الجديدة
+            if (password === "SlEnDeO_StOrE#2026!@Master") { 
+                document.getElementById('adminModal').classList.remove('hidden');
+                renderAdminList();
+            } else if (password !== null) {
+                alert("رمز التحكم خاطئ! محاولة دخول غير مصرح بها.");
+            }
+        }
 
-    // تأثير الماتريكس
-    const canvas = document.getElementById('matrix');
-    const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-    const drops = Array(Math.floor(canvas.width/14)).fill(1);
-    function draw() {
-        ctx.fillStyle = "rgba(0,0,0,0.05)"; ctx.fillRect(0,0,canvas.width,canvas.height);
-        ctx.fillStyle = "#00ff41"; ctx.font = "14px monospace";
-        drops.forEach((y, i) => {
-            ctx.fillText(Math.floor(Math.random()*2), i*14, y*14);
-            if(y*14 > canvas.height && Math.random() > 0.975) drops[i] = 0;
-            drops[i]++;
-        });
-    }
-    setInterval(draw, 45);
-</script>
+        function closeAdminModal() {
+            document.getElementById('adminModal').classList.add('hidden');
+        }
+
+        // إضافة منتج جديد أو تغيير أسعار
+        function addNewProduct() {
+            const game = document.getElementById('adminGameName').value.trim();
+            const packageText = document.getElementById('adminPackage').value.trim();
+            const price = document.getElementById('adminPrice').value.trim();
+            const wallet = document.getElementById('adminWallet').value.trim();
+
+            if (!game || !packageText || !price || !wallet) {
+                return alert("الرجاء ملء كل الخانات!");
+            }
+
+            const newProd = { id: Date.now(), game: game, package: packageText, price: price, wallet: wallet };
+            currentProducts.push(newProd);
+            saveDataToLocalStorage();
+            
+            document.getElementById('adminGameName').value = '';
+            document.getElementById('adminPackage').value = '';
+            document.getElementById('adminPrice').value = '';
+        }
+
+        // حذف باقة
+        function deleteProduct(id) {
+            if (confirm("هل تود إزالة هذه الباقة نهائياً؟")) {
+                currentProducts = currentProducts.filter(p => p.id !== id);
+                saveDataToLocalStorage();
+            }
+        }
+
+        // حفظ البيانات دائمياً وتحديث المتجر فوراً
+        function saveDataToLocalStorage() {
+            localStorage.setItem('slendeo_master_products', JSON.stringify(currentProducts));
+            renderStoreFront();
+            renderAdminList();
+        }
+
+        // نظام إرسال البيانات المباشر للواتساب للزبائن عند الشراء
+        function checkout(game, package, price, walletNumber) {
+            const playerID = prompt(`يا بطل اكتب الـ ID الخاص بك للعبة ${game}:`);
+            if(!playerID) return alert("إلغاء العملية. الـ ID مطلوب لإتمام الشحن المعتمد!");
+
+            const message = `🚨 *طلب شحن جديد معتمد من الستور* 🚨\n\n` +
+                            `🎮 *اللعبة:* ${game}\n` +
+                            `📦 *الباكج المطلوبة:* ${package}\n` +
+                            `🆔 *حساب اللاعب (ID):* ${playerID}\n\n` +
+                            `💵 *المبلغ المطلوب تحويله:* ${price}\n` +
+                            `📌 *رقم محفظة الكاش للتحويل:* ${walletNumber}\n\n` +
+                            `⚠️ _برجاء إرسال صورة لقطة شاشة (اسكرين) لإثبات التحويل فوراً ليتم تأكيد الشحن الفوري خلال دقيقتين._`;
+
+            window.open(`https://wa.me/201556853817?text=${encodeURIComponent(message)}`, '_blank');
+        }
+
+        // بناء المتجر والبدء فوراً
+        renderStoreFront();
+
+        // تأثير مطر النيون
+        const canvas = document.getElementById('bg-canvas'); const ctx = canvas.getContext('2d'); let particles = [];
+        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resizeCanvas); resizeCanvas();
+        class Particle { constructor() { this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height; this.size = Math.random() * 2 + 0.5; this.speedY = Math.random() * 0.8 + 0.2; this.opacity = Math.random() * 0.3; } update() { this.y += this.speedY; if (this.y > canvas.height) { this.y = 0; this.x = Math.random() * canvas.width; } } draw() { ctx.fillStyle = `rgba(168, 85, 247, ${this.opacity})`; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill(); } }
+        for (let i = 0; i < 50; i++) { particles.push(new Particle()); }
+        function animate() { ctx.clearRect(0, 0, canvas.width, canvas.height); particles.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(animate); } if(ctx) animate();
+    </script>
 </body>
 </html>
