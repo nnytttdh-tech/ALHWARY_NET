@@ -4,12 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>✧ 𝑨𝑳𝑯𝑾𝑨𝑹𝒀 𝑨𝒊 ✧</title>
+    <!-- الخطوط الأيقونات -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- مكتبات تنسيق الكود والـ Markdown -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/tokyo-night-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+
     <style>
-        /* ═══════════════════════════════════════════
-           🌟 Sonic Dynamic Visual Tokens & Variables
-           ═══════════════════════════════════════════ */
         :root {
             --sonic-blue: #00d4ff;
             --sonic-dark-blue: #0099cc;
@@ -22,7 +26,7 @@
             --shadow-gold: 0 0 30px rgba(255, 215, 0, 0.4);
             --gradient-main: linear-gradient(135deg, #00d4ff 0%, #0099cc 50%, #7269e3 100%);
             --gradient-gold: linear-gradient(135deg, #ffd700 0%, #ffaa00 50%, #ffd700 100%);
-            --text-color: #c5c6c7;
+            --text-color: #e2e8f0;
         }
 
         * {
@@ -37,6 +41,7 @@
             background-color: var(--dark-bg);
             color: #fff;
             overflow-x: hidden;
+            transition: background-color 0.3s ease;
         }
 
         body {
@@ -45,10 +50,8 @@
             align-items: center;
         }
 
-        /* ═══════════════════════════════════════════
-           🌟 Dynamic Particles Background Effect
-           ═══════════════════════════════════════════ */
-        .particles-container {
+        /* 🌟 خلفية الجسيمات عبر Canvas للأداء العالي */
+        #particles-canvas {
             position: fixed;
             top: 0;
             left: 0;
@@ -56,36 +59,9 @@
             height: 100vh;
             pointer-events: none;
             z-index: 0;
-            overflow: hidden;
         }
 
-        .particle {
-            position: absolute;
-            width: 5px;
-            height: 5px;
-            background: var(--sonic-blue);
-            border-radius: 50%;
-            opacity: 0.6;
-            animation: float-particle 15s infinite ease-in-out;
-            box-shadow: 0 0 10px var(--sonic-blue);
-        }
-
-        .particle.gold {
-            background: var(--royal-gold);
-            box-shadow: 0 0 10px var(--royal-gold);
-            animation-duration: 18s;
-        }
-
-        @keyframes float-particle {
-            0%, 100% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-            10% { opacity: 0.7; }
-            90% { opacity: 0.7; }
-            100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
-        }
-
-        /* ═══════════════════════════════════════════
-           📍 Glassmorphic Header & Glow Button
-           ═══════════════════════════════════════════ */
+        /* 📍 الهيدر والشريط العلوي */
         header {
             width: 100%;
             padding: 14px 24px;
@@ -122,30 +98,37 @@
             50% { filter: drop-shadow(0 0 10px rgba(0,212,255,0.6)); }
         }
 
-        .dots-btn {
+        .header-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .icon-btn {
             background: transparent;
             border: 1px solid rgba(0, 212, 255, 0.3);
             color: var(--sonic-blue);
-            font-size: 1.5rem;
+            font-size: 1.1rem;
             cursor: pointer;
-            padding: 4px 12px;
-            line-height: 1;
+            width: 38px;
+            height: 38px;
             border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             transition: all 0.3s ease;
             box-shadow: 0 0 10px rgba(0, 212, 255, 0.1);
         }
 
-        .dots-btn:hover {
+        .icon-btn:hover {
             color: #fff;
             background: var(--gradient-main);
             border-color: transparent;
             box-shadow: var(--shadow-glow);
-            transform: scale(1.05) rotate(90deg);
+            transform: scale(1.05);
         }
 
-        /* ═══════════════════════════════════════════
-           📱 Sidebar Interactive Slide
-           ═══════════════════════════════════════════ */
+        /* 📱 القائمة الجانبية */
         .sidebar-overlay {
             position: fixed;
             top: 0; left: 0;
@@ -154,7 +137,6 @@
             backdrop-filter: blur(5px);
             display: none;
             z-index: 90;
-            transition: opacity 0.3s ease;
         }
 
         .sidebar {
@@ -174,9 +156,7 @@
             padding: 25px 20px;
         }
 
-        .sidebar.active {
-            right: 0;
-        }
+        .sidebar.active { right: 0; }
 
         .sidebar-header {
             display: flex;
@@ -187,11 +167,7 @@
             margin-bottom: 20px;
         }
 
-        .sidebar-header h3 {
-            font-size: 1.1rem;
-            color: var(--sonic-blue);
-            font-weight: 700;
-        }
+        .sidebar-header h3 { font-size: 1.1rem; color: var(--sonic-blue); font-weight: 700; }
 
         .sidebar-close {
             background: transparent;
@@ -199,18 +175,9 @@
             color: #ef4444;
             font-size: 1.4rem;
             cursor: pointer;
-            transition: transform 0.2s ease;
         }
 
-        .sidebar-close:hover {
-            transform: scale(1.2) rotate(90deg);
-        }
-
-        .sidebar-menu {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
+        .sidebar-menu { display: flex; flex-direction: column; gap: 12px; }
 
         .menu-item {
             background: rgba(255, 255, 255, 0.03);
@@ -224,34 +191,15 @@
             align-items: center;
             gap: 12px;
             transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .menu-item::before {
-            content: '';
-            position: absolute;
-            top: 0; right: 0;
-            width: 3px; height: 100%;
-            background: var(--gradient-main);
-            transform: scaleY(0);
-            transition: transform 0.3s ease;
         }
 
         .menu-item:hover {
             background: rgba(0, 212, 255, 0.1);
             border-color: var(--sonic-blue);
             transform: translateX(-5px);
-            box-shadow: 0 5px 20px rgba(0, 212, 255, 0.2);
         }
 
-        .menu-item:hover::before {
-            transform: scaleY(1);
-        }
-
-        /* ═══════════════════════════════════════════
-           💬 Main Chat & Message Interactions
-           ═══════════════════════════════════════════ */
+        /* 💬 شاشة المحادثة */
         .main-container {
             width: 100%;
             max-width: 900px;
@@ -273,30 +221,24 @@
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 14px;
+            gap: 16px;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(12px);
-            transition: border-color 0.3s ease;
-        }
-
-        .chat-container:hover {
-            border-color: rgba(0, 212, 255, 0.4);
         }
 
         .msg {
-            padding: 12px 18px;
+            padding: 14px 18px;
             border-radius: 16px;
-            max-width: 85%;
-            line-height: 1.6;
+            max-width: 88%;
+            line-height: 1.7;
             font-size: 0.95rem;
             word-break: break-word;
-            white-space: pre-wrap;
-            animation: fadeInUp 0.4s ease forwards;
+            animation: fadeInUp 0.3s ease forwards;
             position: relative;
         }
 
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(15px); }
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
@@ -318,18 +260,46 @@
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
 
-        /* ═══════════════════════════════════════════
-           🎛️ Input Controls & Glowing Action Buttons
-           ═══════════════════════════════════════════ */
+        /* تنسيق الأكواد والجداول داخل إجابات AI */
+        .ai pre {
+            background: #1e1e2e;
+            border-radius: 10px;
+            padding: 12px;
+            margin: 10px 0;
+            overflow-x: auto;
+            position: relative;
+            direction: ltr;
+            text-align: left;
+        }
+
+        .ai code { font-family: 'Consolas', monospace; font-size: 0.9rem; }
+
+        .copy-code-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .copy-code-btn:hover { background: var(--sonic-blue); color: #000; }
+
+        /* 🎛️ أدوات الإدخال (Textarea التلقائي) */
         .input-area {
             display: flex;
+            align-items: flex-end;
             gap: 10px;
             background: var(--card-bg);
-            padding: 8px 12px;
+            padding: 10px 14px;
             border-radius: 16px;
             border: 1px solid rgba(0, 212, 255, 0.25);
             backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
         }
 
         .input-area:focus-within {
@@ -337,45 +307,43 @@
             box-shadow: var(--shadow-glow);
         }
 
-        input {
+        textarea#prompt {
             flex: 1;
             background: transparent;
             border: none;
             outline: none;
             color: #fff;
-            padding: 10px;
-            font-size: 1rem;
+            padding: 4px;
+            font-size: 0.95rem;
+            resize: none;
+            max-height: 120px;
+            min-height: 24px;
+            line-height: 1.5;
         }
 
         button#sendBtn {
             background: var(--gradient-main);
             color: #0a0e17;
             border: none;
-            padding: 10px 24px;
+            padding: 10px 20px;
             border-radius: 12px;
             font-weight: 800;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-size: 0.95rem;
             box-shadow: var(--shadow-glow);
+            height: 42px;
         }
 
-        button#sendBtn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 0 25px rgba(0, 212, 255, 0.8);
-        }
+        button#sendBtn:hover { transform: translateY(-2px); }
 
         footer {
-            padding: 8px;
+            padding: 6px;
             font-size: 0.8rem;
             color: rgba(255, 255, 255, 0.5);
             text-align: center;
-            letter-spacing: 1px;
         }
 
-        /* ═══════════════════════════════════════════
-           ✨ Royal Modals & Popups
-           ═══════════════════════════════════════════ */
+        /* ✨ النوافذ المنبثقة */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0;
@@ -395,15 +363,7 @@
             width: 90%;
             max-width: 440px;
             padding: 24px;
-            position: relative;
             box-shadow: var(--shadow-gold);
-            color: #fff;
-            animation: zoomIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        @keyframes zoomIn {
-            from { opacity: 0; transform: scale(0.85); }
-            to { opacity: 1; transform: scale(1); }
         }
 
         .modal-header {
@@ -415,52 +375,10 @@
             margin-bottom: 18px;
         }
 
-        .modal-header h2 {
-            font-size: 1.15rem;
-            color: var(--royal-gold);
-            font-weight: 700;
-        }
-
-        .close-btn {
-            background: transparent;
-            border: none;
-            color: #ef4444;
-            font-size: 1.3rem;
-            cursor: pointer;
-            font-weight: bold;
-            transition: transform 0.2s ease;
-        }
-
-        .close-btn:hover {
-            transform: scale(1.2) rotate(90deg);
-        }
-
-        .modal-body { font-size: 0.95rem; line-height: 1.6; }
+        .modal-header h2 { font-size: 1.15rem; color: var(--royal-gold); }
+        .close-btn { background: transparent; border: none; color: #ef4444; font-size: 1.3rem; cursor: pointer; }
         .modal-section { display: none; }
         .modal-section.active { display: block; }
-
-        .profile-info { display: flex; align-items: center; gap: 14px; margin-bottom: 15px; }
-        .profile-info img {
-            width: 52px; height: 52px;
-            border-radius: 50%;
-            border: 2px solid var(--royal-gold);
-            box-shadow: var(--shadow-gold);
-        }
-
-        .contact-box {
-            background: rgba(255, 255, 255, 0.04);
-            padding: 12px;
-            border-radius: 12px;
-            border: 1px solid rgba(0, 212, 255, 0.2);
-            margin-top: 12px;
-        }
-
-        .contact-box a {
-            color: var(--sonic-blue);
-            text-decoration: none;
-            word-break: break-all;
-            font-weight: bold;
-        }
 
         .theme-select {
             width: 100%;
@@ -473,97 +391,75 @@
             outline: none;
         }
 
-        .btn-danger {
-            background: linear-gradient(135deg, #ef4444, #dc2626);
-            color: #fff;
-            border: none;
-            padding: 10px 16px;
-            border-radius: 10px;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 18px;
-            font-weight: bold;
-            transition: all 0.3s ease;
+        .contact-box {
+            background: rgba(255, 255, 255, 0.04);
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            margin-top: 12px;
         }
 
-        .btn-danger:hover {
-            box-shadow: 0 0 15px rgba(239, 68, 68, 0.5);
-            transform: translateY(-2px);
-        }
+        .contact-box a { color: var(--sonic-blue); text-decoration: none; font-weight: bold; }
 
-        /* Scrollbar Visuals */
+        /* Scrollbar */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: var(--dark-bg); }
         ::-webkit-scrollbar-thumb { background: var(--sonic-dark-blue); border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--sonic-blue); }
-
-        @media (min-width: 768px) {
-            header { padding: 16px 40px; }
-            header h1 { font-size: 1.5rem; }
-            .main-container { padding: 20px; gap: 15px; }
-        }
     </style>
 </head>
 <body>
 
-    <!-- 🌟 Dynamic Particles Background -->
-    <div class="particles-container" id="particles"></div>
+    <!-- 🌟 Canvas الجسيمات الخفيفة بالسلاسة العالية -->
+    <canvas id="particles-canvas"></canvas>
 
-    <!-- الهيدر مع زر الثلاث نقط -->
+    <!-- الهيدر -->
     <header id="navbar">
         <h1>✧ 𝑨𝑳𝑯𝑾𝑨𝑹𝒀 𝑨𝒊 ✧</h1>
-        <button class="dots-btn" onclick="toggleSidebar()">⋮</button>
+        <div class="header-actions">
+            <button class="icon-btn" onclick="clearChat()" title="مسح المحادثة"><i class="fa-solid fa-trash-can"></i></button>
+            <button class="icon-btn" onclick="toggleSidebar()" title="القائمة"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+        </div>
     </header>
 
-    <!-- خلفية تغطية عند فتح القائمة -->
+    <!-- القائمة الجانبية -->
     <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
-
-    <!-- القائمة الجانبية المنزلقة من اليمين -->
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <h3>خيارات التطبيق</h3>
             <button class="sidebar-close" onclick="closeSidebar()">✕</button>
         </div>
         <div class="sidebar-menu">
-            <div class="menu-item" onclick="openSection('settings')">
-                <span>⚙️</span> قسم الإعدادات
-            </div>
-            <div class="menu-item" onclick="openSection('account')">
-                <span>👤</span> قسم الحساب
-            </div>
-            <div class="menu-item" onclick="openSection('contact')">
-                <span>💬</span> التواصل مع المطور
-            </div>
+            <div class="menu-item" onclick="openSection('settings')"><span>⚙️</span> قسم الإعدادات</div>
+            <div class="menu-item" onclick="openSection('account')"><span>👤</span> قسم الحساب</div>
+            <div class="menu-item" onclick="openSection('contact')"><span>💬</span> التواصل مع المطور</div>
         </div>
     </div>
 
-    <!-- حاوية الشات الرئيسية -->
+    <!-- الحاوية الرئيسية -->
     <div class="main-container">
         <div class="chat-container" id="chat">
             <div class="msg ai">مرحباً بك في <b>𝑨𝑳𝑯𝑾𝑨𝑹𝒀 𝑨𝒊</b>! أنا نموذج ذكاء اصطناعي تم تطويري بواسطة <b>الهواري وعلي ويكا</b>. كيف يمكننا مساعدتك اليوم؟ 🚀</div>
         </div>
 
         <div class="input-area">
-            <input type="text" id="prompt" placeholder="اكتب سؤالك هنا..." onkeydown="if(event.key==='Enter') send()">
+            <textarea id="prompt" rows="1" placeholder="اكتب سؤالك هنا... (Shift + Enter لسطر جديد)" onkeydown="handleKeyDown(event)" oninput="autoResize(this)"></textarea>
             <button id="sendBtn" onclick="send()">إرسال</button>
         </div>
 
         <footer>⚜️ Developed By El-Hawary & Ali Weka ⚜️</footer>
     </div>
 
-    <!-- النافذة المنبثقة للتفاصيل -->
+    <!-- النافذة المنبثقة -->
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal-content">
             <div class="modal-header">
                 <h2 id="modalTitle">العنوان</h2>
                 <button class="close-btn" onclick="closeModal()">✕</button>
             </div>
-
             <div class="modal-body">
-                <!-- قسم الإعدادات -->
                 <div class="modal-section" id="sec-settings">
                     <label>اختر مظهر المحادثة:</label>
-                    <select class="theme-select" onchange="changeTheme(this.value)">
+                    <select class="theme-select" id="themeSelect" onchange="changeTheme(this.value)">
                         <option value="dark">الوضع الليلي (الافتراضي)</option>
                         <option value="purple">الوضع البنفسجي الدافئ</option>
                         <option value="blue">الوضع الأزرق المظلم</option>
@@ -573,25 +469,16 @@
                     </div>
                 </div>
 
-                <!-- قسم الحساب -->
                 <div class="modal-section" id="sec-account">
-                    <div class="profile-info">
-                        <img id="modalUserImg" src="https://via.placeholder.com/48" alt="user">
-                        <div>
-                            <h3 id="modalUserName">زائر</h3>
-                            <span style="font-size:0.75rem; color:#a08b7a;" id="modalUserMail">غير مسجّل</span>
-                        </div>
-                    </div>
-                    <button class="btn-danger" onclick="logout()">تسجيل الخروج</button>
+                    <p style="margin-bottom: 10px;">المستخدم الحالي: <b id="modalUserName">زائر</b></p>
+                    <button style="background:#ef4444; color:#fff; border:none; padding:8px 16px; border-radius:8px; cursor:pointer;" onclick="localStorage.clear(); location.reload();">مسح البيانات المحلية</button>
                 </div>
 
-                <!-- قسم التواصل مع المطور -->
                 <div class="modal-section" id="sec-contact">
-                    <p>يمكنك التواصل المباشر مع المطورين للحصول على الدعم الفني أو لتقديم المقترحات:</p>
                     <div class="contact-box">
-                        <b>👨‍💻 المطورون:</b> الهواري وعلي ويكا<br>
+                        <b>👨‍💻 المطورون:</b> الهواري وعلي ويكا<br><br>
                         <b>📬 البريد الإلكتروني:</b><br>
-                        <a href="mailto:alhwary@gmail.com?subject=تواصل مع مطوري ALHWARY AI">your-email@gmail.com</a>
+                        <a href="mailto:alhwary@gmail.com?subject=تواصل مع مطوري ALHWARY AI">alhwary@gmail.com</a>
                     </div>
                 </div>
             </div>
@@ -599,22 +486,57 @@
     </div>
 
     <script>
-        // === 1. إنشاء الجسيمات المتحركة (Sonic Particle System) ===
-        function createParticles() {
-            const container = document.getElementById('particles');
-            const particleCount = 45;
+        // === 1. محرك الجسيمات ذو الأداء العالي (Canvas) ===
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        let particlesArr = [];
 
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.className = `particle${Math.random() > 0.65 ? ' gold' : ''}`;
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.animationDelay = Math.random() * 15 + 's';
-                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
-                container.appendChild(particle);
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 3 + 1;
+                this.speedY = Math.random() * 0.8 + 0.2;
+                this.color = Math.random() > 0.7 ? '#ffd700' : '#00d4ff';
+                this.opacity = Math.random() * 0.6 + 0.2;
+            }
+            update() {
+                this.y -= this.speedY;
+                if (this.y < 0) {
+                    this.y = canvas.height;
+                    this.x = Math.random() * canvas.width;
+                }
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = this.opacity;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
             }
         }
 
-        // === 2. التحكم بالقائمة الجانبية (Sidebar) ===
+        function initParticles() {
+            particlesArr = [];
+            for (let i = 0; i < 40; i++) particlesArr.push(new Particle());
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particlesArr.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animateParticles);
+        }
+        initParticles();
+        animateParticles();
+
+        // === 2. التحكم بالقائمة والسمات ===
         function toggleSidebar() {
             document.getElementById('sidebar').classList.add('active');
             document.getElementById('sidebarOverlay').style.display = 'block';
@@ -625,39 +547,17 @@
             document.getElementById('sidebarOverlay').style.display = 'none';
         }
 
-        function openSection(section) {
+        function openSection(sec) {
             closeSidebar();
-            openModal(section);
-        }
-
-        // === 3. التحكم بالنافذة المنبثقة (Modal) ===
-        function openModal(section) {
             document.getElementById('modalOverlay').style.display = 'flex';
             document.querySelectorAll('.modal-section').forEach(s => s.classList.remove('active'));
-
-            const userName = localStorage.getItem('user_name') || 'زائر';
-            const userPic = localStorage.getItem('user_picture') || 'https://via.placeholder.com/48';
-
-            if(section === 'settings') {
-                document.getElementById('modalTitle').innerText = '⚙️ إعدادات التطبيق';
-                document.getElementById('sec-settings').classList.add('active');
-            } else if(section === 'account') {
-                document.getElementById('modalTitle').innerText = '👤 تفاصيل الحساب';
-                document.getElementById('sec-account').classList.add('active');
-                document.getElementById('modalUserName').innerText = userName;
-                document.getElementById('modalUserMail').innerText = userName.includes('@') ? userName : userName + '@gmail.com';
-                document.getElementById('modalUserImg').src = userPic;
-            } else if(section === 'contact') {
-                document.getElementById('modalTitle').innerText = '💬 التواصل مع المطورين';
-                document.getElementById('sec-contact').classList.add('active');
-            }
+            document.getElementById(`sec-${sec}`).classList.add('active');
         }
 
-        function closeModal() {
-            document.getElementById('modalOverlay').style.display = 'none';
-        }
+        function closeModal() { document.getElementById('modalOverlay').style.display = 'none'; }
 
         function changeTheme(val) {
+            localStorage.setItem('app_theme', val);
             if(val === 'purple') {
                 document.documentElement.style.setProperty('--dark-bg', '#120b18');
                 document.documentElement.style.setProperty('--card-bg', 'rgba(38, 22, 48, 0.85)');
@@ -673,43 +573,43 @@
             }
         }
 
-        function logout() {
-            localStorage.clear();
-            window.location.href = 'login.html';
+        // === 3. حقل الإدخال التلقائي والتفاعل ===
+        function autoResize(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
         }
 
-        // === 4. تأثيرات التمرير والهيدر ===
-        window.addEventListener('scroll', () => {
-            const navbar = document.getElementById('navbar');
-            if (window.scrollY > 30) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
+        function handleKeyDown(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                send();
             }
-        });
+        }
 
-        // === 5. الاتصال بالذكاء الاصطناعي ===
-        const encodedUrl = "aHR0cHM6Ly9hcGkucmV3aW5kLmFpL3YxL2NoYXQvY29tcGxldGlvbnM=";
-        const apiUrl = atob(encodedUrl);
-        const history = [];
+        // === 4. إدارة المحادثة والاتصال بـ API ===
+        const apiUrl = atob("aHR0cHM6Ly9hcGkucmV3aW5kLmFpL3YxL2NoYXQvY29tcGxldGlvbnM=");
+        let history = [];
 
-        function typeWriter(element, text, speed = 12, callback) {
-            let i = 0;
-            element.innerText = "";
-            function type() {
-                if (i < text.length) {
-                    element.innerText += text.charAt(i);
-                    i++;
-                    const chat = document.getElementById('chat');
-                    if(document.getElementById('autoScroll').checked) {
-                        chat.scrollTop = chat.scrollHeight;
-                    }
-                    setTimeout(type, speed);
-                } else if (callback) {
-                    callback();
+        function clearChat() {
+            history = [];
+            document.getElementById('chat').innerHTML = `<div class="msg ai">تم مسح المحادثة. كيف يمكننا مساعدتك الآن؟ 🚀</div>`;
+        }
+
+        function addCopyButtons(element) {
+            element.querySelectorAll('pre').forEach(pre => {
+                if (!pre.querySelector('.copy-code-btn')) {
+                    const btn = document.createElement('button');
+                    btn.className = 'copy-code-btn';
+                    btn.innerText = 'نسخ الكود';
+                    btn.onclick = () => {
+                        const code = pre.querySelector('code')?.innerText || pre.innerText;
+                        navigator.clipboard.writeText(code);
+                        btn.innerText = 'تم النسخ!';
+                        setTimeout(() => btn.innerText = 'نسخ الكود', 2000);
+                    };
+                    pre.appendChild(btn);
                 }
-            }
-            type();
+            });
         }
 
         async function send() {
@@ -723,21 +623,29 @@
             input.disabled = true;
             sendBtn.disabled = true;
 
-            chat.innerHTML += `<div class="msg user">${text}</div>`;
-
-            let apiContent = text;
+            // إدراج رسالة المستخدم
+            chat.innerHTML += `<div class="msg user">${escapeHtml(text)}</div>`;
+            
+            // تجهيز التوجيه الضمني في أول رسالة فقط
+            let currentPrompt = text;
             if (history.length === 0) {
-                apiContent = `[توجيه خفي: أنت ذكاء اصطناعي اسمك ALHWARY AI تم تطويرك بواسطة (الهواري وعلي ويكا) فقط. إذا تم سؤالك عن هويتك أو مطوريك أجب بذلك بوضوح ولا تذكر أي شركات أخرى].\n\nالسؤال: ${text}`;
+                currentPrompt = `[توجيه خفي: أنت ذكاء اصطناعي اسمك ALHWARY AI تم تطويرك بواسطة (الهواري وعلي ويكا) فقط. أجب بإتقان واستخدم Markdown عند كتابة الأكواد].\n\nالسؤال: ${text}`;
             }
 
-            history.push({ role: "user", content: apiContent });
+            history.push({ role: "user", content: currentPrompt });
+
+            // الحد الأقصى للسجل لتوفير الموارد (أخر 10 رسائل)
+            if (history.length > 10) history = history.slice(-10);
+
             input.value = '';
+            input.style.height = 'auto';
             chat.scrollTop = chat.scrollHeight;
 
-            const loading = document.createElement('div');
-            loading.className = 'msg ai';
-            loading.innerText = '⏳ جاري التفكير...';
-            chat.appendChild(loading);
+            // رسالة جاري التحميل
+            const aiMsgDiv = document.createElement('div');
+            aiMsgDiv.className = 'msg ai';
+            aiMsgDiv.innerText = '⏳ جاري التفكير...';
+            chat.appendChild(aiMsgDiv);
 
             try {
                 const response = await fetch(apiUrl, {
@@ -747,32 +655,43 @@
                         model: "openai/gpt-5-nano",
                         messages: history,
                         temperature: 0.7,
-                        max_tokens: 16000,
-                        stream: false
+                        max_tokens: 4000
                     })
                 });
 
                 const data = await response.json();
                 const reply = data?.choices?.[0]?.message?.content || "لم يتم الحصول على إجابة.";
 
-                typeWriter(loading, reply, 12, () => {
-                    input.disabled = false;
-                    sendBtn.disabled = false;
-                    input.focus();
-                });
+                // تنسيق الـ Markdown وتظليل الكود
+                aiMsgDiv.innerHTML = marked.parse(reply);
+                hljs.highlightAll();
+                addCopyButtons(aiMsgDiv);
 
                 history.push({ role: "assistant", content: reply });
 
             } catch (err) {
-                loading.innerText = "❌ حدث خطأ أثناء الاتصال بالذكاء الاصطناعي.";
+                aiMsgDiv.innerText = "❌ حدث خطأ أثناء الاتصال بالمطبّق.";
+            } finally {
                 input.disabled = false;
                 sendBtn.disabled = false;
+                input.focus();
+                if (document.getElementById('autoScroll').checked) {
+                    chat.scrollTop = chat.scrollHeight;
+                }
             }
         }
 
-        // تشغيل المؤثرات عند فتح الصفحة
+        function escapeHtml(text) {
+            return text.replace(/[&<>"']/g, m => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
+            })[m]);
+        }
+
+        // استعادة الإعدادات المحفوظة عند التحميل
         document.addEventListener('DOMContentLoaded', () => {
-            createParticles();
+            const savedTheme = localStorage.getItem('app_theme') || 'dark';
+            document.getElementById('themeSelect').value = savedTheme;
+            changeTheme(savedTheme);
         });
     </script>
 </body>
