@@ -3,258 +3,777 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>𝑺𝑳𝑬𝑵𝑫𝑬𝑶 𝑺𝑻𝑶𝑹𝑬™ | المنصة المعتمدة للشحن الفوري</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>✧ 𝑨𝑳𝑯𝑾𝑨𝑹𝒀 𝑨𝒊 ✧</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap');
-        body { font-family: 'Cairo', sans-serif; background-color: #03050a; overflow-x: hidden; }
-        
-        .neon-purple { text-shadow: 0 0 12px rgba(168, 85, 247, 0.7), 0 0 25px rgba(168, 85, 247, 0.4); }
-        
-        #bg-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
-        
-        .premium-card { 
-            background: linear-gradient(135deg, rgba(15, 12, 30, 0.8) 0%, rgba(7, 5, 15, 0.9) 100%);
-            border: 1px solid rgba(168, 85, 247, 0.15);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-        }
-        .premium-card:hover { 
-            transform: translateY(-5px); 
-            border-color: rgba(234, 179, 8, 0.5);
-            box-shadow: 0 15px 35px rgba(234, 179, 8, 0.15);
+        /* ═══════════════════════════════════════════
+           🌟 Sonic Dynamic Visual Tokens & Variables
+           ═══════════════════════════════════════════ */
+        :root {
+            --sonic-blue: #00d4ff;
+            --sonic-dark-blue: #0099cc;
+            --royal-gold: #ffd700;
+            --dark-bg: #0a0e17;
+            --card-bg: rgba(15, 23, 42, 0.85);
+            --accent: #7269e3;
+            --accent-glow: rgba(114, 105, 227, 0.4);
+            --shadow-glow: 0 0 30px rgba(0, 212, 255, 0.4);
+            --shadow-gold: 0 0 30px rgba(255, 215, 0, 0.4);
+            --gradient-main: linear-gradient(135deg, #00d4ff 0%, #0099cc 50%, #7269e3 100%);
+            --gradient-gold: linear-gradient(135deg, #ffd700 0%, #ffaa00 50%, #ffd700 100%);
+            --text-color: #c5c6c7;
         }
 
-        @keyframes thunder-ambient { 0%, 95%, 98%, 100% { background-color: transparent; } 96% { background-color: rgba(168, 85, 247, 0.03); } 97% { background-color: rgba(255, 255, 255, 0.05); } }
-        .thunder-layer { position: fixed; inset: 0; z-index: -2; pointer-events: none; animation: thunder-ambient 8s infinite; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        html, body {
+            height: 100%;
+            background-color: var(--dark-bg);
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* ═══════════════════════════════════════════
+           🌟 Dynamic Particles Background Effect
+           ═══════════════════════════════════════════ */
+        .particles-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background: var(--sonic-blue);
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: float-particle 15s infinite ease-in-out;
+            box-shadow: 0 0 10px var(--sonic-blue);
+        }
+
+        .particle.gold {
+            background: var(--royal-gold);
+            box-shadow: 0 0 10px var(--royal-gold);
+            animation-duration: 18s;
+        }
+
+        @keyframes float-particle {
+            0%, 100% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.7; }
+            90% { opacity: 0.7; }
+            100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
+        }
+
+        /* ═══════════════════════════════════════════
+           📍 Glassmorphic Header & Glow Button
+           ═══════════════════════════════════════════ */
+        header {
+            width: 100%;
+            padding: 14px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 14, 23, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+
+        header.scrolled {
+            box-shadow: 0 5px 30px rgba(0, 212, 255, 0.2);
+            background: rgba(10, 14, 23, 0.95);
+        }
+
+        header h1 {
+            font-size: 1.3rem;
+            font-family: 'Orbitron', 'Cairo', sans-serif;
+            background: var(--gradient-main);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+            letter-spacing: 1px;
+            animation: pulse-title 3s infinite;
+        }
+
+        @keyframes pulse-title {
+            0%, 100% { filter: drop-shadow(0 0 2px rgba(0,212,255,0.2)); }
+            50% { filter: drop-shadow(0 0 10px rgba(0,212,255,0.6)); }
+        }
+
+        .dots-btn {
+            background: transparent;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            color: var(--sonic-blue);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 4px 12px;
+            line-height: 1;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.1);
+        }
+
+        .dots-btn:hover {
+            color: #fff;
+            background: var(--gradient-main);
+            border-color: transparent;
+            box-shadow: var(--shadow-glow);
+            transform: scale(1.05) rotate(90deg);
+        }
+
+        /* ═══════════════════════════════════════════
+           📱 Sidebar Interactive Slide
+           ═══════════════════════════════════════════ */
+        .sidebar-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            display: none;
+            z-index: 90;
+            transition: opacity 0.3s ease;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 280px;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(25px);
+            border-left: 1px solid rgba(0, 212, 255, 0.2);
+            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.8);
+            z-index: 100;
+            transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            padding: 25px 20px;
+        }
+
+        .sidebar.active {
+            right: 0;
+        }
+
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+            margin-bottom: 20px;
+        }
+
+        .sidebar-header h3 {
+            font-size: 1.1rem;
+            color: var(--sonic-blue);
+            font-weight: 700;
+        }
+
+        .sidebar-close {
+            background: transparent;
+            border: none;
+            color: #ef4444;
+            font-size: 1.4rem;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .sidebar-close:hover {
+            transform: scale(1.2) rotate(90deg);
+        }
+
+        .sidebar-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .menu-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(0, 212, 255, 0.15);
+            color: #fff;
+            padding: 14px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .menu-item::before {
+            content: '';
+            position: absolute;
+            top: 0; right: 0;
+            width: 3px; height: 100%;
+            background: var(--gradient-main);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .menu-item:hover {
+            background: rgba(0, 212, 255, 0.1);
+            border-color: var(--sonic-blue);
+            transform: translateX(-5px);
+            box-shadow: 0 5px 20px rgba(0, 212, 255, 0.2);
+        }
+
+        .menu-item:hover::before {
+            transform: scaleY(1);
+        }
+
+        /* ═══════════════════════════════════════════
+           💬 Main Chat & Message Interactions
+           ═══════════════════════════════════════════ */
+        .main-container {
+            width: 100%;
+            max-width: 900px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 16px;
+            gap: 12px;
+            height: calc(100vh - 65px);
+            z-index: 5;
+        }
+
+        .chat-container {
+            flex: 1;
+            background: var(--card-bg);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 20px;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(12px);
+            transition: border-color 0.3s ease;
+        }
+
+        .chat-container:hover {
+            border-color: rgba(0, 212, 255, 0.4);
+        }
+
+        .msg {
+            padding: 12px 18px;
+            border-radius: 16px;
+            max-width: 85%;
+            line-height: 1.6;
+            font-size: 0.95rem;
+            word-break: break-word;
+            white-space: pre-wrap;
+            animation: fadeInUp 0.4s ease forwards;
+            position: relative;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .user {
+            background: var(--gradient-main);
+            color: #0a0e17;
+            font-weight: 600;
+            align-self: flex-end;
+            border-bottom-left-radius: 3px;
+            box-shadow: var(--shadow-glow);
+        }
+
+        .ai {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            color: var(--text-color);
+            align-self: flex-start;
+            border-bottom-right-radius: 3px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* ═══════════════════════════════════════════
+           🎛️ Input Controls & Glowing Action Buttons
+           ═══════════════════════════════════════════ */
+        .input-area {
+            display: flex;
+            gap: 10px;
+            background: var(--card-bg);
+            padding: 8px 12px;
+            border-radius: 16px;
+            border: 1px solid rgba(0, 212, 255, 0.25);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .input-area:focus-within {
+            border-color: var(--sonic-blue);
+            box-shadow: var(--shadow-glow);
+        }
+
+        input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: #fff;
+            padding: 10px;
+            font-size: 1rem;
+        }
+
+        button#sendBtn {
+            background: var(--gradient-main);
+            color: #0a0e17;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            box-shadow: var(--shadow-glow);
+        }
+
+        button#sendBtn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 25px rgba(0, 212, 255, 0.8);
+        }
+
+        footer {
+            padding: 8px;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.5);
+            text-align: center;
+            letter-spacing: 1px;
+        }
+
+        /* ═══════════════════════════════════════════
+           ✨ Royal Modals & Popups
+           ═══════════════════════════════════════════ */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 120;
+        }
+
+        .modal-content {
+            background: rgba(15, 23, 42, 0.95);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 20px;
+            width: 90%;
+            max-width: 440px;
+            padding: 24px;
+            position: relative;
+            box-shadow: var(--shadow-gold);
+            color: #fff;
+            animation: zoomIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes zoomIn {
+            from { opacity: 0; transform: scale(0.85); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+            padding-bottom: 12px;
+            margin-bottom: 18px;
+        }
+
+        .modal-header h2 {
+            font-size: 1.15rem;
+            color: var(--royal-gold);
+            font-weight: 700;
+        }
+
+        .close-btn {
+            background: transparent;
+            border: none;
+            color: #ef4444;
+            font-size: 1.3rem;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.2s ease;
+        }
+
+        .close-btn:hover {
+            transform: scale(1.2) rotate(90deg);
+        }
+
+        .modal-body { font-size: 0.95rem; line-height: 1.6; }
+        .modal-section { display: none; }
+        .modal-section.active { display: block; }
+
+        .profile-info { display: flex; align-items: center; gap: 14px; margin-bottom: 15px; }
+        .profile-info img {
+            width: 52px; height: 52px;
+            border-radius: 50%;
+            border: 2px solid var(--royal-gold);
+            box-shadow: var(--shadow-gold);
+        }
+
+        .contact-box {
+            background: rgba(255, 255, 255, 0.04);
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            margin-top: 12px;
+        }
+
+        .contact-box a {
+            color: var(--sonic-blue);
+            text-decoration: none;
+            word-break: break-all;
+            font-weight: bold;
+        }
+
+        .theme-select {
+            width: 100%;
+            padding: 10px;
+            background: #0a0e17;
+            color: #fff;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 10px;
+            margin-top: 10px;
+            outline: none;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: #fff;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 18px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .btn-danger:hover {
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.5);
+            transform: translateY(-2px);
+        }
+
+        /* Scrollbar Visuals */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--dark-bg); }
+        ::-webkit-scrollbar-thumb { background: var(--sonic-dark-blue); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--sonic-blue); }
+
+        @media (min-width: 768px) {
+            header { padding: 16px 40px; }
+            header h1 { font-size: 1.5rem; }
+            .main-container { padding: 20px; gap: 15px; }
+        }
     </style>
 </head>
-<body class="text-gray-200 min-h-screen flex flex-col justify-between">
+<body>
 
-    <div class="thunder-layer"></div>
-    <canvas id="bg-canvas"></canvas>
+    <!-- 🌟 Dynamic Particles Background -->
+    <div class="particles-container" id="particles"></div>
 
-    <header class="border-b border-purple-950/40 bg-gray-950/80 backdrop-blur-md sticky top-0 z-40">
-        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
-            <h1 class="text-xl md:text-2xl font-black text-purple-500 italic tracking-wider neon-purple">𝑺𝑳𝑬𝑵𝑫𝑬𝑶 𝑺𝑻𝑶𝑹𝑬™</h1>
-            <button onclick="openAdminModal()" class="bg-purple-900/30 hover:bg-purple-800/50 border border-purple-500/30 text-purple-300 text-xs px-3 py-1.5 rounded-xl transition flex items-center gap-1">
-                <i class="fas fa-user-shield"></i> لوحة الأدمن
-            </button>
-        </div>
+    <!-- الهيدر مع زر الثلاث نقط -->
+    <header id="navbar">
+        <h1>✧ 𝑨𝑳𝑯𝑾𝑨𝑹𝒀 𝑨𝒊 ✧</h1>
+        <button class="dots-btn" onclick="toggleSidebar()">⋮</button>
     </header>
 
-    <section class="container mx-auto px-4 py-8 text-center max-w-4xl">
-        <span class="bg-yellow-950/50 text-yellow-500 border border-yellow-600/30 text-[9px] font-bold px-4 py-1 rounded-full uppercase tracking-widest">AUTOMATED TELECOM CHECKOUT</span>
-        <h2 class="text-2xl md:text-4xl font-black mt-3 mb-2 tracking-tight text-white shadow-sm">إمبراطورية الشحن الرسمي المعتمد</h2>
-        <p class="text-gray-400 text-xs max-w-md mx-auto">اختر اللعبة والباكج، سيتم توليد الفاتورة فورياً وتحويلك لخط الدفع المباشر.</p>
-    </section>
+    <!-- خلفية تغطية عند فتح القائمة -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
 
-    <main id="productsContainer" class="container mx-auto px-4 py-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl">
-        </main>
-
-    <div id="adminModal" class="fixed inset-0 bg-black/85 backdrop-blur-md hidden flex items-center justify-center z-50 p-4">
-        <div class="bg-gray-950 border border-purple-900/50 rounded-2xl max-w-lg w-full p-6 space-y-4 max-h-[90vh] overflow-y-auto shadow-2xl">
-            <div class="flex justify-between items-center border-b border-gray-900 pb-2">
-                <h3 class="text-sm font-black text-white flex items-center gap-2"><i class="fas fa-lock text-purple-500"></i> غرفة التحكم بالأسعار والمنتجات</h3>
-                <button onclick="closeAdminModal()" class="text-gray-500 hover:text-white text-xl">&times;</button>
+    <!-- القائمة الجانبية المنزلقة من اليمين -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3>خيارات التطبيق</h3>
+            <button class="sidebar-close" onclick="closeSidebar()">✕</button>
+        </div>
+        <div class="sidebar-menu">
+            <div class="menu-item" onclick="openSection('settings')">
+                <span>⚙️</span> قسم الإعدادات
             </div>
-            
-            <div class="space-y-3 bg-gray-900/40 p-3 rounded-xl border border-gray-950">
-                <h4 class="text-xs font-bold text-purple-400"><i class="fas fa-plus-circle"></i> إضافة باقة أو تعديل سعر منتج</h4>
-                <div class="grid grid-cols-2 gap-2">
-                    <input id="adminGameName" type="text" placeholder="اسم اللعبة (مثال: ببجي موبايل)" class="bg-black border border-gray-800 p-2 rounded text-xs text-white focus:border-purple-500 outline-none">
-                    <input id="adminPackage" type="text" placeholder="الباقة (مثال: 660 شدة UC)" class="bg-black border border-gray-800 p-2 rounded text-xs text-white focus:border-purple-500 outline-none">
-                    <input id="adminPrice" type="text" placeholder="السعر (مثال: 430 جنيه)" class="bg-black border border-gray-800 p-2 rounded text-xs text-white focus:border-purple-500 outline-none">
-                    <input id="adminWallet" type="text" placeholder="رقم كاش المستلم" value="01556853817" class="bg-black border border-gray-800 p-2 rounded text-xs text-white focus:border-purple-500 outline-none">
-                </div>
-                <button onclick="addNewProduct()" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 rounded text-xs transition">إدراج وتحديث المتجر فوراً</button>
+            <div class="menu-item" onclick="openSection('account')">
+                <span>👤</span> قسم الحساب
             </div>
-
-            <div class="space-y-2">
-                <h4 class="text-xs font-bold text-yellow-500"><i class="fas fa-list"></i> جميع المنتجات المتاحة حالياً (اضغط لحذف المنتجات القديمة):</h4>
-                <div id="adminItemsList" class="space-y-1 max-h-44 overflow-y-auto text-[11px]">
-                    </div>
+            <div class="menu-item" onclick="openSection('contact')">
+                <span>💬</span> التواصل مع المطور
             </div>
-            <p class="text-[10px] text-gray-500 text-center">تُحفظ كافة التغيرات تلقائياً داخل المتصفح.</p>
         </div>
     </div>
 
-    <footer class="border-t border-purple-950/30 bg-gray-950 text-center py-4 text-[10px] text-gray-600">
-        <p>© 2026 جميع الحقوق محفوظة لـ <span class="text-purple-500 font-bold">𝑺𝑳𝑬𝑵𝑫𝑬𝑶 𝑺𝑻𝑶𝑹Ｅ™</span></p>
-    </footer>
+    <!-- حاوية الشات الرئيسية -->
+    <div class="main-container">
+        <div class="chat-container" id="chat">
+            <div class="msg ai">مرحباً بك في <b>𝑨𝑳𝑯𝑾𝑨𝑹𝒀 𝑨𝒊</b>! أنا نموذج ذكاء اصطناعي تم تطويري بواسطة <b>الهواري وعلي ويكا</b>. كيف يمكننا مساعدتك اليوم؟ 🚀</div>
+        </div>
+
+        <div class="input-area">
+            <input type="text" id="prompt" placeholder="اكتب سؤالك هنا..." onkeydown="if(event.key==='Enter') send()">
+            <button id="sendBtn" onclick="send()">إرسال</button>
+        </div>
+
+        <footer>⚜️ Developed By El-Hawary & Ali Weka ⚜️</footer>
+    </div>
+
+    <!-- النافذة المنبثقة للتفاصيل -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">العنوان</h2>
+                <button class="close-btn" onclick="closeModal()">✕</button>
+            </div>
+
+            <div class="modal-body">
+                <!-- قسم الإعدادات -->
+                <div class="modal-section" id="sec-settings">
+                    <label>اختر مظهر المحادثة:</label>
+                    <select class="theme-select" onchange="changeTheme(this.value)">
+                        <option value="dark">الوضع الليلي (الافتراضي)</option>
+                        <option value="purple">الوضع البنفسجي الدافئ</option>
+                        <option value="blue">الوضع الأزرق المظلم</option>
+                    </select>
+                    <div style="margin-top: 15px;">
+                        <label><input type="checkbox" id="autoScroll" checked> التمرير التلقائي أثناء الكتابة</label>
+                    </div>
+                </div>
+
+                <!-- قسم الحساب -->
+                <div class="modal-section" id="sec-account">
+                    <div class="profile-info">
+                        <img id="modalUserImg" src="https://via.placeholder.com/48" alt="user">
+                        <div>
+                            <h3 id="modalUserName">زائر</h3>
+                            <span style="font-size:0.75rem; color:#a08b7a;" id="modalUserMail">غير مسجّل</span>
+                        </div>
+                    </div>
+                    <button class="btn-danger" onclick="logout()">تسجيل الخروج</button>
+                </div>
+
+                <!-- قسم التواصل مع المطور -->
+                <div class="modal-section" id="sec-contact">
+                    <p>يمكنك التواصل المباشر مع المطورين للحصول على الدعم الفني أو لتقديم المقترحات:</p>
+                    <div class="contact-box">
+                        <b>👨‍💻 المطورون:</b> الهواري وعلي ويكا<br>
+                        <b>📬 البريد الإلكتروني:</b><br>
+                        <a href="mailto:alhwary@gmail.com?subject=تواصل مع مطوري ALHWARY AI">your-email@gmail.com</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
-        // 💾 بنك معلومات المنتجات الافتراضية المأخوذة من كودك الأصلي
-        const defaultProducts = [
-            // ببجي
-            { id: 1, game: 'ببجي (PUBG Mobile)', package: '60 شدة UC', price: '50 جنيه', wallet: '01556853817' },
-            { id: 2, game: 'ببجي (PUBG Mobile)', package: '325 شدة UC', price: '220 جنيه', wallet: '01556853817' },
-            { id: 3, game: 'ببجي (PUBG Mobile)', package: '660 شدة UC', price: '430 جنيه', wallet: '01556853817' },
-            { id: 4, game: 'ببجي (PUBG Mobile)', package: '1800 شدة UC', price: '1150 جنيه', wallet: '01556853817' },
-            // فري فاير
-            { id: 5, game: 'فري فاير (Free Fire)', package: '100 جوهرة', price: '45 جنيه', wallet: '01556853817' },
-            { id: 6, game: 'فري فاير (Free Fire)', package: '210 جوهرة', price: '90 جنيه', wallet: '01556853817' },
-            { id: 7, game: 'فري فاير (Free Fire)', package: '530 جوهرة', price: '210 جنيه', wallet: '01556853817' },
-            { id: 8, game: 'فري فاير (Free Fire)', package: '1080 جوهرة', price: '410 جنيه', wallet: '01556853817' },
-            // فيفا
-            { id: 9, game: 'فيفا موبايل (EA FC)', package: '500 نقطة FC', price: '120 جنيه', wallet: '01556853817' },
-            { id: 10, game: 'فيفا موبايل (EA FC)', package: '1050 نقطة FC', price: '240 جنيه', wallet: '01556853817' },
-            { id: 11, game: 'فيفا موبايل (EA FC)', package: '2800 نقطة FC', price: '580 جنيه', wallet: '01556853817' },
-            { id: 12, game: 'فيفا موبايل (EA FC)', package: '5750 نقطة FC', price: '1100 جنيه', wallet: '01556853817' },
-            // بلود سترايك
-            { id: 13, game: 'بلود سترايك (Blood Strike)', package: '100 جولد', price: '60 جنيه', wallet: '01556853817' },
-            { id: 14, game: 'بلود سترايك (Blood Strike)', package: '500 جولد', price: '280 جنيه', wallet: '01556853817' },
-            { id: 15, game: 'بلود سترايك (Blood Strike)', package: '1000 جولد', price: '540 جنيه', wallet: '01556853817' },
-            // روبلوكس
-            { id: 16, game: 'روبلوكس (Roblox)', package: '400 Robux', price: '150 جنيه', wallet: '01556853817' },
-            { id: 17, game: 'روبلوكس (Roblox)', package: '800 Robux', price: '290 جنيه', wallet: '01556853817' },
-            { id: 18, game: 'روبلوكس (Roblox)', package: '1700 Robux', price: '590 جنيه', wallet: '01556853817' },
-            // كود
-            { id: 19, game: 'كول اوف ديوتي (COD)', package: '80 نقطة CP', price: '40 جنيه', wallet: '01556853817' },
-            { id: 20, game: 'كول اوف ديوتي (COD)', package: '420 نقطة CP', price: '190 جنيه', wallet: '01556853817' },
-            { id: 21, game: 'كول اوف ديوتي (COD)', package: '880 نقطة CP', price: '370 جنيه', wallet: '01556853817' }
-        ];
+        // === 1. إنشاء الجسيمات المتحركة (Sonic Particle System) ===
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const particleCount = 45;
 
-        // قراءة البيانات المحفوظة محلياً أو إرجاع القائمة الافتراضية
-        let currentProducts = JSON.parse(localStorage.getItem('slendeo_master_products')) || defaultProducts;
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = `particle${Math.random() > 0.65 ? ' gold' : ''}`;
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                container.appendChild(particle);
+            }
+        }
 
-        // دالة عرض المنتجات بواجهة العميل
-        function renderStoreFront() {
-            const container = document.getElementById('productsContainer');
-            container.innerHTML = '';
+        // === 2. التحكم بالقائمة الجانبية (Sidebar) ===
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.add('active');
+            document.getElementById('sidebarOverlay').style.display = 'block';
+        }
 
-            // تجميع الباقات تبعاً لكل لعبة
-            const groups = {};
-            currentProducts.forEach(p => {
-                if (!groups[p.game]) groups[p.game] = [];
-                groups[p.game].push(p);
-            });
+        function closeSidebar() {
+            document.getElementById('sidebar').classList.remove('active');
+            document.getElementById('sidebarOverlay').style.display = 'none';
+        }
 
-            // توليد كروت النيون الفخمة لكل لعبة ديناميكياً
-            for (const gameName in groups) {
-                // تحديد لون الأيقونة الافتراضي المناسب لكل لعبة
-                let iconColor = "text-yellow-500";
-                if(gameName.includes("فري فاير")) iconColor = "text-red-500";
-                if(gameName.includes("فيفا")) iconColor = "text-green-500";
-                if(gameName.includes("بلود")) iconColor = "text-orange-500";
-                if(gameName.includes("روبلوكس")) iconColor = "text-cyan-400";
-                if(gameName.includes("كول")) iconColor = "text-gray-400";
+        function openSection(section) {
+            closeSidebar();
+            openModal(section);
+        }
 
-                let cardHtml = `
-                    <div class="premium-card rounded-2xl p-5 flex flex-col justify-between">
-                        <div>
-                            <h4 class="text-base font-black text-white mb-3 flex items-center gap-2 border-b border-gray-900 pb-2">
-                                <i class="fas fa-gamepad ${iconColor}"></i> ${gameName}
-                            </h4>
-                            <div class="space-y-2.5">
-                `;
+        // === 3. التحكم بالنافذة المنبثقة (Modal) ===
+        function openModal(section) {
+            document.getElementById('modalOverlay').style.display = 'flex';
+            document.querySelectorAll('.modal-section').forEach(s => s.classList.remove('active'));
 
-                groups[gameName].forEach(item => {
-                    cardHtml += `
-                        <button onclick="checkout('${item.game}', '${item.package}', '${item.price}', '${item.wallet}')" class="w-full bg-gray-950/60 hover:bg-purple-900/20 border border-gray-800 text-right px-3 py-2 rounded-xl text-xs flex justify-between items-center transition">
-                            <span class="font-bold text-gray-200">${item.package}</span> 
-                            <span class="text-yellow-500 font-black">${item.price}</span>
-                        </button>
-                    `;
+            const userName = localStorage.getItem('user_name') || 'زائر';
+            const userPic = localStorage.getItem('user_picture') || 'https://via.placeholder.com/48';
+
+            if(section === 'settings') {
+                document.getElementById('modalTitle').innerText = '⚙️ إعدادات التطبيق';
+                document.getElementById('sec-settings').classList.add('active');
+            } else if(section === 'account') {
+                document.getElementById('modalTitle').innerText = '👤 تفاصيل الحساب';
+                document.getElementById('sec-account').classList.add('active');
+                document.getElementById('modalUserName').innerText = userName;
+                document.getElementById('modalUserMail').innerText = userName.includes('@') ? userName : userName + '@gmail.com';
+                document.getElementById('modalUserImg').src = userPic;
+            } else if(section === 'contact') {
+                document.getElementById('modalTitle').innerText = '💬 التواصل مع المطورين';
+                document.getElementById('sec-contact').classList.add('active');
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').style.display = 'none';
+        }
+
+        function changeTheme(val) {
+            if(val === 'purple') {
+                document.documentElement.style.setProperty('--dark-bg', '#120b18');
+                document.documentElement.style.setProperty('--card-bg', 'rgba(38, 22, 48, 0.85)');
+                document.documentElement.style.setProperty('--sonic-blue', '#a855f7');
+            } else if(val === 'blue') {
+                document.documentElement.style.setProperty('--dark-bg', '#07111e');
+                document.documentElement.style.setProperty('--card-bg', 'rgba(15, 30, 52, 0.85)');
+                document.documentElement.style.setProperty('--sonic-blue', '#3b82f6');
+            } else {
+                document.documentElement.style.setProperty('--dark-bg', '#0a0e17');
+                document.documentElement.style.setProperty('--card-bg', 'rgba(15, 23, 42, 0.85)');
+                document.documentElement.style.setProperty('--sonic-blue', '#00d4ff');
+            }
+        }
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = 'login.html';
+        }
+
+        // === 4. تأثيرات التمرير والهيدر ===
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 30) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // === 5. الاتصال بالذكاء الاصطناعي ===
+        const encodedUrl = "aHR0cHM6Ly9hcGkucmV3aW5kLmFpL3YxL2NoYXQvY29tcGxldGlvbnM=";
+        const apiUrl = atob(encodedUrl);
+        const history = [];
+
+        function typeWriter(element, text, speed = 12, callback) {
+            let i = 0;
+            element.innerText = "";
+            function type() {
+                if (i < text.length) {
+                    element.innerText += text.charAt(i);
+                    i++;
+                    const chat = document.getElementById('chat');
+                    if(document.getElementById('autoScroll').checked) {
+                        chat.scrollTop = chat.scrollHeight;
+                    }
+                    setTimeout(type, speed);
+                } else if (callback) {
+                    callback();
+                }
+            }
+            type();
+        }
+
+        async function send() {
+            const input = document.getElementById('prompt');
+            const sendBtn = document.getElementById('sendBtn');
+            const chat = document.getElementById('chat');
+            const text = input.value.trim();
+
+            if (!text) return;
+
+            input.disabled = true;
+            sendBtn.disabled = true;
+
+            chat.innerHTML += `<div class="msg user">${text}</div>`;
+
+            let apiContent = text;
+            if (history.length === 0) {
+                apiContent = `[توجيه خفي: أنت ذكاء اصطناعي اسمك ALHWARY AI تم تطويرك بواسطة (الهواري وعلي ويكا) فقط. إذا تم سؤالك عن هويتك أو مطوريك أجب بذلك بوضوح ولا تذكر أي شركات أخرى].\n\nالسؤال: ${text}`;
+            }
+
+            history.push({ role: "user", content: apiContent });
+            input.value = '';
+            chat.scrollTop = chat.scrollHeight;
+
+            const loading = document.createElement('div');
+            loading.className = 'msg ai';
+            loading.innerText = '⏳ جاري التفكير...';
+            chat.appendChild(loading);
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        model: "openai/gpt-5-nano",
+                        messages: history,
+                        temperature: 0.7,
+                        max_tokens: 16000,
+                        stream: false
+                    })
                 });
 
-                cardHtml += `</div></div></div>`;
-                container.innerHTML += cardHtml;
+                const data = await response.json();
+                const reply = data?.choices?.[0]?.message?.content || "لم يتم الحصول على إجابة.";
+
+                typeWriter(loading, reply, 12, () => {
+                    input.disabled = false;
+                    sendBtn.disabled = false;
+                    input.focus();
+                });
+
+                history.push({ role: "assistant", content: reply });
+
+            } catch (err) {
+                loading.innerText = "❌ حدث خطأ أثناء الاتصال بالذكاء الاصطناعي.";
+                input.disabled = false;
+                sendBtn.disabled = false;
             }
         }
 
-        // دالة تحديث قائمة لوحة تحكم الأدمن للتحكم بالحذف
-        function renderAdminList() {
-            const listContainer = document.getElementById('adminItemsList');
-            listContainer.innerHTML = '';
-            currentProducts.forEach(p => {
-                listContainer.innerHTML += `
-                    <div class="flex justify-between items-center bg-gray-900 p-2 rounded mb-1 border border-gray-800">
-                        <span>[${p.game}] ➔ ${p.package} (${p.price})</span>
-                        <button onclick="deleteProduct(${p.id})" class="text-red-500 hover:text-red-400 font-bold bg-red-950/40 px-2 py-0.5 rounded transition">حذف</button>
-                    </div>
-                `;
-            });
-        }
-
-        // دالة التحقق وفتح نافذة الأدمن بكلمة مرور مستحيل تخمينها
-        function openAdminModal() {
-            const password = prompt("الرجاء إدخال رمز التحقق السري لغرفة الأدمن:");
-            // كلمة المرور المعقدة والآمنة الجديدة
-            if (password === "SlEnDeO_StOrE#2026!@Master") { 
-                document.getElementById('adminModal').classList.remove('hidden');
-                renderAdminList();
-            } else if (password !== null) {
-                alert("رمز التحكم خاطئ! محاولة دخول غير مصرح بها.");
-            }
-        }
-
-        function closeAdminModal() {
-            document.getElementById('adminModal').classList.add('hidden');
-        }
-
-        // إضافة منتج جديد أو تغيير أسعار
-        function addNewProduct() {
-            const game = document.getElementById('adminGameName').value.trim();
-            const packageText = document.getElementById('adminPackage').value.trim();
-            const price = document.getElementById('adminPrice').value.trim();
-            const wallet = document.getElementById('adminWallet').value.trim();
-
-            if (!game || !packageText || !price || !wallet) {
-                return alert("الرجاء ملء كل الخانات!");
-            }
-
-            const newProd = { id: Date.now(), game: game, package: packageText, price: price, wallet: wallet };
-            currentProducts.push(newProd);
-            saveDataToLocalStorage();
-            
-            document.getElementById('adminGameName').value = '';
-            document.getElementById('adminPackage').value = '';
-            document.getElementById('adminPrice').value = '';
-        }
-
-        // حذف باقة
-        function deleteProduct(id) {
-            if (confirm("هل تود إزالة هذه الباقة نهائياً؟")) {
-                currentProducts = currentProducts.filter(p => p.id !== id);
-                saveDataToLocalStorage();
-            }
-        }
-
-        // حفظ البيانات دائمياً وتحديث المتجر فوراً
-        function saveDataToLocalStorage() {
-            localStorage.setItem('slendeo_master_products', JSON.stringify(currentProducts));
-            renderStoreFront();
-            renderAdminList();
-        }
-
-        // نظام إرسال البيانات المباشر للواتساب للزبائن عند الشراء
-        function checkout(game, package, price, walletNumber) {
-            const playerID = prompt(`يا بطل اكتب الـ ID الخاص بك للعبة ${game}:`);
-            if(!playerID) return alert("إلغاء العملية. الـ ID مطلوب لإتمام الشحن المعتمد!");
-
-            const message = `🚨 *طلب شحن جديد معتمد من الستور* 🚨\n\n` +
-                            `🎮 *اللعبة:* ${game}\n` +
-                            `📦 *الباكج المطلوبة:* ${package}\n` +
-                            `🆔 *حساب اللاعب (ID):* ${playerID}\n\n` +
-                            `💵 *المبلغ المطلوب تحويله:* ${price}\n` +
-                            `📌 *رقم محفظة الكاش للتحويل:* ${walletNumber}\n\n` +
-                            `⚠️ _برجاء إرسال صورة لقطة شاشة (اسكرين) لإثبات التحويل فوراً ليتم تأكيد الشحن الفوري خلال دقيقتين._`;
-
-            window.open(`https://wa.me/201556853817?text=${encodeURIComponent(message)}`, '_blank');
-        }
-
-        // بناء المتجر والبدء فوراً
-        renderStoreFront();
-
-        // تأثير مطر النيون
-        const canvas = document.getElementById('bg-canvas'); const ctx = canvas.getContext('2d'); let particles = [];
-        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-        window.addEventListener('resize', resizeCanvas); resizeCanvas();
-        class Particle { constructor() { this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height; this.size = Math.random() * 2 + 0.5; this.speedY = Math.random() * 0.8 + 0.2; this.opacity = Math.random() * 0.3; } update() { this.y += this.speedY; if (this.y > canvas.height) { this.y = 0; this.x = Math.random() * canvas.width; } } draw() { ctx.fillStyle = `rgba(168, 85, 247, ${this.opacity})`; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill(); } }
-        for (let i = 0; i < 50; i++) { particles.push(new Particle()); }
-        function animate() { ctx.clearRect(0, 0, canvas.width, canvas.height); particles.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(animate); } if(ctx) animate();
+        // تشغيل المؤثرات عند فتح الصفحة
+        document.addEventListener('DOMContentLoaded', () => {
+            createParticles();
+        });
     </script>
 </body>
 </html>
