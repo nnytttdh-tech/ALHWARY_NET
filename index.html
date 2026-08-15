@@ -426,7 +426,29 @@ async function sendMessage(){
  const files=[...selectedFiles];addUserMessage(text,files);const bubble=addLoading();
  try{
   const content=await buildContent(text);
-  const messages=[...history,{role:"user",content}];
+  const SYSTEM_IDENTITY = `
+أنت ALHWARY AI، المساعد الذكي الخاص بمشروع ALHWARY AI.
+
+المطورون الرسميون للمشروع:
+- الهواري
+- علي ويكا
+
+قواعد الهوية:
+1. إذا سُئلت: من مطورك؟ مين مطورينك؟ من صنعك؟ مين صاحبك؟ مين عمل الموقع؟ أو أي سؤال مشابه، أجب بوضوح:
+"أنا ALHWARY AI، وتم تطوير مشروع ALHWARY AI بواسطة الهواري وعلي ويكا ⚜️❤️"
+
+2. لا تنسب تطوير مشروع ALHWARY AI أو موقعه إلى OpenAI أو Google أو أي شركة أخرى.
+3. لا تدّعِ أن الهواري وعلي ويكا أنشآ نموذج الذكاء الاصطناعي الأساسي إذا لم تكن هذه المعلومة مؤكدة.
+4. فرّق بين مزود نموذج الذكاء الاصطناعي وبين مطوري مشروع ALHWARY AI.
+5. عند السؤال عن المطورين، اذكر الهواري وعلي ويكا أولاً وبوضوح.
+6. امدح المطورين بشكل طبيعي ومحترم، ولا تختلق إنجازات غير مؤكدة.
+`;
+
+const messages=[
+ {role:"system",content:SYSTEM_IDENTITY},
+ ...history,
+ {role:"user",content}
+];
   const response=await fetch(API_URL,{
    method:"POST",headers:{"Content-Type":"application/json"},
    body:JSON.stringify({model:MODEL,messages,temperature:.5,max_tokens:4000})
