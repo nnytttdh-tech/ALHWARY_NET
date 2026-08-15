@@ -1,698 +1,455 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>✧ 𝑨𝑳𝑯𝑾𝑨𝑹𝒀 𝑨𝒊 ✧</title>
-    <!-- الخطوط الأيقونات -->
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- مكتبات تنسيق الكود والـ Markdown -->
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/tokyo-night-dark.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#070b12">
+<title>✧ 𝑨𝑳𝑯𝑾𝑨𝑹𝒀 𝑨𝒊 ✧</title>
 
-    <style>
-        :root {
-            --sonic-blue: #00d4ff;
-            --sonic-dark-blue: #0099cc;
-            --royal-gold: #ffd700;
-            --dark-bg: #0a0e17;
-            --card-bg: rgba(15, 23, 42, 0.85);
-            --accent: #7269e3;
-            --accent-glow: rgba(114, 105, 227, 0.4);
-            --shadow-glow: 0 0 30px rgba(0, 212, 255, 0.4);
-            --shadow-gold: 0 0 30px rgba(255, 215, 0, 0.4);
-            --gradient-main: linear-gradient(135deg, #00d4ff 0%, #0099cc 50%, #7269e3 100%);
-            --gradient-gold: linear-gradient(135deg, #ffd700 0%, #ffaa00 50%, #ffd700 100%);
-            --text-color: #e2e8f0;
-        }
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/tokyo-night-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Cairo', sans-serif;
-        }
+<style>
+:root{
+ --bg:#070b12;--panel:rgba(12,18,30,.88);--panel2:rgba(18,26,42,.92);
+ --cyan:#00d9ff;--blue:#168cff;--gold:#ffd45a;--text:#e8f0fa;
+ --muted:#8fa0b7;--border:rgba(0,217,255,.18);
+ --glow:0 0 28px rgba(0,217,255,.22);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;background:var(--bg);color:var(--text);font-family:Cairo,sans-serif}
+body{overflow:hidden}
+button,input,textarea{font:inherit}
+button{cursor:pointer}
+#particles{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+header{
+ position:fixed;top:0;left:0;right:0;height:68px;z-index:20;
+ display:flex;align-items:center;justify-content:space-between;padding:8px 18px;
+ background:rgba(7,11,18,.86);backdrop-filter:blur(18px);
+ border-bottom:1px solid var(--border)
+}
+.brand{display:flex;align-items:center;gap:10px}
+.logo{
+ width:46px;height:46px;border-radius:14px;display:grid;place-items:center;
+ background:linear-gradient(135deg,var(--cyan),var(--blue),#7655ff);
+ box-shadow:var(--glow);font-size:20px;color:#061018
+}
+.brand h1{
+ font-family:Orbitron,Cairo,sans-serif;font-size:16px;
+ background:linear-gradient(90deg,var(--cyan),#fff,var(--gold));
+ -webkit-background-clip:text;background-clip:text;color:transparent
+}
+.brand p{font-size:9px;color:var(--muted)}
+.header-actions{display:flex;gap:7px}
+.icon-btn{
+ width:42px;height:42px;border-radius:12px;background:rgba(255,255,255,.035);
+ color:var(--cyan);border:1px solid var(--border);transition:.2s
+}
+.icon-btn:hover{background:rgba(0,217,255,.12);transform:translateY(-1px)}
+.app{position:relative;z-index:5;height:100dvh;padding:78px 10px 8px}
+.chat{
+ width:min(920px,100%);height:100%;margin:auto;overflow-y:auto;
+ padding:10px 4px 165px;scroll-behavior:smooth
+}
+.chat::-webkit-scrollbar{width:5px}.chat::-webkit-scrollbar-thumb{background:#145d77;border-radius:8px}
+.welcome{text-align:center;margin:45px auto 20px;max-width:600px}
+.welcome-icon{
+ width:70px;height:70px;margin:auto;border-radius:22px;display:grid;place-items:center;
+ background:linear-gradient(135deg,rgba(0,217,255,.16),rgba(118,85,255,.18));
+ border:1px solid var(--border);box-shadow:var(--glow);font-size:28px;color:var(--cyan)
+}
+.welcome h2{font-size:23px;margin-top:12px}.welcome p{font-size:12px;color:var(--muted);margin-top:5px}
+.message{display:flex;gap:9px;align-items:flex-start;margin:12px 0;animation:up .25s ease}
+@keyframes up{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+.message.user{flex-direction:row-reverse}
+.avatar{
+ flex:0 0 36px;width:36px;height:36px;border-radius:11px;display:grid;place-items:center;
+ background:linear-gradient(135deg,#10293a,#15203b);border:1px solid var(--border);color:var(--cyan)
+}
+.user .avatar{color:#061018;background:linear-gradient(135deg,var(--cyan),var(--blue))}
+.message-body{max-width:min(82%,760px)}
+.bubble{
+ background:var(--panel);border:1px solid var(--border);border-radius:17px;
+ padding:12px 14px;line-height:1.8;font-size:13px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,.18)
+}
+.user .bubble{background:linear-gradient(135deg,#00bfe4,#1778df);color:#031019;border:0;font-weight:600}
+.bubble p{margin:4px 0}.bubble ul,.bubble ol{padding-right:20px}
+.bubble pre{
+ direction:ltr;text-align:left;background:#111522!important;border:1px solid #25324a;
+ border-radius:12px;padding:14px;margin:10px 0;overflow:auto;position:relative
+}
+.bubble code{font-family:Consolas,monospace;font-size:12px}
+.code-actions{display:flex;gap:6px;direction:ltr;position:absolute;top:7px;right:7px;z-index:2}
+.code-btn{
+ border:1px solid #34445e;background:#1a2334;color:#dce8f8;border-radius:7px;
+ padding:4px 7px;font-size:10px
+}
+.code-btn:hover{background:#00bfe4;color:#061018}
+.composer-wrap{
+ position:fixed;z-index:15;left:0;right:0;bottom:0;padding:8px 10px 10px;
+ background:linear-gradient(transparent,rgba(7,11,18,.96) 22%);pointer-events:none
+}
+.composer{
+ pointer-events:auto;width:min(920px,100%);margin:auto;background:var(--panel);
+ border:1px solid var(--border);border-radius:19px;padding:8px;backdrop-filter:blur(18px);box-shadow:var(--glow)
+}
+.preview{display:none;gap:7px;overflow-x:auto;padding:2px 2px 8px}.preview.active{display:flex}
+.preview-item{position:relative;flex:0 0 62px;width:62px;height:62px;border-radius:11px;overflow:hidden;border:1px solid var(--border);background:#101725}
+.preview-item img{width:100%;height:100%;object-fit:cover}.preview-file{height:100%;display:grid;place-items:center;color:var(--cyan);font-size:22px}
+.remove-file{
+ position:absolute;top:2px;left:2px;width:20px;height:20px;border:0;border-radius:50%;
+ background:rgba(0,0,0,.75);color:#fff;font-size:13px;line-height:20px
+}
+.input-row{display:flex;align-items:flex-end;gap:7px}
+#prompt{
+ flex:1;min-width:0;max-height:130px;min-height:45px;resize:none;outline:none;border:0;
+ background:transparent;color:#fff;padding:9px;font-size:13px;line-height:1.6
+}
+.action-btn,.send-btn{
+ width:42px;height:42px;border-radius:12px;border:1px solid var(--border);
+ background:rgba(255,255,255,.035);color:var(--cyan);display:grid;place-items:center
+}
+.send-btn{background:linear-gradient(135deg,var(--cyan),var(--blue));color:#041019;border:0}
+.action-btn:hover{background:rgba(0,217,255,.12)}.send-btn:hover{transform:translateY(-1px)}
+.action-btn input{display:none}
+.attachments{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}.attachment{max-width:180px}
+.attachment img{width:150px;max-height:130px;object-fit:cover;border-radius:10px;border:1px solid rgba(255,255,255,.1)}
+.file-box{
+ display:flex;align-items:center;gap:7px;padding:8px 10px;border-radius:10px;
+ background:rgba(0,0,0,.18);font-size:11px;direction:ltr
+}
+.file-box i{color:var(--cyan)}
+.toast{
+ position:fixed;z-index:100;left:50%;bottom:115px;transform:translate(-50%,20px);
+ opacity:0;pointer-events:none;background:#111a29;border:1px solid var(--border);
+ padding:8px 13px;border-radius:10px;font-size:11px;transition:.2s;box-shadow:var(--glow)
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.modal{
+ position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.72);backdrop-filter:blur(8px);
+ display:none;align-items:center;justify-content:center;padding:15px
+}
+.modal.show{display:flex}.modal-box{
+ width:min(900px,100%);height:min(80dvh,700px);background:#0d1420;border:1px solid var(--border);
+ border-radius:18px;overflow:hidden;display:flex;flex-direction:column
+}
+.modal-head{height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;border-bottom:1px solid var(--border)}
+.modal-head h3{font-size:14px;color:var(--cyan)}.modal-head button{background:none;border:0;color:#ff7373;font-size:20px}
+.runner{flex:1;border:0;background:#fff}
+.side{
+ position:fixed;right:-310px;top:0;bottom:0;width:290px;z-index:40;
+ background:rgba(10,16,27,.97);border-left:1px solid var(--border);padding:18px;transition:.3s
+}
+.side.show{right:0}.side h3{color:var(--cyan);margin-bottom:18px}
+.side button{width:100%;padding:12px;margin-bottom:9px;border-radius:11px;background:rgba(255,255,255,.04);border:1px solid var(--border);color:#fff;text-align:right}
+.side-overlay{position:fixed;inset:0;z-index:35;background:rgba(0,0,0,.5);display:none}.side-overlay.show{display:block}
+footer{text-align:center;color:#53647a;font-size:9px;margin-top:7px}
 
-        html, body {
-            height: 100%;
-            background-color: var(--dark-bg);
-            color: #fff;
-            overflow-x: hidden;
-            transition: background-color 0.3s ease;
-        }
-
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        /* 🌟 خلفية الجسيمات عبر Canvas للأداء العالي */
-        #particles-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        /* 📍 الهيدر والشريط العلوي */
-        header {
-            width: 100%;
-            padding: 14px 24px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(10, 14, 23, 0.85);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(0, 212, 255, 0.2);
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            transition: all 0.3s ease;
-        }
-
-        header.scrolled {
-            box-shadow: 0 5px 30px rgba(0, 212, 255, 0.2);
-            background: rgba(10, 14, 23, 0.95);
-        }
-
-        header h1 {
-            font-size: 1.3rem;
-            font-family: 'Orbitron', 'Cairo', sans-serif;
-            background: var(--gradient-main);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: 800;
-            letter-spacing: 1px;
-            animation: pulse-title 3s infinite;
-        }
-
-        @keyframes pulse-title {
-            0%, 100% { filter: drop-shadow(0 0 2px rgba(0,212,255,0.2)); }
-            50% { filter: drop-shadow(0 0 10px rgba(0,212,255,0.6)); }
-        }
-
-        .header-actions {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-
-        .icon-btn {
-            background: transparent;
-            border: 1px solid rgba(0, 212, 255, 0.3);
-            color: var(--sonic-blue);
-            font-size: 1.1rem;
-            cursor: pointer;
-            width: 38px;
-            height: 38px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 10px rgba(0, 212, 255, 0.1);
-        }
-
-        .icon-btn:hover {
-            color: #fff;
-            background: var(--gradient-main);
-            border-color: transparent;
-            box-shadow: var(--shadow-glow);
-            transform: scale(1.05);
-        }
-
-        /* 📱 القائمة الجانبية */
-        .sidebar-overlay {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100vw; height: 100vh;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(5px);
-            display: none;
-            z-index: 90;
-        }
-
-        .sidebar {
-            position: fixed;
-            top: 0;
-            right: -300px;
-            width: 280px;
-            height: 100%;
-            background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(25px);
-            border-left: 1px solid rgba(0, 212, 255, 0.2);
-            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.8);
-            z-index: 100;
-            transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            flex-direction: column;
-            padding: 25px 20px;
-        }
-
-        .sidebar.active { right: 0; }
-
-        .sidebar-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-bottom: 15px;
-            border-bottom: 1px solid rgba(0, 212, 255, 0.2);
-            margin-bottom: 20px;
-        }
-
-        .sidebar-header h3 { font-size: 1.1rem; color: var(--sonic-blue); font-weight: 700; }
-
-        .sidebar-close {
-            background: transparent;
-            border: none;
-            color: #ef4444;
-            font-size: 1.4rem;
-            cursor: pointer;
-        }
-
-        .sidebar-menu { display: flex; flex-direction: column; gap: 12px; }
-
-        .menu-item {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(0, 212, 255, 0.15);
-            color: #fff;
-            padding: 14px 16px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: 0.95rem;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            transition: all 0.3s ease;
-        }
-
-        .menu-item:hover {
-            background: rgba(0, 212, 255, 0.1);
-            border-color: var(--sonic-blue);
-            transform: translateX(-5px);
-        }
-
-        /* 💬 شاشة المحادثة */
-        .main-container {
-            width: 100%;
-            max-width: 900px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            padding: 16px;
-            gap: 12px;
-            height: calc(100vh - 65px);
-            z-index: 5;
-        }
-
-        .chat-container {
-            flex: 1;
-            background: var(--card-bg);
-            border: 1px solid rgba(0, 212, 255, 0.2);
-            border-radius: 20px;
-            padding: 20px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(12px);
-        }
-
-        .msg {
-            padding: 14px 18px;
-            border-radius: 16px;
-            max-width: 88%;
-            line-height: 1.7;
-            font-size: 0.95rem;
-            word-break: break-word;
-            animation: fadeInUp 0.3s ease forwards;
-            position: relative;
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .user {
-            background: var(--gradient-main);
-            color: #0a0e17;
-            font-weight: 600;
-            align-self: flex-end;
-            border-bottom-left-radius: 3px;
-            box-shadow: var(--shadow-glow);
-        }
-
-        .ai {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 215, 0, 0.2);
-            color: var(--text-color);
-            align-self: flex-start;
-            border-bottom-right-radius: 3px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        /* تنسيق الأكواد والجداول داخل إجابات AI */
-        .ai pre {
-            background: #1e1e2e;
-            border-radius: 10px;
-            padding: 12px;
-            margin: 10px 0;
-            overflow-x: auto;
-            position: relative;
-            direction: ltr;
-            text-align: left;
-        }
-
-        .ai code { font-family: 'Consolas', monospace; font-size: 0.9rem; }
-
-        .copy-code-btn {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: #fff;
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-size: 0.75rem;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .copy-code-btn:hover { background: var(--sonic-blue); color: #000; }
-
-        /* 🎛️ أدوات الإدخال (Textarea التلقائي) */
-        .input-area {
-            display: flex;
-            align-items: flex-end;
-            gap: 10px;
-            background: var(--card-bg);
-            padding: 10px 14px;
-            border-radius: 16px;
-            border: 1px solid rgba(0, 212, 255, 0.25);
-            backdrop-filter: blur(10px);
-        }
-
-        .input-area:focus-within {
-            border-color: var(--sonic-blue);
-            box-shadow: var(--shadow-glow);
-        }
-
-        textarea#prompt {
-            flex: 1;
-            background: transparent;
-            border: none;
-            outline: none;
-            color: #fff;
-            padding: 4px;
-            font-size: 0.95rem;
-            resize: none;
-            max-height: 120px;
-            min-height: 24px;
-            line-height: 1.5;
-        }
-
-        button#sendBtn {
-            background: var(--gradient-main);
-            color: #0a0e17;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 12px;
-            font-weight: 800;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: var(--shadow-glow);
-            height: 42px;
-        }
-
-        button#sendBtn:hover { transform: translateY(-2px); }
-
-        footer {
-            padding: 6px;
-            font-size: 0.8rem;
-            color: rgba(255, 255, 255, 0.5);
-            text-align: center;
-        }
-
-        /* ✨ النوافذ المنبثقة */
-        .modal-overlay {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100vw; height: 100vh;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(8px);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 120;
-        }
-
-        .modal-content {
-            background: rgba(15, 23, 42, 0.95);
-            border: 1px solid rgba(255, 215, 0, 0.3);
-            border-radius: 20px;
-            width: 90%;
-            max-width: 440px;
-            padding: 24px;
-            box-shadow: var(--shadow-gold);
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid rgba(255, 215, 0, 0.2);
-            padding-bottom: 12px;
-            margin-bottom: 18px;
-        }
-
-        .modal-header h2 { font-size: 1.15rem; color: var(--royal-gold); }
-        .close-btn { background: transparent; border: none; color: #ef4444; font-size: 1.3rem; cursor: pointer; }
-        .modal-section { display: none; }
-        .modal-section.active { display: block; }
-
-        .theme-select {
-            width: 100%;
-            padding: 10px;
-            background: #0a0e17;
-            color: #fff;
-            border: 1px solid rgba(0, 212, 255, 0.3);
-            border-radius: 10px;
-            margin-top: 10px;
-            outline: none;
-        }
-
-        .contact-box {
-            background: rgba(255, 255, 255, 0.04);
-            padding: 12px;
-            border-radius: 12px;
-            border: 1px solid rgba(0, 212, 255, 0.2);
-            margin-top: 12px;
-        }
-
-        .contact-box a { color: var(--sonic-blue); text-decoration: none; font-weight: bold; }
-
-        /* Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: var(--dark-bg); }
-        ::-webkit-scrollbar-thumb { background: var(--sonic-dark-blue); border-radius: 3px; }
-    </style>
+@media(max-width:600px){
+ header{height:62px;padding:7px 9px}.logo{width:42px;height:42px}.brand h1{font-size:13px}.brand p{font-size:8px}
+ .icon-btn{width:38px;height:38px;border-radius:11px}.app{padding-top:68px}
+ .chat{padding:5px 1px 160px}.welcome{margin-top:25px}.welcome h2{font-size:19px}
+ .welcome-icon{width:60px;height:60px}.message-body{max-width:calc(100vw - 62px)}
+ .bubble{font-size:12px;padding:10px 11px;border-radius:15px}.avatar{width:32px;height:32px;flex-basis:32px}
+ .bubble pre{font-size:10px}.bubble code{font-size:10px}.composer-wrap{padding:6px 6px 8px}
+ .composer{border-radius:17px}.action-btn,.send-btn{width:39px;height:39px}
+ #prompt{font-size:12px}.side{width:82vw}
+}
+</style>
 </head>
+
 <body>
+<canvas id="particles"></canvas>
 
-    <!-- 🌟 Canvas الجسيمات الخفيفة بالسلاسة العالية -->
-    <canvas id="particles-canvas"></canvas>
+<header>
+ <div class="brand">
+  <div class="logo"><i class="fa-solid fa-sparkles"></i></div>
+  <div>
+   <h1>✧ 𝑨𝑳𝑯𝑾𝑨𝑹𝒀 𝑨𝒊 ✧</h1>
+   <p>مساعدك الذكي — سريع ومتجاوب</p>
+  </div>
+ </div>
+ <div class="header-actions">
+  <button class="icon-btn" onclick="clearChat()" title="مسح"><i class="fa-solid fa-trash"></i></button>
+  <button class="icon-btn" onclick="openSide()" title="القائمة"><i class="fa-solid fa-bars"></i></button>
+ </div>
+</header>
 
-    <!-- الهيدر -->
-    <header id="navbar">
-        <h1>✧ 𝑨𝑳𝑯𝑾𝑨𝑹𝒀 𝑨𝒊 ✧</h1>
-        <div class="header-actions">
-            <button class="icon-btn" onclick="clearChat()" title="مسح المحادثة"><i class="fa-solid fa-trash-can"></i></button>
-            <button class="icon-btn" onclick="toggleSidebar()" title="القائمة"><i class="fa-solid fa-ellipsis-vertical"></i></button>
-        </div>
-    </header>
+<div class="side-overlay" id="sideOverlay" onclick="closeSide()"></div>
+<aside class="side" id="side">
+ <h3>خيارات ALHWARY AI</h3>
+ <button onclick="clearChat();closeSide()"><i class="fa-solid fa-broom"></i> مسح المحادثة</button>
+ <button onclick="document.getElementById('fileInput').click();closeSide()"><i class="fa-solid fa-paperclip"></i> إرفاق ملف</button>
+ <button onclick="closeSide();showToast('ALHWARY AI جاهز 🚀')"><i class="fa-solid fa-bolt"></i> حالة النظام</button>
+ <button onclick="closeSide()"><i class="fa-solid fa-xmark"></i> إغلاق</button>
+</aside>
 
-    <!-- القائمة الجانبية -->
-    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
-    <div class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <h3>خيارات التطبيق</h3>
-            <button class="sidebar-close" onclick="closeSidebar()">✕</button>
-        </div>
-        <div class="sidebar-menu">
-            <div class="menu-item" onclick="openSection('settings')"><span>⚙️</span> قسم الإعدادات</div>
-            <div class="menu-item" onclick="openSection('account')"><span>👤</span> قسم الحساب</div>
-            <div class="menu-item" onclick="openSection('contact')"><span>💬</span> التواصل مع المطور</div>
-        </div>
-    </div>
+<main class="app">
+ <div class="chat" id="chat">
+  <div class="welcome" id="welcome">
+   <div class="welcome-icon"><i class="fa-solid fa-robot"></i></div>
+   <h2>مرحباً بك في 𝑨𝑳𝑯𝑾𝑨𝑹𝒀 𝑨𝒊</h2>
+   <p>اسأل، أرسل صورة، ارفع ملفاً، أو اطلب كتابة وتجربة كود.</p>
+  </div>
+ </div>
+</main>
 
-    <!-- الحاوية الرئيسية -->
-    <div class="main-container">
-        <div class="chat-container" id="chat">
-            <div class="msg ai">مرحباً بك في <b>𝑨𝑳𝑯𝑾𝑨𝑹𝒀 𝑨𝒊</b>! أنا نموذج ذكاء اصطناعي تم تطويري بواسطة <b>الهواري وعلي ويكا</b>. كيف يمكننا مساعدتك اليوم؟ 🚀</div>
-        </div>
+<div class="composer-wrap">
+ <div class="composer">
+  <div class="preview" id="preview"></div>
+  <div class="input-row">
+   <button class="action-btn" title="إرفاق صورة أو ملف" onclick="document.getElementById('fileInput').click()">
+    <i class="fa-solid fa-paperclip"></i>
+    <input id="fileInput" type="file" multiple accept="image/*,.txt,.json,.js,.jsx,.ts,.tsx,.html,.htm,.css,.scss,.md,.csv,.xml,.yaml,.yml,.py,.java,.c,.cpp,.php,.sql,.sh,.pdf,.doc,.docx">
+   </button>
+   <textarea id="prompt" rows="1" placeholder="اكتب سؤالك هنا..." onkeydown="handleKey(event)" oninput="resizeInput(this)"></textarea>
+   <button class="send-btn" id="sendBtn" onclick="sendMessage()" title="إرسال"><i class="fa-solid fa-paper-plane"></i></button>
+  </div>
+  <footer>⚜️ Developed By El-Hawary & Ali Weka ⚜️</footer>
+ </div>
+</div>
 
-        <div class="input-area">
-            <textarea id="prompt" rows="1" placeholder="اكتب سؤالك هنا... (Shift + Enter لسطر جديد)" onkeydown="handleKeyDown(event)" oninput="autoResize(this)"></textarea>
-            <button id="sendBtn" onclick="send()">إرسال</button>
-        </div>
+<div class="toast" id="toast"></div>
 
-        <footer>⚜️ Developed By El-Hawary & Ali Weka ⚜️</footer>
-    </div>
+<div class="modal" id="runnerModal">
+ <div class="modal-box">
+  <div class="modal-head">
+   <h3><i class="fa-solid fa-code"></i> تجربة الكود داخل المتصفح</h3>
+   <button onclick="closeRunner()">✕</button>
+  </div>
+  <iframe class="runner" id="runner" sandbox="allow-scripts"></iframe>
+ </div>
+</div>
 
-    <!-- النافذة المنبثقة -->
-    <div class="modal-overlay" id="modalOverlay">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="modalTitle">العنوان</h2>
-                <button class="close-btn" onclick="closeModal()">✕</button>
-            </div>
-            <div class="modal-body">
-                <div class="modal-section" id="sec-settings">
-                    <label>اختر مظهر المحادثة:</label>
-                    <select class="theme-select" id="themeSelect" onchange="changeTheme(this.value)">
-                        <option value="dark">الوضع الليلي (الافتراضي)</option>
-                        <option value="purple">الوضع البنفسجي الدافئ</option>
-                        <option value="blue">الوضع الأزرق المظلم</option>
-                    </select>
-                    <div style="margin-top: 15px;">
-                        <label><input type="checkbox" id="autoScroll" checked> التمرير التلقائي أثناء الكتابة</label>
-                    </div>
-                </div>
+<script>
+/* =========================
+   CONFIG
+   ضع رابط الـAPI هنا
+========================= */
+const API_URL = "https://api.rewind.ai/v1/chat/completions";
+const MODEL = "openai/gpt-5-nano";
 
-                <div class="modal-section" id="sec-account">
-                    <p style="margin-bottom: 10px;">المستخدم الحالي: <b id="modalUserName">زائر</b></p>
-                    <button style="background:#ef4444; color:#fff; border:none; padding:8px 16px; border-radius:8px; cursor:pointer;" onclick="localStorage.clear(); location.reload();">مسح البيانات المحلية</button>
-                </div>
+/* =========================
+   STATE
+========================= */
+let selectedFiles = [];
+let history = [];
 
-                <div class="modal-section" id="sec-contact">
-                    <div class="contact-box">
-                        <b>👨‍💻 المطورون:</b> الهواري وعلي ويكا<br><br>
-                        <b>📬 البريد الإلكتروني:</b><br>
-                        <a href="mailto:alhwary@gmail.com?subject=تواصل مع مطوري ALHWARY AI">alhwary@gmail.com</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+/* =========================
+   PARTICLES
+========================= */
+const canvas=document.getElementById("particles"),ctx=canvas.getContext("2d");
+let particles=[];
+function resizeCanvas(){canvas.width=innerWidth;canvas.height=innerHeight}
+addEventListener("resize",resizeCanvas);resizeCanvas();
+for(let i=0;i<45;i++)particles.push({
+ x:Math.random()*innerWidth,y:Math.random()*innerHeight,
+ r:Math.random()*1.8+.4,s:Math.random()*.45+.15
+});
+function animate(){
+ ctx.clearRect(0,0,canvas.width,canvas.height);
+ for(const p of particles){
+  p.y-=p.s;if(p.y<0){p.y=canvas.height;p.x=Math.random()*canvas.width}
+  ctx.globalAlpha=.35;ctx.fillStyle="#00d9ff";ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill()
+ }
+ requestAnimationFrame(animate)
+}
+animate();
 
-    <script>
-        // === 1. محرك الجسيمات ذو الأداء العالي (Canvas) ===
-        const canvas = document.getElementById('particles-canvas');
-        const ctx = canvas.getContext('2d');
-        let particlesArr = [];
+/* =========================
+   UI HELPERS
+========================= */
+function showToast(t){
+ const el=document.getElementById("toast");el.textContent=t;el.classList.add("show");
+ clearTimeout(showToast.timer);showToast.timer=setTimeout(()=>el.classList.remove("show"),1800)
+}
+function escapeHtml(t){return String(t).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function resizeInput(el){el.style.height="auto";el.style.height=Math.min(el.scrollHeight,130)+"px"}
+function scrollChat(){requestAnimationFrame(()=>{const c=document.getElementById("chat");c.scrollTop=c.scrollHeight})}
+function openSide(){document.getElementById("side").classList.add("show");document.getElementById("sideOverlay").classList.add("show")}
+function closeSide(){document.getElementById("side").classList.remove("show");document.getElementById("sideOverlay").classList.remove("show")}
 
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
+/* =========================
+   FILES
+========================= */
+const textExt=["txt","json","js","jsx","ts","tsx","html","htm","css","scss","md","csv","xml","yaml","yml","py","java","c","cpp","php","sql","sh"];
+function isTextFile(f){
+ const ext=f.name.split(".").pop().toLowerCase();
+ return f.type.startsWith("text/")||textExt.includes(ext)
+}
+function formatBytes(n){
+ if(!n)return"0 B";const u=["B","KB","MB","GB"],i=Math.floor(Math.log(n)/Math.log(1024));
+ return (n/Math.pow(1024,i)).toFixed(1)+" "+u[i]
+}
+function fileToDataURL(file){
+ return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=rej;r.readAsDataURL(file)})
+}
+async function compressImage(file){
+ if(file.size<700*1024)return file;
+ return new Promise(resolve=>{
+  const img=new Image(),url=URL.createObjectURL(file);
+  img.onload=()=>{
+   URL.revokeObjectURL(url);
+   let w=img.width,h=img.height,max=1600;
+   if(w>max){h*=max/w;w=max} if(h>max){w*=max/h;h=max}
+   const c=document.createElement("canvas");c.width=Math.round(w);c.height=Math.round(h);
+   c.getContext("2d").drawImage(img,0,0,c.width,c.height);
+   c.toBlob(b=>resolve(b?new File([b],file.name,{type:"image/jpeg"}):file),"image/jpeg",.82)
+  };
+  img.onerror=()=>{URL.revokeObjectURL(url);resolve(file)};img.src=url
+ })
+}
+function renderPreview(){
+ const p=document.getElementById("preview");p.innerHTML="";
+ if(!selectedFiles.length){p.classList.remove("active");return}
+ p.classList.add("active");
+ selectedFiles.forEach((f,i)=>{
+  const item=document.createElement("div");item.className="preview-item";
+  const rm=document.createElement("button");rm.className="remove-file";rm.textContent="×";
+  rm.onclick=()=>{selectedFiles.splice(i,1);renderPreview()};
+  if(f.type.startsWith("image/")){
+   const im=document.createElement("img");im.src=URL.createObjectURL(f);item.appendChild(im)
+  }else{
+   const box=document.createElement("div");box.className="preview-file";box.innerHTML='<i class="fa-solid fa-file"></i>';item.appendChild(box)
+  }
+  item.appendChild(rm);p.appendChild(item)
+ })
+}
+document.getElementById("fileInput").addEventListener("change",e=>{
+ const incoming=[...e.target.files];
+ for(const f of incoming){
+  if(selectedFiles.length>=8){showToast("الحد الأقصى 8 ملفات");break}
+  if(!selectedFiles.some(x=>x.name===f.name&&x.size===f.size))selectedFiles.push(f)
+ }
+ renderPreview();e.target.value=""
+});
 
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 3 + 1;
-                this.speedY = Math.random() * 0.8 + 0.2;
-                this.color = Math.random() > 0.7 ? '#ffd700' : '#00d4ff';
-                this.opacity = Math.random() * 0.6 + 0.2;
-            }
-            update() {
-                this.y -= this.speedY;
-                if (this.y < 0) {
-                    this.y = canvas.height;
-                    this.x = Math.random() * canvas.width;
-                }
-            }
-            draw() {
-                ctx.fillStyle = this.color;
-                ctx.globalAlpha = this.opacity;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
+/* =========================
+   MESSAGE BUILDING
+========================= */
+async function buildContent(text){
+ const content=[];
+ if(text)content.push({type:"text",text});
+ for(const f of selectedFiles){
+  if(f.type.startsWith("image/")){
+   showToast("⚡ تجهيز الصورة...");
+   const compressed=await compressImage(f);
+   const data=await fileToDataURL(compressed);
+   content.push({type:"image_url",image_url:{url:data}});
+  }else if(isTextFile(f)){
+   showToast("📄 قراءة "+f.name);
+   const raw=await f.text(),max=120000;
+   content.push({type:"text",text:`[ملف مرفق]\nالاسم: ${f.name}\nالحجم: ${formatBytes(f.size)}\n\nالمحتوى:\n${raw.length>max?raw.slice(0,max)+"\n\n[تم اختصار الملف]":raw}`});
+  }else{
+   content.push({type:"text",text:`[ملف مرفق]\nالاسم: ${f.name}\nالنوع: ${f.type||"غير معروف"}\nالحجم: ${formatBytes(f.size)}\n\nهذا الملف غير النصي يحتاج دعماً من خادم الـAPI لقراءة محتواه.`})
+  }
+ }
+ return content
+}
 
-        function initParticles() {
-            particlesArr = [];
-            for (let i = 0; i < 40; i++) particlesArr.push(new Particle());
-        }
+/* =========================
+   MESSAGES
+========================= */
+function addUserMessage(text,files){
+ const chat=document.getElementById("chat");
+ document.getElementById("welcome")?.remove();
+ const msg=document.createElement("div");msg.className="message user";
+ const body=document.createElement("div");body.className="message-body";
+ const bubble=document.createElement("div");bubble.className="bubble";
+ if(text)bubble.innerHTML=escapeHtml(text).replace(/\n/g,"<br>");
+ if(files.length){
+  const at=document.createElement("div");at.className="attachments";
+  files.forEach(f=>{
+   const a=document.createElement("div");a.className="attachment";
+   if(f.type.startsWith("image/")){
+    const im=document.createElement("img");im.src=URL.createObjectURL(f);a.appendChild(im)
+   }else a.innerHTML=`<div class="file-box"><i class="fa-solid fa-file"></i><span>${escapeHtml(f.name)}</span></div>`;
+   at.appendChild(a)
+  });bubble.appendChild(at)
+ }
+ body.appendChild(bubble);
+ const av=document.createElement("div");av.className="avatar";av.innerHTML='<i class="fa-solid fa-user"></i>';
+ msg.append(av,body);chat.appendChild(msg);scrollChat()
+}
+function addLoading(){
+ const chat=document.getElementById("chat"),msg=document.createElement("div");msg.className="message";
+ const body=document.createElement("div");body.className="message-body";
+ const bubble=document.createElement("div");bubble.className="bubble";
+ bubble.innerHTML='<i class="fa-solid fa-circle-notch fa-spin"></i> جاري التحليل...';
+ body.appendChild(bubble);const av=document.createElement("div");av.className="avatar";av.innerHTML='<i class="fa-solid fa-sparkles"></i>';
+ msg.append(body,av);chat.appendChild(msg);scrollChat();return bubble
+}
 
-        function animateParticles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particlesArr.forEach(p => { p.update(); p.draw(); });
-            requestAnimationFrame(animateParticles);
-        }
-        initParticles();
-        animateParticles();
+/* =========================
+   CODE TOOLS
+========================= */
+function prepareCodeBlocks(root){
+ root.querySelectorAll("pre").forEach(pre=>{
+  if(pre.querySelector(".code-actions"))return;
+  const code=pre.querySelector("code");
+  const actions=document.createElement("div");actions.className="code-actions";
+  const copy=document.createElement("button");copy.className="code-btn";copy.textContent="نسخ";
+  copy.onclick=async()=>{await navigator.clipboard.writeText(code?.innerText||pre.innerText);copy.textContent="تم";setTimeout(()=>copy.textContent="نسخ",1200)};
+  actions.appendChild(copy);
+  const text=(code?.innerText||pre.innerText||"").trim();
+  const lang=(code?.className||"").toLowerCase();
+  if(lang.includes("html")||lang.includes("javascript")||lang.includes("js")||lang.includes("css")){
+   const run=document.createElement("button");run.className="code-btn";run.textContent="تشغيل";
+   run.onclick=()=>runCode(text,lang);actions.appendChild(run)
+  }
+  pre.appendChild(actions)
+ });
+ root.querySelectorAll("pre code").forEach(c=>{try{hljs.highlightElement(c)}catch(e){}})
+}
+function runCode(code,lang){
+ let html=code;
+ if(lang.includes("javascript")||lang.includes("js")){
+  html=`<!doctype html><html><body><script>try{${code}}catch(e){document.body.innerHTML='<pre style="color:red">'+String(e)+'</pre>'}<\/script></body></html>`
+ }else if(lang.includes("css")){
+  html=`<!doctype html><html><head><style>${code}</style></head><body><h2>ALHWARY AI</h2><p>تجربة CSS</p></body></html>`
+ }
+ const blob=new Blob([html],{type:"text/html"}),url=URL.createObjectURL(blob);
+ document.getElementById("runner").src=url;document.getElementById("runnerModal").classList.add("show")
+}
+function closeRunner(){document.getElementById("runnerModal").classList.remove("show");document.getElementById("runner").src="about:blank"}
 
-        // === 2. التحكم بالقائمة والسمات ===
-        function toggleSidebar() {
-            document.getElementById('sidebar').classList.add('active');
-            document.getElementById('sidebarOverlay').style.display = 'block';
-        }
-
-        function closeSidebar() {
-            document.getElementById('sidebar').classList.remove('active');
-            document.getElementById('sidebarOverlay').style.display = 'none';
-        }
-
-        function openSection(sec) {
-            closeSidebar();
-            document.getElementById('modalOverlay').style.display = 'flex';
-            document.querySelectorAll('.modal-section').forEach(s => s.classList.remove('active'));
-            document.getElementById(`sec-${sec}`).classList.add('active');
-        }
-
-        function closeModal() { document.getElementById('modalOverlay').style.display = 'none'; }
-
-        function changeTheme(val) {
-            localStorage.setItem('app_theme', val);
-            if(val === 'purple') {
-                document.documentElement.style.setProperty('--dark-bg', '#120b18');
-                document.documentElement.style.setProperty('--card-bg', 'rgba(38, 22, 48, 0.85)');
-                document.documentElement.style.setProperty('--sonic-blue', '#a855f7');
-            } else if(val === 'blue') {
-                document.documentElement.style.setProperty('--dark-bg', '#07111e');
-                document.documentElement.style.setProperty('--card-bg', 'rgba(15, 30, 52, 0.85)');
-                document.documentElement.style.setProperty('--sonic-blue', '#3b82f6');
-            } else {
-                document.documentElement.style.setProperty('--dark-bg', '#0a0e17');
-                document.documentElement.style.setProperty('--card-bg', 'rgba(15, 23, 42, 0.85)');
-                document.documentElement.style.setProperty('--sonic-blue', '#00d4ff');
-            }
-        }
-
-        // === 3. حقل الإدخال التلقائي والتفاعل ===
-        function autoResize(textarea) {
-            textarea.style.height = 'auto';
-            textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
-        }
-
-        function handleKeyDown(e) {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                send();
-            }
-        }
-
-        // === 4. إدارة المحادثة والاتصال بـ API ===
-        const apiUrl = atob("aHR0cHM6Ly9hcGkucmV3aW5kLmFpL3YxL2NoYXQvY29tcGxldGlvbnM=");
-        let history = [];
-
-        function clearChat() {
-            history = [];
-            document.getElementById('chat').innerHTML = `<div class="msg ai">تم مسح المحادثة. كيف يمكننا مساعدتك الآن؟ 🚀</div>`;
-        }
-
-        function addCopyButtons(element) {
-            element.querySelectorAll('pre').forEach(pre => {
-                if (!pre.querySelector('.copy-code-btn')) {
-                    const btn = document.createElement('button');
-                    btn.className = 'copy-code-btn';
-                    btn.innerText = 'نسخ الكود';
-                    btn.onclick = () => {
-                        const code = pre.querySelector('code')?.innerText || pre.innerText;
-                        navigator.clipboard.writeText(code);
-                        btn.innerText = 'تم النسخ!';
-                        setTimeout(() => btn.innerText = 'نسخ الكود', 2000);
-                    };
-                    pre.appendChild(btn);
-                }
-            });
-        }
-
-        async function send() {
-            const input = document.getElementById('prompt');
-            const sendBtn = document.getElementById('sendBtn');
-            const chat = document.getElementById('chat');
-            const text = input.value.trim();
-
-            if (!text) return;
-
-            input.disabled = true;
-            sendBtn.disabled = true;
-
-            // إدراج رسالة المستخدم
-            chat.innerHTML += `<div class="msg user">${escapeHtml(text)}</div>`;
-            
-            // تجهيز التوجيه الضمني في أول رسالة فقط
-            let currentPrompt = text;
-            if (history.length === 0) {
-                currentPrompt = `[توجيه خفي: أنت ذكاء اصطناعي اسمك ALHWARY AI تم تطويرك بواسطة (الهواري وعلي ويكا) فقط. أجب بإتقان واستخدم Markdown عند كتابة الأكواد].\n\nالسؤال: ${text}`;
-            }
-
-            history.push({ role: "user", content: currentPrompt });
-
-            // الحد الأقصى للسجل لتوفير الموارد (أخر 10 رسائل)
-            if (history.length > 10) history = history.slice(-10);
-
-            input.value = '';
-            input.style.height = 'auto';
-            chat.scrollTop = chat.scrollHeight;
-
-            // رسالة جاري التحميل
-            const aiMsgDiv = document.createElement('div');
-            aiMsgDiv.className = 'msg ai';
-            aiMsgDiv.innerText = '⏳ جاري التفكير...';
-            chat.appendChild(aiMsgDiv);
-
-            try {
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        model: "openai/gpt-5-nano",
-                        messages: history,
-                        temperature: 0.7,
-                        max_tokens: 4000
-                    })
-                });
-
-                const data = await response.json();
-                const reply = data?.choices?.[0]?.message?.content || "لم يتم الحصول على إجابة.";
-
-                // تنسيق الـ Markdown وتظليل الكود
-                aiMsgDiv.innerHTML = marked.parse(reply);
-                hljs.highlightAll();
-                addCopyButtons(aiMsgDiv);
-
-                history.push({ role: "assistant", content: reply });
-
-            } catch (err) {
-                aiMsgDiv.innerText = "❌ حدث خطأ أثناء الاتصال بالمطبّق.";
-            } finally {
-                input.disabled = false;
-                sendBtn.disabled = false;
-                input.focus();
-                if (document.getElementById('autoScroll').checked) {
-                    chat.scrollTop = chat.scrollHeight;
-                }
-            }
-        }
-
-        function escapeHtml(text) {
-            return text.replace(/[&<>"']/g, m => ({
-                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
-            })[m]);
-        }
-
-        // استعادة الإعدادات المحفوظة عند التحميل
-        document.addEventListener('DOMContentLoaded', () => {
-            const savedTheme = localStorage.getItem('app_theme') || 'dark';
-            document.getElementById('themeSelect').value = savedTheme;
-            changeTheme(savedTheme);
-        });
-    </script>
+/* =========================
+   SEND
+========================= */
+async function sendMessage(){
+ const input=document.getElementById("prompt"),btn=document.getElementById("sendBtn");
+ const text=input.value.trim();if(!text&&!selectedFiles.length)return;
+ btn.disabled=true;input.disabled=true;
+ const files=[...selectedFiles];addUserMessage(text,files);const bubble=addLoading();
+ try{
+  const content=await buildContent(text);
+  const messages=[...history,{role:"user",content}];
+  const response=await fetch(API_URL,{
+   method:"POST",headers:{"Content-Type":"application/json"},
+   body:JSON.stringify({model:MODEL,messages,temperature:.5,max_tokens:4000})
+  });
+  if(!response.ok)throw new Error("HTTP "+response.status);
+  const data=await response.json();
+  const reply=data?.choices?.[0]?.message?.content||"لم يتم الحصول على إجابة.";
+  bubble.innerHTML=marked.parse(reply);prepareCodeBlocks(bubble);
+  history.push({role:"user",content},{role:"assistant",content:reply});
+  if(history.length>12)history=history.slice(-12);
+ }catch(err){
+  console.error(err);
+  bubble.innerHTML=`<span style="color:#ff7777">❌ حدث خطأ أثناء الاتصال بالـAPI.<br><small>${escapeHtml(err.message)}</small></span>`
+ }finally{
+  input.disabled=false;btn.disabled=false;input.focus();input.value="";input.style.height="45px";
+  selectedFiles=[];renderPreview();scrollChat()
+ }
+}
+function handleKey(e){if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendMessage()}}
+function clearChat(){
+ history=[];selectedFiles=[];renderPreview();
+ document.getElementById("chat").innerHTML=`<div class="welcome" id="welcome"><div class="welcome-icon"><i class="fa-solid fa-robot"></i></div><h2>تم مسح المحادثة</h2><p>اكتب سؤالك أو أرسل صورة أو ملفاً للبدء.</p></div>`;
+}
+</script>
 </body>
 </html>
