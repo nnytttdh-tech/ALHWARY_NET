@@ -1,477 +1,770 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#070b12">
-<title>✧ 𝑨𝑳𝑯𝑾𝑨𝑹𝒀 𝑨𝒊 ✧</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/tokyo-night-dark.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
-
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>شاتات - تكلم مع صحابك</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>
-:root{
- --bg:#070b12;--panel:rgba(12,18,30,.88);--panel2:rgba(18,26,42,.92);
- --cyan:#00d9ff;--blue:#168cff;--gold:#ffd45a;--text:#e8f0fa;
- --muted:#8fa0b7;--border:rgba(0,217,255,.18);
- --glow:0 0 28px rgba(0,217,255,.22);
-}
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{width:100%;height:100%;background:var(--bg);color:var(--text);font-family:Cairo,sans-serif}
-body{overflow:hidden}
-button,input,textarea{font:inherit}
-button{cursor:pointer}
-#particles{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
-header{
- position:fixed;top:0;left:0;right:0;height:68px;z-index:20;
- display:flex;align-items:center;justify-content:space-between;padding:8px 18px;
- background:rgba(7,11,18,.86);backdrop-filter:blur(18px);
- border-bottom:1px solid var(--border)
-}
-.brand{display:flex;align-items:center;gap:10px}
-.logo{
- width:46px;height:46px;border-radius:14px;display:grid;place-items:center;
- background:linear-gradient(135deg,var(--cyan),var(--blue),#7655ff);
- box-shadow:var(--glow);font-size:20px;color:#061018
-}
-.brand h1{
- font-family:Orbitron,Cairo,sans-serif;font-size:16px;
- background:linear-gradient(90deg,var(--cyan),#fff,var(--gold));
- -webkit-background-clip:text;background-clip:text;color:transparent
-}
-.brand p{font-size:9px;color:var(--muted)}
-.header-actions{display:flex;gap:7px}
-.icon-btn{
- width:42px;height:42px;border-radius:12px;background:rgba(255,255,255,.035);
- color:var(--cyan);border:1px solid var(--border);transition:.2s
-}
-.icon-btn:hover{background:rgba(0,217,255,.12);transform:translateY(-1px)}
-.app{position:relative;z-index:5;height:100dvh;padding:78px 10px 8px}
-.chat{
- width:min(920px,100%);height:100%;margin:auto;overflow-y:auto;
- padding:10px 4px 165px;scroll-behavior:smooth
-}
-.chat::-webkit-scrollbar{width:5px}.chat::-webkit-scrollbar-thumb{background:#145d77;border-radius:8px}
-.welcome{text-align:center;margin:45px auto 20px;max-width:600px}
-.welcome-icon{
- width:70px;height:70px;margin:auto;border-radius:22px;display:grid;place-items:center;
- background:linear-gradient(135deg,rgba(0,217,255,.16),rgba(118,85,255,.18));
- border:1px solid var(--border);box-shadow:var(--glow);font-size:28px;color:var(--cyan)
-}
-.welcome h2{font-size:23px;margin-top:12px}.welcome p{font-size:12px;color:var(--muted);margin-top:5px}
-.message{display:flex;gap:9px;align-items:flex-start;margin:12px 0;animation:up .25s ease}
-@keyframes up{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
-.message.user{flex-direction:row-reverse}
-.avatar{
- flex:0 0 36px;width:36px;height:36px;border-radius:11px;display:grid;place-items:center;
- background:linear-gradient(135deg,#10293a,#15203b);border:1px solid var(--border);color:var(--cyan)
-}
-.user .avatar{color:#061018;background:linear-gradient(135deg,var(--cyan),var(--blue))}
-.message-body{max-width:min(82%,760px)}
-.bubble{
- background:var(--panel);border:1px solid var(--border);border-radius:17px;
- padding:12px 14px;line-height:1.8;font-size:13px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,.18)
-}
-.user .bubble{background:linear-gradient(135deg,#00bfe4,#1778df);color:#031019;border:0;font-weight:600}
-.bubble p{margin:4px 0}.bubble ul,.bubble ol{padding-right:20px}
-.bubble pre{
- direction:ltr;text-align:left;background:#111522!important;border:1px solid #25324a;
- border-radius:12px;padding:14px;margin:10px 0;overflow:auto;position:relative
-}
-.bubble code{font-family:Consolas,monospace;font-size:12px}
-.code-actions{display:flex;gap:6px;direction:ltr;position:absolute;top:7px;right:7px;z-index:2}
-.code-btn{
- border:1px solid #34445e;background:#1a2334;color:#dce8f8;border-radius:7px;
- padding:4px 7px;font-size:10px
-}
-.code-btn:hover{background:#00bfe4;color:#061018}
-.composer-wrap{
- position:fixed;z-index:15;left:0;right:0;bottom:0;padding:8px 10px 10px;
- background:linear-gradient(transparent,rgba(7,11,18,.96) 22%);pointer-events:none
-}
-.composer{
- pointer-events:auto;width:min(920px,100%);margin:auto;background:var(--panel);
- border:1px solid var(--border);border-radius:19px;padding:8px;backdrop-filter:blur(18px);box-shadow:var(--glow)
-}
-.preview{display:none;gap:7px;overflow-x:auto;padding:2px 2px 8px}.preview.active{display:flex}
-.preview-item{position:relative;flex:0 0 62px;width:62px;height:62px;border-radius:11px;overflow:hidden;border:1px solid var(--border);background:#101725}
-.preview-item img{width:100%;height:100%;object-fit:cover}.preview-file{height:100%;display:grid;place-items:center;color:var(--cyan);font-size:22px}
-.remove-file{
- position:absolute;top:2px;left:2px;width:20px;height:20px;border:0;border-radius:50%;
- background:rgba(0,0,0,.75);color:#fff;font-size:13px;line-height:20px
-}
-.input-row{display:flex;align-items:flex-end;gap:7px}
-#prompt{
- flex:1;min-width:0;max-height:130px;min-height:45px;resize:none;outline:none;border:0;
- background:transparent;color:#fff;padding:9px;font-size:13px;line-height:1.6
-}
-.action-btn,.send-btn{
- width:42px;height:42px;border-radius:12px;border:1px solid var(--border);
- background:rgba(255,255,255,.035);color:var(--cyan);display:grid;place-items:center
-}
-.send-btn{background:linear-gradient(135deg,var(--cyan),var(--blue));color:#041019;border:0}
-.action-btn:hover{background:rgba(0,217,255,.12)}.send-btn:hover{transform:translateY(-1px)}
-.action-btn input{display:none}
-.attachments{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}.attachment{max-width:180px}
-.attachment img{width:150px;max-height:130px;object-fit:cover;border-radius:10px;border:1px solid rgba(255,255,255,.1)}
-.file-box{
- display:flex;align-items:center;gap:7px;padding:8px 10px;border-radius:10px;
- background:rgba(0,0,0,.18);font-size:11px;direction:ltr
-}
-.file-box i{color:var(--cyan)}
-.toast{
- position:fixed;z-index:100;left:50%;bottom:115px;transform:translate(-50%,20px);
- opacity:0;pointer-events:none;background:#111a29;border:1px solid var(--border);
- padding:8px 13px;border-radius:10px;font-size:11px;transition:.2s;box-shadow:var(--glow)
-}
-.toast.show{opacity:1;transform:translate(-50%,0)}
-.modal{
- position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.72);backdrop-filter:blur(8px);
- display:none;align-items:center;justify-content:center;padding:15px
-}
-.modal.show{display:flex}.modal-box{
- width:min(900px,100%);height:min(80dvh,700px);background:#0d1420;border:1px solid var(--border);
- border-radius:18px;overflow:hidden;display:flex;flex-direction:column
-}
-.modal-head{height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;border-bottom:1px solid var(--border)}
-.modal-head h3{font-size:14px;color:var(--cyan)}.modal-head button{background:none;border:0;color:#ff7373;font-size:20px}
-.runner{flex:1;border:0;background:#fff}
-.side{
- position:fixed;right:-310px;top:0;bottom:0;width:290px;z-index:40;
- background:rgba(10,16,27,.97);border-left:1px solid var(--border);padding:18px;transition:.3s
-}
-.side.show{right:0}.side h3{color:var(--cyan);margin-bottom:18px}
-.side button{width:100%;padding:12px;margin-bottom:9px;border-radius:11px;background:rgba(255,255,255,.04);border:1px solid var(--border);color:#fff;text-align:right}
-.side-overlay{position:fixed;inset:0;z-index:35;background:rgba(0,0,0,.5);display:none}.side-overlay.show{display:block}
-footer{text-align:center;color:#53647a;font-size:9px;margin-top:7px}
+  :root {
+    --bg:            #FAFAFA;
+    --bg-soft:       #F3EFEB;
+    --card:          #FFFFFF;
+    --border:        #E0D6CC;
+    --text:          #3C2A1E;
+    --text-soft:     #6B4F3D;
+    --text-muted:    #A08B7A;
+    --primary:       #6B3E2E;
+    --primary-hover: #4A2C1A;
+    --primary-light: rgba(107, 62, 46, 0.1);
+    --bubble-mine:   #6B3E2E;
+    --bubble-theirs: #F3EFEB;
+    --radius-lg: 22px;
+    --shadow: 0 1px 2px rgba(0,0,0,.05), 0 10px 28px -8px rgba(107, 62, 46, 0.15);
+  }
+  * { box-sizing:border-box; margin:0; padding:0; outline:none; -webkit-tap-highlight-color: transparent; }
+  html, body { height:100%; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: 'Tajawal', sans-serif;
+    display:flex; flex-direction:column;
+  }
+  ::-webkit-scrollbar { width:6px; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius:10px; }
 
-@media(max-width:600px){
- header{height:62px;padding:7px 9px}.logo{width:42px;height:42px}.brand h1{font-size:13px}.brand p{font-size:8px}
- .icon-btn{width:38px;height:38px;border-radius:11px}.app{padding-top:68px}
- .chat{padding:5px 1px 160px}.welcome{margin-top:25px}.welcome h2{font-size:19px}
- .welcome-icon{width:60px;height:60px}.message-body{max-width:calc(100vw - 62px)}
- .bubble{font-size:12px;padding:10px 11px;border-radius:15px}.avatar{width:32px;height:32px;flex-basis:32px}
- .bubble pre{font-size:10px}.bubble code{font-size:10px}.composer-wrap{padding:6px 6px 8px}
- .composer{border-radius:17px}.action-btn,.send-btn{width:39px;height:39px}
- #prompt{font-size:12px}.side{width:82vw}
-}
+  /* ---------- Topbar ---------- */
+  .topbar { width:100%; background: var(--bg-soft); border-bottom:1px solid var(--border); display:flex; justify-content:center; flex-shrink:0; }
+  .bar-container { width:100%; max-width:1000px; padding:12px 16px; display:flex; align-items:center; gap:8px; }
+  .brand { display:flex; align-items:center; gap:8px; text-decoration:none !important; }
+  .brand-name { font-weight:800; font-size:18px; color:var(--text); }
+  .brand-logo { width:36px; height:36px; border-radius:50%; background:var(--bg); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; }
+  .brand-logo svg { width:20px; height:20px; }
+  .spacer { flex-grow:1; }
+  .topbar-user { font-size:14px; color:var(--text-soft); font-weight:600; display:flex; align-items:center; gap:10px; }
+  .logout-btn { background:transparent; border:1px solid var(--border); color:var(--text-soft); padding:6px 14px; border-radius:10px; font-family:inherit; font-size:13px; cursor:pointer; transition:.2s; }
+  .logout-btn:hover { background:var(--primary-light); border-color:var(--primary); color:var(--primary); }
+
+  /* ---------- Auth screen ---------- */
+  #authScreen { flex:1; display:flex; align-items:flex-start; justify-content:center; padding:20px; overflow-y:auto; }
+  .login-card {
+    background: var(--card); padding:35px 25px; width:100%; max-width:380px;
+    margin-top:40px; border:1px solid var(--border); border-radius:var(--radius-lg);
+    text-align:center; box-shadow:var(--shadow);
+  }
+  .main-logo { width:90px; height:90px; margin:-70px auto 20px; border-radius:50%; background:var(--bg-soft); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; box-shadow:0 8px 25px rgba(107,62,46,.1); }
+  .main-logo svg { width:50%; height:50%; }
+  .login-title { font-size:24px; font-weight:800; margin-bottom:6px; }
+  .login-sub { color:var(--text-muted); font-size:14px; margin-bottom:24px; }
+
+  .tabs { display:flex; background:var(--bg-soft); border-radius:12px; padding:4px; margin-bottom:24px; border:1px solid var(--border); }
+  .tab-btn { flex:1; padding:9px; border:none; background:transparent; border-radius:9px; font-family:inherit; font-weight:700; font-size:14px; color:var(--text-muted); cursor:pointer; transition:.2s; }
+  .tab-btn.active { background:var(--primary); color:#fff; }
+
+  .form-group { margin-bottom:16px; text-align:right; }
+  .form-group label { display:block; font-size:13px; font-weight:600; color:var(--text-soft); margin-bottom:6px; }
+  .input-wrapper { position:relative; display:flex; align-items:center; background:var(--bg-soft); border:1px solid var(--border); border-radius:12px; transition:.3s; }
+  .input-wrapper:focus-within { border-color:var(--primary); box-shadow:0 0 0 4px var(--primary-light); }
+  .input-wrapper input { width:100%; padding:13px 16px; background:transparent; border:none; color:var(--text); font-size:14px; font-family:inherit; }
+
+  .btn-primary { width:100%; padding:14px; background:var(--primary); color:#fff; border:none; border-radius:12px; font-size:16px; font-weight:700; cursor:pointer; transition:.2s; font-family:inherit; }
+  .btn-primary:hover { background:var(--primary-hover); }
+  .btn-primary:disabled { opacity:.6; cursor:not-allowed; }
+
+  .auth-msg { font-size:13px; margin-top:14px; min-height:16px; }
+  .auth-msg.error { color:#B3261E; }
+  .auth-msg.ok { color:#2E7D32; }
+
+  .disabled-social { display:flex; align-items:center; gap:10px; padding:12px; background:var(--bg-soft); border:1px dashed var(--border); border-radius:12px; margin-top:22px; font-size:12.5px; color:var(--text-muted); text-align:right; line-height:1.6; }
+
+  /* ---------- App screen ---------- */
+  #appScreen { flex:1; display:none; width:100%; max-width:1000px; margin:0 auto; overflow:hidden; }
+  .app-layout { display:flex; height:100%; width:100%; border-right:1px solid var(--border); border-left:1px solid var(--border); }
+
+  .sidebar { width:300px; flex-shrink:0; background:var(--bg-soft); border-left:1px solid var(--border); display:flex; flex-direction:column; }
+  .sidebar-tabs { display:flex; border-bottom:1px solid var(--border); }
+  .sidebar-tab { flex:1; padding:12px 4px; text-align:center; font-size:13px; font-weight:700; color:var(--text-muted); background:transparent; border:none; cursor:pointer; border-bottom:2px solid transparent; font-family:inherit; }
+  .sidebar-tab.active { color:var(--primary); border-bottom:2px solid var(--primary); }
+  .sidebar-body { flex:1; overflow-y:auto; padding:10px; }
+
+  .list-item { display:flex; align-items:center; gap:10px; padding:10px; border-radius:12px; cursor:pointer; margin-bottom:4px; transition:.15s; }
+  .list-item:hover { background:var(--card); }
+  .list-item.active { background:var(--card); box-shadow:var(--shadow); }
+  .avatar { width:40px; height:40px; border-radius:50%; background:var(--primary); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:15px; flex-shrink:0; }
+  .avatar.group { background:var(--text-soft); }
+  .li-text { flex:1; min-width:0; text-align:right; }
+  .li-name { font-size:14px; font-weight:700; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .li-sub { font-size:12px; color:var(--text-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .empty-hint { color:var(--text-muted); font-size:13px; text-align:center; padding:30px 10px; line-height:1.7; }
+
+  .add-row { display:flex; gap:6px; padding:10px; border-top:1px solid var(--border); }
+  .add-row input { flex:1; padding:9px 12px; border-radius:10px; border:1px solid var(--border); background:var(--card); font-family:inherit; font-size:13px; }
+  .add-row button { padding:9px 14px; border-radius:10px; border:none; background:var(--primary); color:#fff; font-family:inherit; font-weight:700; font-size:13px; cursor:pointer; white-space:nowrap; }
+  .add-row button:hover { background:var(--primary-hover); }
+
+  .chk-row { display:flex; align-items:center; gap:8px; padding:8px 6px; font-size:14px; }
+  .chk-row input { width:16px; height:16px; accent-color:var(--primary); }
+
+  /* ---------- Chat area ---------- */
+  .chat-area { flex:1; display:flex; flex-direction:column; background:var(--bg); min-width:0; }
+  .chat-header { padding:14px 18px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:10px; background:var(--card); }
+  .chat-header .li-name { font-size:15px; }
+  .messages { flex:1; overflow-y:auto; padding:18px; display:flex; flex-direction:column; gap:10px; }
+  .msg-row { display:flex; flex-direction:column; max-width:70%; }
+  .msg-row.mine { align-self:flex-start; align-items:flex-start; }
+  .msg-row.theirs { align-self:flex-end; align-items:flex-end; }
+  .msg-sender { font-size:11px; color:var(--text-muted); margin-bottom:2px; padding:0 4px; }
+  .bubble { padding:10px 14px; border-radius:16px; font-size:14px; line-height:1.5; word-break:break-word; }
+  .msg-row.mine .bubble { background:var(--bubble-mine); color:#fff; border-bottom-left-radius:4px; }
+  .msg-row.theirs .bubble { background:var(--bubble-theirs); color:var(--text); border-bottom-right-radius:4px; }
+  .msg-time { font-size:10px; color:var(--text-muted); margin-top:2px; padding:0 4px; }
+
+  .composer { display:flex; gap:8px; padding:14px; border-top:1px solid var(--border); background:var(--card); }
+  .composer input { flex:1; padding:12px 16px; border-radius:14px; border:1px solid var(--border); background:var(--bg-soft); font-family:inherit; font-size:14px; }
+  .composer input:focus { border-color:var(--primary); }
+  .composer button { padding:0 20px; border-radius:14px; border:none; background:var(--primary); color:#fff; font-weight:700; cursor:pointer; font-family:inherit; }
+  .composer button:hover { background:var(--primary-hover); }
+
+  .no-chat-selected { flex:1; display:flex; align-items:center; justify-content:center; color:var(--text-muted); font-size:14px; text-align:center; padding:20px; }
+
+  .modal-overlay { position:fixed; inset:0; background:rgba(60,42,30,.4); display:none; align-items:center; justify-content:center; z-index:50; padding:20px; }
+  .modal-overlay.show { display:flex; }
+  .modal-box { background:var(--card); border-radius:18px; padding:24px; width:100%; max-width:340px; box-shadow:var(--shadow); }
+  .modal-box h3 { font-size:17px; margin-bottom:14px; }
+  .modal-actions { display:flex; gap:8px; margin-top:16px; }
+  .modal-actions button { flex:1; padding:10px; border-radius:10px; border:none; font-family:inherit; font-weight:700; cursor:pointer; }
+  .modal-actions .cancel { background:var(--bg-soft); color:var(--text-soft); }
+  .modal-actions .confirm { background:var(--primary); color:#fff; }
+  .friend-picker { max-height:180px; overflow-y:auto; border:1px solid var(--border); border-radius:10px; padding:6px; margin-top:10px; }
+
+  @media (max-width:700px) {
+    #appScreen { max-width:100%; }
+    .app-layout { position:relative; }
+    .sidebar { position:absolute; inset:0; z-index:5; width:100%; }
+    .sidebar.hidden-mobile { display:none; }
+    .chat-area.hidden-mobile { display:none; }
+    .back-btn { display:inline-flex !important; }
+  }
+  .back-btn { display:none; background:transparent; border:none; color:var(--primary); font-size:20px; cursor:pointer; padding:4px 8px; }
 </style>
 </head>
-
 <body>
-<canvas id="particles"></canvas>
 
-<header>
- <div class="brand">
-  <div class="logo"><i class="fa-solid fa-sparkles"></i></div>
-  <div>
-   <h1>✧ 𝑨𝑳𝑯𝑾𝑨𝑹𝒀 𝑨𝒊 ✧</h1>
-   <p>مساعدك الذكي — سريع ومتجاوب</p>
+<header class="topbar">
+  <div class="bar-container">
+    <a href="#" class="brand">
+      <span class="brand-name">شاتات</span>
+      <span class="brand-logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#6B3E2E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M8 6 L2 12 L8 18"/><path d="M12 6 L12 18"/><path d="M16 6 L22 12 L16 18"/>
+        </svg>
+      </span>
+    </a>
+    <div class="spacer"></div>
+    <div class="topbar-user" id="topbarUser" style="display:none;">
+      <span id="topbarUserName"></span>
+      <button class="logout-btn" id="logoutBtn">خروج</button>
+    </div>
   </div>
- </div>
- <div class="header-actions">
-  <button class="icon-btn" onclick="clearChat()" title="مسح"><i class="fa-solid fa-trash"></i></button>
-  <button class="icon-btn" onclick="openSide()" title="القائمة"><i class="fa-solid fa-bars"></i></button>
- </div>
 </header>
 
-<div class="side-overlay" id="sideOverlay" onclick="closeSide()"></div>
-<aside class="side" id="side">
- <h3>خيارات ALHWARY AI</h3>
- <button onclick="clearChat();closeSide()"><i class="fa-solid fa-broom"></i> مسح المحادثة</button>
- <button onclick="document.getElementById('fileInput').click();closeSide()"><i class="fa-solid fa-paperclip"></i> إرفاق ملف</button>
- <button onclick="closeSide();showToast('ALHWARY AI جاهز 🚀')"><i class="fa-solid fa-bolt"></i> حالة النظام</button>
- <button onclick="closeSide()"><i class="fa-solid fa-xmark"></i> إغلاق</button>
-</aside>
+<!-- ================= AUTH SCREEN ================= -->
+<div id="authScreen">
+  <div class="login-card">
+    <div class="main-logo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#6B3E2E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M8 6 L2 12 L8 18"/><path d="M12 6 L12 18"/><path d="M16 6 L22 12 L16 18"/>
+      </svg>
+    </div>
+    <h1 class="login-title">أهلاً بيك في شاتات</h1>
+    <p class="login-sub">اتكلم مع صحابك في الخاص أو في جروب</p>
 
-<main class="app">
- <div class="chat" id="chat">
-  <div class="welcome" id="welcome">
-   <div class="welcome-icon"><i class="fa-solid fa-robot"></i></div>
-   <h2>مرحباً بك في 𝑨𝑳𝑯𝑾𝑨𝑹𝒀 𝑨𝒊</h2>
-   <p>اسأل، أرسل صورة، ارفع ملفاً، أو اطلب كتابة وتجربة كود.</p>
-  </div>
- </div>
-</main>
+    <div class="tabs">
+      <button class="tab-btn active" id="tabLogin">تسجيل دخول</button>
+      <button class="tab-btn" id="tabRegister">حساب جديد</button>
+    </div>
 
-<div class="composer-wrap">
- <div class="composer">
-  <div class="preview" id="preview"></div>
-  <div class="input-row">
-   <button class="action-btn" title="إرفاق صورة أو ملف" onclick="document.getElementById('fileInput').click()">
-    <i class="fa-solid fa-paperclip"></i>
-    <input id="fileInput" type="file" multiple accept="image/*,.txt,.json,.js,.jsx,.ts,.tsx,.html,.htm,.css,.scss,.md,.csv,.xml,.yaml,.yml,.py,.java,.c,.cpp,.php,.sql,.sh,.pdf,.doc,.docx">
-   </button>
-   <textarea id="prompt" rows="1" placeholder="اكتب سؤالك هنا..." onkeydown="handleKey(event)" oninput="resizeInput(this)"></textarea>
-   <button class="send-btn" id="sendBtn" onclick="sendMessage()" title="إرسال"><i class="fa-solid fa-paper-plane"></i></button>
+    <!-- Login form -->
+    <form id="loginForm">
+      <div class="form-group">
+        <label>اسم المستخدم</label>
+        <div class="input-wrapper"><input type="text" id="loginUsername" placeholder="مثلاً: ahmed" required /></div>
+      </div>
+      <div class="form-group">
+        <label>كلمة المرور</label>
+        <div class="input-wrapper"><input type="password" id="loginPassword" placeholder="••••••••" required /></div>
+      </div>
+      <button type="submit" class="btn-primary" id="loginBtn">تسجيل دخول</button>
+    </form>
+
+    <!-- Register form -->
+    <form id="registerForm" style="display:none;">
+      <div class="form-group">
+        <label>اسمك</label>
+        <div class="input-wrapper"><input type="text" id="regDisplayName" placeholder="مثلاً: أحمد" required /></div>
+      </div>
+      <div class="form-group">
+        <label>اسم المستخدم (يوزر نيم)</label>
+        <div class="input-wrapper"><input type="text" id="regUsername" placeholder="حروف إنجليزي وأرقام بس" required /></div>
+      </div>
+      <div class="form-group">
+        <label>كلمة المرور</label>
+        <div class="input-wrapper"><input type="password" id="regPassword" placeholder="6 أحرف على الأقل" required /></div>
+      </div>
+      <button type="submit" class="btn-primary" id="registerBtn">إنشاء الحساب</button>
+    </form>
+
+    <div class="auth-msg" id="authMsg"></div>
+
+    <div class="disabled-social">
+      ⚠️ تسجيل الدخول بجوجل مش شغال دلوقتي — استخدم يوزر نيم وباسورد للتسجيل.
+    </div>
   </div>
-  <footer>⚜️ Developed By El-Hawary & Ali Weka ⚜️</footer>
- </div>
 </div>
 
-<div class="toast" id="toast"></div>
+<!-- ================= APP SCREEN ================= -->
+<div id="appScreen">
+  <div class="app-layout">
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-tabs">
+        <button class="sidebar-tab active" data-tab="chats">المحادثات</button>
+        <button class="sidebar-tab" data-tab="friends">الأصدقاء</button>
+        <button class="sidebar-tab" data-tab="groups">الجروبات</button>
+      </div>
 
-<div class="modal" id="runnerModal">
- <div class="modal-box">
-  <div class="modal-head">
-   <h3><i class="fa-solid fa-code"></i> تجربة الكود داخل المتصفح</h3>
-   <button onclick="closeRunner()">✕</button>
+      <!-- Chats list -->
+      <div class="sidebar-body" id="panelChats">
+        <div id="chatsList"></div>
+      </div>
+
+      <!-- Friends panel -->
+      <div class="sidebar-body" id="panelFriends" style="display:none;">
+        <div id="friendsList"></div>
+        <div class="add-row" style="border-top:none; padding:10px 0;">
+          <input type="text" id="addFriendInput" placeholder="اسم مستخدم الصديق" />
+          <button id="addFriendBtn">إضافة</button>
+        </div>
+      </div>
+
+      <!-- Groups panel -->
+      <div class="sidebar-body" id="panelGroups" style="display:none;">
+        <div id="groupsList"></div>
+        <div style="padding:10px 0;">
+          <button class="btn-primary" id="newGroupBtn" style="padding:11px;">+ إنشاء جروب جديد</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-area" id="chatArea">
+      <div class="no-chat-selected" id="noChatSelected">اختار محادثة أو صديق أو جروب من القائمة عشان تبدأ الكلام 💬</div>
+
+      <div id="activeChatWrap" style="display:none; flex:1; display:none; flex-direction:column;">
+        <div class="chat-header">
+          <button class="back-btn" id="backBtn">→</button>
+          <div class="avatar" id="chatHeaderAvatar"></div>
+          <div class="li-text">
+            <div class="li-name" id="chatHeaderName"></div>
+            <div class="li-sub" id="chatHeaderSub"></div>
+          </div>
+        </div>
+        <div class="messages" id="messagesBox"></div>
+        <form class="composer" id="composerForm">
+          <input type="text" id="messageInput" placeholder="اكتب رسالة..." autocomplete="off" />
+          <button type="submit">إرسال</button>
+        </form>
+      </div>
+    </div>
   </div>
-  <iframe class="runner" id="runner" sandbox="allow-scripts"></iframe>
- </div>
+</div>
+
+<!-- New group modal -->
+<div class="modal-overlay" id="groupModal">
+  <div class="modal-box">
+    <h3>إنشاء جروب جديد</h3>
+    <div class="form-group">
+      <label>اسم الجروب</label>
+      <div class="input-wrapper"><input type="text" id="newGroupName" placeholder="مثلاً: شلة المدرسة" /></div>
+    </div>
+    <label style="font-size:13px; font-weight:600; color:var(--text-soft);">اختار الأعضاء من أصدقائك</label>
+    <div class="friend-picker" id="groupFriendPicker"></div>
+    <div class="modal-actions">
+      <button class="cancel" id="groupCancelBtn">إلغاء</button>
+      <button class="confirm" id="groupConfirmBtn">إنشاء</button>
+    </div>
+  </div>
 </div>
 
 <script>
-/* =========================
-   CONFIG
-   ضع رابط الـAPI هنا
-========================= */
-const API_URL = "https://api.rewind.ai/v1/chat/completions";
-const MODEL = "openai/gpt-5-nano";
+(function(){
+  "use strict";
 
-/* =========================
-   STATE
-========================= */
-let selectedFiles = [];
-let history = [];
-
-/* =========================
-   PARTICLES
-========================= */
-const canvas=document.getElementById("particles"),ctx=canvas.getContext("2d");
-let particles=[];
-function resizeCanvas(){canvas.width=innerWidth;canvas.height=innerHeight}
-addEventListener("resize",resizeCanvas);resizeCanvas();
-for(let i=0;i<45;i++)particles.push({
- x:Math.random()*innerWidth,y:Math.random()*innerHeight,
- r:Math.random()*1.8+.4,s:Math.random()*.45+.15
-});
-function animate(){
- ctx.clearRect(0,0,canvas.width,canvas.height);
- for(const p of particles){
-  p.y-=p.s;if(p.y<0){p.y=canvas.height;p.x=Math.random()*canvas.width}
-  ctx.globalAlpha=.35;ctx.fillStyle="#00d9ff";ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill()
- }
- requestAnimationFrame(animate)
-}
-animate();
-
-/* =========================
-   UI HELPERS
-========================= */
-function showToast(t){
- const el=document.getElementById("toast");el.textContent=t;el.classList.add("show");
- clearTimeout(showToast.timer);showToast.timer=setTimeout(()=>el.classList.remove("show"),1800)
-}
-function escapeHtml(t){return String(t).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
-function resizeInput(el){el.style.height="auto";el.style.height=Math.min(el.scrollHeight,130)+"px"}
-function scrollChat(){requestAnimationFrame(()=>{const c=document.getElementById("chat");c.scrollTop=c.scrollHeight})}
-function openSide(){document.getElementById("side").classList.add("show");document.getElementById("sideOverlay").classList.add("show")}
-function closeSide(){document.getElementById("side").classList.remove("show");document.getElementById("sideOverlay").classList.remove("show")}
-
-/* =========================
-   FILES
-========================= */
-const textExt=["txt","json","js","jsx","ts","tsx","html","htm","css","scss","md","csv","xml","yaml","yml","py","java","c","cpp","php","sql","sh"];
-function isTextFile(f){
- const ext=f.name.split(".").pop().toLowerCase();
- return f.type.startsWith("text/")||textExt.includes(ext)
-}
-function formatBytes(n){
- if(!n)return"0 B";const u=["B","KB","MB","GB"],i=Math.floor(Math.log(n)/Math.log(1024));
- return (n/Math.pow(1024,i)).toFixed(1)+" "+u[i]
-}
-function fileToDataURL(file){
- return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=rej;r.readAsDataURL(file)})
-}
-async function compressImage(file){
- if(file.size<700*1024)return file;
- return new Promise(resolve=>{
-  const img=new Image(),url=URL.createObjectURL(file);
-  img.onload=()=>{
-   URL.revokeObjectURL(url);
-   let w=img.width,h=img.height,max=1600;
-   if(w>max){h*=max/w;w=max} if(h>max){w*=max/h;h=max}
-   const c=document.createElement("canvas");c.width=Math.round(w);c.height=Math.round(h);
-   c.getContext("2d").drawImage(img,0,0,c.width,c.height);
-   c.toBlob(b=>resolve(b?new File([b],file.name,{type:"image/jpeg"}):file),"image/jpeg",.82)
-  };
-  img.onerror=()=>{URL.revokeObjectURL(url);resolve(file)};img.src=url
- })
-}
-function renderPreview(){
- const p=document.getElementById("preview");p.innerHTML="";
- if(!selectedFiles.length){p.classList.remove("active");return}
- p.classList.add("active");
- selectedFiles.forEach((f,i)=>{
-  const item=document.createElement("div");item.className="preview-item";
-  const rm=document.createElement("button");rm.className="remove-file";rm.textContent="×";
-  rm.onclick=()=>{selectedFiles.splice(i,1);renderPreview()};
-  if(f.type.startsWith("image/")){
-   const im=document.createElement("img");im.src=URL.createObjectURL(f);item.appendChild(im)
-  }else{
-   const box=document.createElement("div");box.className="preview-file";box.innerHTML='<i class="fa-solid fa-file"></i>';item.appendChild(box)
+  // ---------------- Utilities ----------------
+  async function sha256(text){
+    const enc = new TextEncoder().encode(text);
+    const buf = await crypto.subtle.digest('SHA-256', enc);
+    return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
   }
-  item.appendChild(rm);p.appendChild(item)
- })
-}
-document.getElementById("fileInput").addEventListener("change",e=>{
- const incoming=[...e.target.files];
- for(const f of incoming){
-  if(selectedFiles.length>=8){showToast("الحد الأقصى 8 ملفات");break}
-  if(!selectedFiles.some(x=>x.name===f.name&&x.size===f.size))selectedFiles.push(f)
- }
- renderPreview();e.target.value=""
-});
 
-/* =========================
-   MESSAGE BUILDING
-========================= */
-async function buildContent(text){
- const content=[];
- if(text)content.push({type:"text",text});
- for(const f of selectedFiles){
-  if(f.type.startsWith("image/")){
-   showToast("⚡ تجهيز الصورة...");
-   const compressed=await compressImage(f);
-   const data=await fileToDataURL(compressed);
-   content.push({type:"image_url",image_url:{url:data}});
-  }else if(isTextFile(f)){
-   showToast("📄 قراءة "+f.name);
-   const raw=await f.text(),max=120000;
-   content.push({type:"text",text:`[ملف مرفق]\nالاسم: ${f.name}\nالحجم: ${formatBytes(f.size)}\n\nالمحتوى:\n${raw.length>max?raw.slice(0,max)+"\n\n[تم اختصار الملف]":raw}`});
-  }else{
-   content.push({type:"text",text:`[ملف مرفق]\nالاسم: ${f.name}\nالنوع: ${f.type||"غير معروف"}\nالحجم: ${formatBytes(f.size)}\n\nهذا الملف غير النصي يحتاج دعماً من خادم الـAPI لقراءة محتواه.`})
+  async function storeGet(key){
+    try{
+      const res = await window.storage.get(key, true);
+      return res ? JSON.parse(res.value) : null;
+    }catch(e){ return null; }
   }
- }
- return content
-}
-
-/* =========================
-   MESSAGES
-========================= */
-function addUserMessage(text,files){
- const chat=document.getElementById("chat");
- document.getElementById("welcome")?.remove();
- const msg=document.createElement("div");msg.className="message user";
- const body=document.createElement("div");body.className="message-body";
- const bubble=document.createElement("div");bubble.className="bubble";
- if(text)bubble.innerHTML=escapeHtml(text).replace(/\n/g,"<br>");
- if(files.length){
-  const at=document.createElement("div");at.className="attachments";
-  files.forEach(f=>{
-   const a=document.createElement("div");a.className="attachment";
-   if(f.type.startsWith("image/")){
-    const im=document.createElement("img");im.src=URL.createObjectURL(f);a.appendChild(im)
-   }else a.innerHTML=`<div class="file-box"><i class="fa-solid fa-file"></i><span>${escapeHtml(f.name)}</span></div>`;
-   at.appendChild(a)
-  });bubble.appendChild(at)
- }
- body.appendChild(bubble);
- const av=document.createElement("div");av.className="avatar";av.innerHTML='<i class="fa-solid fa-user"></i>';
- msg.append(av,body);chat.appendChild(msg);scrollChat()
-}
-function addLoading(){
- const chat=document.getElementById("chat"),msg=document.createElement("div");msg.className="message";
- const body=document.createElement("div");body.className="message-body";
- const bubble=document.createElement("div");bubble.className="bubble";
- bubble.innerHTML='<i class="fa-solid fa-circle-notch fa-spin"></i> جاري التحليل...';
- body.appendChild(bubble);const av=document.createElement("div");av.className="avatar";av.innerHTML='<i class="fa-solid fa-sparkles"></i>';
- msg.append(body,av);chat.appendChild(msg);scrollChat();return bubble
-}
-
-/* =========================
-   CODE TOOLS
-========================= */
-function prepareCodeBlocks(root){
- root.querySelectorAll("pre").forEach(pre=>{
-  if(pre.querySelector(".code-actions"))return;
-  const code=pre.querySelector("code");
-  const actions=document.createElement("div");actions.className="code-actions";
-  const copy=document.createElement("button");copy.className="code-btn";copy.textContent="نسخ";
-  copy.onclick=async()=>{await navigator.clipboard.writeText(code?.innerText||pre.innerText);copy.textContent="تم";setTimeout(()=>copy.textContent="نسخ",1200)};
-  actions.appendChild(copy);
-  const text=(code?.innerText||pre.innerText||"").trim();
-  const lang=(code?.className||"").toLowerCase();
-  if(lang.includes("html")||lang.includes("javascript")||lang.includes("js")||lang.includes("css")){
-   const run=document.createElement("button");run.className="code-btn";run.textContent="تشغيل";
-   run.onclick=()=>runCode(text,lang);actions.appendChild(run)
+  async function storeSet(key, value){
+    try{
+      await window.storage.set(key, JSON.stringify(value), true);
+      return true;
+    }catch(e){ console.error('storage set failed', key, e); return false; }
   }
-  pre.appendChild(actions)
- });
- root.querySelectorAll("pre code").forEach(c=>{try{hljs.highlightElement(c)}catch(e){}})
-}
-function runCode(code,lang){
- let html=code;
- if(lang.includes("javascript")||lang.includes("js")){
-  html=`<!doctype html><html><body><script>try{${code}}catch(e){document.body.innerHTML='<pre style="color:red">'+String(e)+'</pre>'}<\/script></body></html>`
- }else if(lang.includes("css")){
-  html=`<!doctype html><html><head><style>${code}</style></head><body><h2>ALHWARY AI</h2><p>تجربة CSS</p></body></html>`
- }
- const blob=new Blob([html],{type:"text/html"}),url=URL.createObjectURL(blob);
- document.getElementById("runner").src=url;document.getElementById("runnerModal").classList.add("show")
-}
-function closeRunner(){document.getElementById("runnerModal").classList.remove("show");document.getElementById("runner").src="about:blank"}
 
-/* =========================
-   SEND
-========================= */
-async function sendMessage(){
- const input=document.getElementById("prompt"),btn=document.getElementById("sendBtn");
- const text=input.value.trim();if(!text&&!selectedFiles.length)return;
- btn.disabled=true;input.disabled=true;
- const files=[...selectedFiles];addUserMessage(text,files);const bubble=addLoading();
- try{
-  const content=await buildContent(text);
-  const SYSTEM_IDENTITY = `
-أنت ALHWARY AI، المساعد الذكي الخاص بمشروع ALHWARY AI.
+  function escapeHtml(str){
+    const d = document.createElement('div');
+    d.textContent = str;
+    return d.innerHTML;
+  }
 
-المطورون الرسميون للمشروع:
-- الهواري
-- علي ويكا
+  function pairKey(a,b){
+    return [a,b].sort().join('__');
+  }
 
-قواعد الهوية:
-1. إذا سُئلت: من مطورك؟ مين مطورينك؟ من صنعك؟ مين صاحبك؟ مين عمل الموقع؟ أو أي سؤال مشابه، أجب بوضوح:
-"أنا ALHWARY AI، وتم تطوير مشروع ALHWARY AI بواسطة الهواري وعلي ويكا ⚜️❤️"
+  function fmtTime(ts){
+    const d = new Date(ts);
+    return d.toLocaleTimeString('ar-EG', {hour:'2-digit', minute:'2-digit'});
+  }
 
-2. لا تنسب تطوير مشروع ALHWARY AI أو موقعه إلى OpenAI أو Google أو أي شركة أخرى.
-3. لا تدّعِ أن الهواري وعلي ويكا أنشآ نموذج الذكاء الاصطناعي الأساسي إذا لم تكن هذه المعلومة مؤكدة.
-4. فرّق بين مزود نموذج الذكاء الاصطناعي وبين مطوري مشروع ALHWARY AI.
-5. عند السؤال عن المطورين، اذكر الهواري وعلي ويكا أولاً وبوضوح.
-6. امدح المطورين بشكل طبيعي ومحترم، ولا تختلق إنجازات غير مؤكدة.
-`;
+  function initials(name){
+    return (name || '?').trim().charAt(0).toUpperCase();
+  }
 
-const messages=[
- {role:"system",content:SYSTEM_IDENTITY},
- ...history,
- {role:"user",content}
-];
-  const response=await fetch(API_URL,{
-   method:"POST",headers:{"Content-Type":"application/json"},
-   body:JSON.stringify({model:MODEL,messages,temperature:.5,max_tokens:4000})
+  // ---------------- State ----------------
+  let currentUser = null;      // {username, displayName}
+  let friends = [];            // array of usernames
+  let groups = [];             // array of group objects
+  let activeChat = null;       // {type:'private'|'group', id, name}
+  let pollTimer = null;
+  let userCache = {};          // username -> {displayName}
+
+  // ---------------- DOM refs ----------------
+  const authScreen = document.getElementById('authScreen');
+  const appScreen = document.getElementById('appScreen');
+  const tabLogin = document.getElementById('tabLogin');
+  const tabRegister = document.getElementById('tabRegister');
+  const loginForm = document.getElementById('loginForm');
+  const registerForm = document.getElementById('registerForm');
+  const authMsg = document.getElementById('authMsg');
+  const topbarUser = document.getElementById('topbarUser');
+  const topbarUserName = document.getElementById('topbarUserName');
+  const logoutBtn = document.getElementById('logoutBtn');
+
+  const sidebarTabs = document.querySelectorAll('.sidebar-tab');
+  const panelChats = document.getElementById('panelChats');
+  const panelFriends = document.getElementById('panelFriends');
+  const panelGroups = document.getElementById('panelGroups');
+  const chatsList = document.getElementById('chatsList');
+  const friendsList = document.getElementById('friendsList');
+  const groupsList = document.getElementById('groupsList');
+  const addFriendInput = document.getElementById('addFriendInput');
+  const addFriendBtn = document.getElementById('addFriendBtn');
+  const newGroupBtn = document.getElementById('newGroupBtn');
+
+  const noChatSelected = document.getElementById('noChatSelected');
+  const activeChatWrap = document.getElementById('activeChatWrap');
+  const chatHeaderAvatar = document.getElementById('chatHeaderAvatar');
+  const chatHeaderName = document.getElementById('chatHeaderName');
+  const chatHeaderSub = document.getElementById('chatHeaderSub');
+  const messagesBox = document.getElementById('messagesBox');
+  const composerForm = document.getElementById('composerForm');
+  const messageInput = document.getElementById('messageInput');
+  const backBtn = document.getElementById('backBtn');
+  const sidebar = document.getElementById('sidebar');
+  const chatArea = document.getElementById('chatArea');
+
+  const groupModal = document.getElementById('groupModal');
+  const newGroupName = document.getElementById('newGroupName');
+  const groupFriendPicker = document.getElementById('groupFriendPicker');
+  const groupCancelBtn = document.getElementById('groupCancelBtn');
+  const groupConfirmBtn = document.getElementById('groupConfirmBtn');
+
+  // ---------------- Auth tabs ----------------
+  tabLogin.addEventListener('click', ()=>{
+    tabLogin.classList.add('active'); tabRegister.classList.remove('active');
+    loginForm.style.display='block'; registerForm.style.display='none';
+    authMsg.textContent=''; authMsg.className='auth-msg';
   });
-  if(!response.ok)throw new Error("HTTP "+response.status);
-  const data=await response.json();
-  const reply=data?.choices?.[0]?.message?.content||"لم يتم الحصول على إجابة.";
-  bubble.innerHTML=marked.parse(reply);prepareCodeBlocks(bubble);
-  history.push({role:"user",content},{role:"assistant",content:reply});
-  if(history.length>12)history=history.slice(-12);
- }catch(err){
-  console.error(err);
-  bubble.innerHTML=`<span style="color:#ff7777">❌ حدث خطأ أثناء الاتصال بالـAPI.<br><small>${escapeHtml(err.message)}</small></span>`
- }finally{
-  input.disabled=false;btn.disabled=false;input.focus();input.value="";input.style.height="45px";
-  selectedFiles=[];renderPreview();scrollChat()
- }
-}
-function handleKey(e){if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendMessage()}}
-function clearChat(){
- history=[];selectedFiles=[];renderPreview();
- document.getElementById("chat").innerHTML=`<div class="welcome" id="welcome"><div class="welcome-icon"><i class="fa-solid fa-robot"></i></div><h2>تم مسح المحادثة</h2><p>اكتب سؤالك أو أرسل صورة أو ملفاً للبدء.</p></div>`;
-}
+  tabRegister.addEventListener('click', ()=>{
+    tabRegister.classList.add('active'); tabLogin.classList.remove('active');
+    registerForm.style.display='block'; loginForm.style.display='none';
+    authMsg.textContent=''; authMsg.className='auth-msg';
+  });
+
+  function setAuthMsg(text, isError){
+    authMsg.textContent = text;
+    authMsg.className = 'auth-msg ' + (isError ? 'error' : 'ok');
+  }
+
+  // ---------------- Register ----------------
+  registerForm.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    const displayName = document.getElementById('regDisplayName').value.trim();
+    const usernameRaw = document.getElementById('regUsername').value.trim();
+    const username = usernameRaw.toLowerCase();
+    const password = document.getElementById('regPassword').value;
+    const btn = document.getElementById('registerBtn');
+
+    if(!/^[a-z0-9_]{3,20}$/.test(username)){
+      setAuthMsg('اسم المستخدم لازم يكون حروف إنجليزي/أرقام فقط، 3 لـ20 حرف', true); return;
+    }
+    if(password.length < 6){
+      setAuthMsg('كلمة المرور لازم تكون 6 أحرف على الأقل', true); return;
+    }
+    if(!displayName){
+      setAuthMsg('اكتب اسمك', true); return;
+    }
+
+    btn.disabled = true;
+    setAuthMsg('جاري إنشاء الحساب...', false);
+
+    const existing = await storeGet('user_' + username);
+    if(existing){
+      setAuthMsg('اسم المستخدم ده متاخد، جرب اسم تاني', true);
+      btn.disabled = false;
+      return;
+    }
+
+    const passHash = await sha256(password);
+    const userObj = { username, displayName, passHash, createdAt: Date.now() };
+    await storeSet('user_' + username, userObj);
+
+    // update users index
+    const idx = (await storeGet('usersindex')) || [];
+    if(!idx.includes(username)){ idx.push(username); await storeSet('usersindex', idx); }
+
+    btn.disabled = false;
+    setAuthMsg('تم إنشاء الحساب! سجل دخولك دلوقتي', false);
+    tabLogin.click();
+    document.getElementById('loginUsername').value = username;
+  });
+
+  // ---------------- Login ----------------
+  loginForm.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    const username = document.getElementById('loginUsername').value.trim().toLowerCase();
+    const password = document.getElementById('loginPassword').value;
+    const btn = document.getElementById('loginBtn');
+    btn.disabled = true;
+    setAuthMsg('جاري الدخول...', false);
+
+    const userObj = await storeGet('user_' + username);
+    if(!userObj){
+      setAuthMsg('اسم المستخدم مش موجود', true);
+      btn.disabled = false; return;
+    }
+    const passHash = await sha256(password);
+    if(passHash !== userObj.passHash){
+      setAuthMsg('كلمة المرور غلط', true);
+      btn.disabled = false; return;
+    }
+
+    currentUser = { username: userObj.username, displayName: userObj.displayName };
+    btn.disabled = false;
+    enterApp();
+  });
+
+  // ---------------- Logout ----------------
+  logoutBtn.addEventListener('click', ()=>{
+    currentUser = null;
+    activeChat = null;
+    if(pollTimer) clearInterval(pollTimer);
+    appScreen.style.display = 'none';
+    authScreen.style.display = 'flex';
+    topbarUser.style.display = 'none';
+    loginForm.reset(); registerForm.reset();
+    setAuthMsg('', false);
+  });
+
+  // ---------------- Enter app ----------------
+  async function enterApp(){
+    authScreen.style.display = 'none';
+    appScreen.style.display = 'block';
+    topbarUser.style.display = 'flex';
+    topbarUserName.textContent = currentUser.displayName + ' (@' + currentUser.username + ')';
+
+    await refreshFriends();
+    await refreshGroups();
+    renderChatsList();
+    renderFriendsList();
+    renderGroupsList();
+
+    if(pollTimer) clearInterval(pollTimer);
+    pollTimer = setInterval(async ()=>{
+      if(activeChat) await loadAndRenderMessages(false);
+    }, 3000);
+  }
+
+  // ---------------- Sidebar tabs ----------------
+  sidebarTabs.forEach(tabBtn=>{
+    tabBtn.addEventListener('click', ()=>{
+      sidebarTabs.forEach(t=>t.classList.remove('active'));
+      tabBtn.classList.add('active');
+      const tab = tabBtn.dataset.tab;
+      panelChats.style.display = tab==='chats' ? 'block' : 'none';
+      panelFriends.style.display = tab==='friends' ? 'block' : 'none';
+      panelGroups.style.display = tab==='groups' ? 'block' : 'none';
+    });
+  });
+
+  // ---------------- Friends ----------------
+  async function refreshFriends(){
+    friends = (await storeGet('friends_' + currentUser.username)) || [];
+  }
+
+  async function getUserInfo(username){
+    if(userCache[username]) return userCache[username];
+    const u = await storeGet('user_' + username);
+    const info = u ? {displayName: u.displayName} : {displayName: username};
+    userCache[username] = info;
+    return info;
+  }
+
+  function renderFriendsList(){
+    friendsList.innerHTML = '';
+    if(friends.length === 0){
+      friendsList.innerHTML = '<div class="empty-hint">لسه معندكش أصدقاء.<br>ضيف صحابك بيوزر نيمهم تحت 👇</div>';
+      return;
+    }
+    friends.forEach(async (fUsername)=>{
+      const info = await getUserInfo(fUsername);
+      const el = document.createElement('div');
+      el.className = 'list-item';
+      el.innerHTML = `
+        <div class="avatar">${escapeHtml(initials(info.displayName))}</div>
+        <div class="li-text">
+          <div class="li-name">${escapeHtml(info.displayName)}</div>
+          <div class="li-sub">@${escapeHtml(fUsername)}</div>
+        </div>`;
+      el.addEventListener('click', ()=> openPrivateChat(fUsername, info.displayName));
+      friendsList.appendChild(el);
+    });
+  }
+
+  addFriendBtn.addEventListener('click', async ()=>{
+    const uname = addFriendInput.value.trim().toLowerCase();
+    if(!uname) return;
+    if(uname === currentUser.username){ alert('متقدرش تضيف نفسك 😅'); return; }
+    const userObj = await storeGet('user_' + uname);
+    if(!userObj){ alert('مفيش يوزر بالاسم ده. اتأكد إن صاحبك عمل حساب الأول.'); return; }
+    if(friends.includes(uname)){ alert('هو أصلاً في قائمة أصدقائك'); return; }
+
+    friends.push(uname);
+    await storeSet('friends_' + currentUser.username, friends);
+
+    // also add reciprocally so both see each other
+    const theirFriends = (await storeGet('friends_' + uname)) || [];
+    if(!theirFriends.includes(currentUser.username)){
+      theirFriends.push(currentUser.username);
+      await storeSet('friends_' + uname, theirFriends);
+    }
+
+    addFriendInput.value = '';
+    renderFriendsList();
+    renderChatsList();
+  });
+
+  // ---------------- Groups ----------------
+  async function refreshGroups(){
+    const allIds = (await storeGet('groupsindex')) || [];
+    const loaded = [];
+    for(const gid of allIds){
+      const g = await storeGet('group_' + gid);
+      if(g && g.members.includes(currentUser.username)) loaded.push(g);
+    }
+    groups = loaded;
+  }
+
+  function renderGroupsList(){
+    groupsList.innerHTML = '';
+    if(groups.length === 0){
+      groupsList.innerHTML = '<div class="empty-hint">لسه مش في أي جروب.<br>اعمل جروب جديد تحت 👇</div>';
+      return;
+    }
+    groups.forEach(g=>{
+      const el = document.createElement('div');
+      el.className = 'list-item';
+      el.innerHTML = `
+        <div class="avatar group">#</div>
+        <div class="li-text">
+          <div class="li-name">${escapeHtml(g.name)}</div>
+          <div class="li-sub">${g.members.length} أعضاء</div>
+        </div>`;
+      el.addEventListener('click', ()=> openGroupChat(g));
+      groupsList.appendChild(el);
+    });
+  }
+
+  newGroupBtn.addEventListener('click', async ()=>{
+    if(friends.length === 0){ alert('لازم يكون عندك صديق واحد على الأقل عشان تعمل جروب'); return; }
+    newGroupName.value = '';
+    groupFriendPicker.innerHTML = '';
+    for(const fUsername of friends){
+      const info = await getUserInfo(fUsername);
+      const row = document.createElement('label');
+      row.className = 'chk-row';
+      row.innerHTML = `<input type="checkbox" value="${escapeHtml(fUsername)}" /> ${escapeHtml(info.displayName)} (@${escapeHtml(fUsername)})`;
+      groupFriendPicker.appendChild(row);
+    }
+    groupModal.classList.add('show');
+  });
+
+  groupCancelBtn.addEventListener('click', ()=> groupModal.classList.remove('show'));
+
+  groupConfirmBtn.addEventListener('click', async ()=>{
+    const name = newGroupName.value.trim();
+    if(!name){ alert('اكتب اسم للجروب'); return; }
+    const checked = Array.from(groupFriendPicker.querySelectorAll('input[type=checkbox]:checked')).map(c=>c.value);
+    if(checked.length === 0){ alert('اختار عضو واحد على الأقل'); return; }
+
+    const gid = 'g_' + Date.now() + '_' + Math.random().toString(36).slice(2,8);
+    const members = Array.from(new Set([currentUser.username, ...checked]));
+    const groupObj = { id: gid, name, members, owner: currentUser.username, createdAt: Date.now() };
+    await storeSet('group_' + gid, groupObj);
+
+    const idx = (await storeGet('groupsindex')) || [];
+    idx.push(gid);
+    await storeSet('groupsindex', idx);
+
+    groupModal.classList.remove('show');
+    await refreshGroups();
+    renderGroupsList();
+    renderChatsList();
+    openGroupChat(groupObj);
+  });
+
+  // ---------------- Chats list (combined) ----------------
+  function renderChatsList(){
+    chatsList.innerHTML = '';
+    if(friends.length === 0 && groups.length === 0){
+      chatsList.innerHTML = '<div class="empty-hint">مفيش محادثات لسه.<br>ضيف أصدقاء أو اعمل جروب عشان تبدأ 💬</div>';
+      return;
+    }
+    friends.forEach(async (fUsername)=>{
+      const info = await getUserInfo(fUsername);
+      const el = document.createElement('div');
+      el.className = 'list-item';
+      el.innerHTML = `
+        <div class="avatar">${escapeHtml(initials(info.displayName))}</div>
+        <div class="li-text">
+          <div class="li-name">${escapeHtml(info.displayName)}</div>
+          <div class="li-sub">محادثة خاصة</div>
+        </div>`;
+      el.addEventListener('click', ()=> openPrivateChat(fUsername, info.displayName));
+      chatsList.appendChild(el);
+    });
+    groups.forEach(g=>{
+      const el = document.createElement('div');
+      el.className = 'list-item';
+      el.innerHTML = `
+        <div class="avatar group">#</div>
+        <div class="li-text">
+          <div class="li-name">${escapeHtml(g.name)}</div>
+          <div class="li-sub">جروب - ${g.members.length} أعضاء</div>
+        </div>`;
+      el.addEventListener('click', ()=> openGroupChat(g));
+      chatsList.appendChild(el);
+    });
+  }
+
+  // ---------------- Open chat ----------------
+  function openPrivateChat(otherUsername, otherDisplayName){
+    activeChat = { type:'private', id: pairKey(currentUser.username, otherUsername), name: otherDisplayName, otherUsername };
+    showChatUI(otherDisplayName, 'محادثة خاصة', initials(otherDisplayName), false);
+    loadAndRenderMessages(true);
+  }
+
+  function openGroupChat(groupObj){
+    activeChat = { type:'group', id: groupObj.id, name: groupObj.name };
+    showChatUI(groupObj.name, groupObj.members.length + ' أعضاء', '#', true);
+    loadAndRenderMessages(true);
+  }
+
+  function showChatUI(name, sub, avatarText, isGroup){
+    noChatSelected.style.display = 'none';
+    activeChatWrap.style.display = 'flex';
+    chatHeaderName.textContent = name;
+    chatHeaderSub.textContent = sub;
+    chatHeaderAvatar.textContent = avatarText;
+    chatHeaderAvatar.className = 'avatar' + (isGroup ? ' group' : '');
+    if(window.innerWidth <= 700){
+      sidebar.classList.add('hidden-mobile');
+      chatArea.classList.remove('hidden-mobile');
+    }
+  }
+
+  backBtn.addEventListener('click', ()=>{
+    sidebar.classList.remove('hidden-mobile');
+    chatArea.classList.add('hidden-mobile');
+  });
+
+  // ---------------- Messages ----------------
+  function msgStorageKey(){
+    if(!activeChat) return null;
+    return activeChat.type === 'private' ? 'chat_priv_' + activeChat.id : 'chat_group_' + activeChat.id;
+  }
+
+  let lastRenderedCount = -1;
+
+  async function loadAndRenderMessages(forceScroll){
+    const key = msgStorageKey();
+    if(!key) return;
+    const msgs = (await storeGet(key)) || [];
+    if(msgs.length === lastRenderedCount && !forceScroll) return;
+    lastRenderedCount = msgs.length;
+
+    const wasNearBottom = messagesBox.scrollHeight - messagesBox.scrollTop - messagesBox.clientHeight < 80;
+
+    messagesBox.innerHTML = '';
+    if(msgs.length === 0){
+      messagesBox.innerHTML = '<div class="empty-hint">مفيش رسائل لسه، ابدأ الكلام! 👋</div>';
+    } else {
+      for(const m of msgs){
+        const mine = m.from === currentUser.username;
+        const row = document.createElement('div');
+        row.className = 'msg-row ' + (mine ? 'mine' : 'theirs');
+        let senderLabel = '';
+        if(activeChat.type === 'group' && !mine){
+          const info = await getUserInfo(m.from);
+          senderLabel = `<div class="msg-sender">${escapeHtml(info.displayName)}</div>`;
+        }
+        row.innerHTML = `${senderLabel}<div class="bubble">${escapeHtml(m.text)}</div><div class="msg-time">${fmtTime(m.ts)}</div>`;
+        messagesBox.appendChild(row);
+      }
+    }
+    if(forceScroll || wasNearBottom){
+      messagesBox.scrollTop = messagesBox.scrollHeight;
+    }
+  }
+
+  composerForm.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    const text = messageInput.value.trim();
+    if(!text || !activeChat) return;
+    messageInput.value = '';
+
+    const key = msgStorageKey();
+    const msgs = (await storeGet(key)) || [];
+    msgs.push({ from: currentUser.username, text, ts: Date.now() });
+    await storeSet(key, msgs);
+    lastRenderedCount = -1;
+    await loadAndRenderMessages(true);
+  });
+
+  window.addEventListener('resize', ()=>{
+    if(window.innerWidth > 700){
+      sidebar.classList.remove('hidden-mobile');
+      chatArea.classList.remove('hidden-mobile');
+    }
+  });
+
+})();
 </script>
 </body>
 </html>
