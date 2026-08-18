@@ -3,148 +3,116 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>شاتات - تكلم مع صحابك</title>
+<title>شاتات - نسخة تجريبية</title>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg:            #FAFAFA;
-    --bg-soft:       #F3EFEB;
-    --card:          #FFFFFF;
-    --border:        #E0D6CC;
-    --text:          #3C2A1E;
-    --text-soft:     #6B4F3D;
-    --text-muted:    #A08B7A;
-    --primary:       #6B3E2E;
-    --primary-hover: #4A2C1A;
-    --primary-light: rgba(107, 62, 46, 0.1);
-    --bubble-mine:   #6B3E2E;
-    --bubble-theirs: #F3EFEB;
-    --radius-lg: 22px;
-    --shadow: 0 1px 2px rgba(0,0,0,.05), 0 10px 28px -8px rgba(107, 62, 46, 0.15);
+    --bg:#FAFAFA; --bg-soft:#F3EFEB; --card:#FFFFFF; --border:#E0D6CC;
+    --text:#3C2A1E; --text-soft:#6B4F3D; --text-muted:#A08B7A;
+    --primary:#6B3E2E; --primary-hover:#4A2C1A; --primary-light:rgba(107,62,46,.1);
+    --bubble-mine:#6B3E2E; --bubble-theirs:#F3EFEB;
+    --radius-lg:22px; --shadow:0 1px 2px rgba(0,0,0,.05),0 10px 28px -8px rgba(107,62,46,.15);
   }
-  * { box-sizing:border-box; margin:0; padding:0; outline:none; -webkit-tap-highlight-color: transparent; }
-  html, body { height:100%; }
-  body {
-    background: var(--bg); color: var(--text);
-    font-family: 'Tajawal', sans-serif;
-    display:flex; flex-direction:column;
+  * { box-sizing:border-box; margin:0; padding:0; outline:none; -webkit-tap-highlight-color:transparent; }
+  html,body{height:100%;}
+  body{background:var(--bg); color:var(--text); font-family:'Tajawal',sans-serif; display:flex; flex-direction:column;}
+  ::-webkit-scrollbar{width:6px;} ::-webkit-scrollbar-thumb{background:var(--border); border-radius:10px;}
+
+  .topbar{width:100%; background:var(--bg-soft); border-bottom:1px solid var(--border); display:flex; justify-content:center; flex-shrink:0;}
+  .bar-container{width:100%; max-width:1000px; padding:12px 16px; display:flex; align-items:center; gap:8px;}
+  .brand{display:flex; align-items:center; gap:8px;}
+  .brand-name{font-weight:800; font-size:18px;}
+  .brand-logo{width:36px; height:36px; border-radius:50%; background:var(--bg); border:1px solid var(--border); display:flex; align-items:center; justify-content:center;}
+  .brand-logo svg{width:20px; height:20px;}
+  .spacer{flex-grow:1;}
+  .demo-badge{font-size:11px; background:var(--primary-light); color:var(--primary); padding:4px 10px; border-radius:20px; font-weight:700;}
+  .switch-user{display:flex; align-items:center; gap:8px;}
+  .switch-user select{padding:7px 10px; border-radius:10px; border:1px solid var(--border); background:var(--card); font-family:inherit; font-size:13px; color:var(--text);}
+  .logout-btn{background:transparent; border:1px solid var(--border); color:var(--text-soft); padding:6px 14px; border-radius:10px; font-family:inherit; font-size:13px; cursor:pointer;}
+  .logout-btn:hover{background:var(--primary-light); border-color:var(--primary); color:var(--primary);}
+
+  #authScreen{flex:1; display:flex; align-items:flex-start; justify-content:center; padding:20px; overflow-y:auto;}
+  .login-card{background:var(--card); padding:35px 25px; width:100%; max-width:380px; margin-top:40px; border:1px solid var(--border); border-radius:var(--radius-lg); text-align:center; box-shadow:var(--shadow);}
+  .main-logo{width:90px; height:90px; margin:-70px auto 20px; border-radius:50%; background:var(--bg-soft); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; box-shadow:0 8px 25px rgba(107,62,46,.1);}
+  .main-logo svg{width:50%; height:50%;}
+  .login-title{font-size:24px; font-weight:800; margin-bottom:6px;}
+  .login-sub{color:var(--text-muted); font-size:14px; margin-bottom:24px; line-height:1.7;}
+  .form-group{margin-bottom:16px; text-align:right;}
+  .form-group label{display:block; font-size:13px; font-weight:600; color:var(--text-soft); margin-bottom:6px;}
+  .input-wrapper{position:relative; display:flex; align-items:center; background:var(--bg-soft); border:1px solid var(--border); border-radius:12px; transition:.3s;}
+  .input-wrapper:focus-within{border-color:var(--primary); box-shadow:0 0 0 4px var(--primary-light);}
+  .input-wrapper input{width:100%; padding:13px 16px; background:transparent; border:none; color:var(--text); font-size:14px; font-family:inherit;}
+  .btn-primary{width:100%; padding:14px; background:var(--primary); color:#fff; border:none; border-radius:12px; font-size:16px; font-weight:700; cursor:pointer; font-family:inherit;}
+  .btn-primary:hover{background:var(--primary-hover);}
+  .auth-msg{font-size:13px; margin-top:14px; min-height:16px; color:#B3261E;}
+  .demo-note{display:flex; align-items:flex-start; gap:8px; padding:12px; background:var(--bg-soft); border:1px dashed var(--border); border-radius:12px; margin-top:22px; font-size:12.5px; color:var(--text-muted); text-align:right; line-height:1.7;}
+  .existing-users{margin-top:18px; text-align:right;}
+  .existing-users-title{font-size:12px; font-weight:700; color:var(--text-muted); margin-bottom:8px;}
+  .existing-user-chip{display:inline-flex; align-items:center; gap:6px; background:var(--bg-soft); border:1px solid var(--border); padding:6px 12px; border-radius:20px; font-size:13px; margin:3px; cursor:pointer;}
+  .existing-user-chip:hover{border-color:var(--primary); color:var(--primary);}
+
+  #appScreen{flex:1; display:none; width:100%; max-width:1000px; margin:0 auto; overflow:hidden;}
+  .app-layout{display:flex; height:100%; width:100%; border-right:1px solid var(--border); border-left:1px solid var(--border);}
+  .sidebar{width:300px; flex-shrink:0; background:var(--bg-soft); border-left:1px solid var(--border); display:flex; flex-direction:column;}
+  .sidebar-tabs{display:flex; border-bottom:1px solid var(--border);}
+  .sidebar-tab{flex:1; padding:12px 4px; text-align:center; font-size:13px; font-weight:700; color:var(--text-muted); background:transparent; border:none; cursor:pointer; border-bottom:2px solid transparent; font-family:inherit;}
+  .sidebar-tab.active{color:var(--primary); border-bottom:2px solid var(--primary);}
+  .sidebar-body{flex:1; overflow-y:auto; padding:10px;}
+  .list-item{display:flex; align-items:center; gap:10px; padding:10px; border-radius:12px; cursor:pointer; margin-bottom:4px;}
+  .list-item:hover{background:var(--card);}
+  .list-item.active{background:var(--card); box-shadow:var(--shadow);}
+  .avatar{width:40px; height:40px; border-radius:50%; background:var(--primary); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:15px; flex-shrink:0;}
+  .avatar.group{background:var(--text-soft);}
+  .li-text{flex:1; min-width:0; text-align:right;}
+  .li-name{font-size:14px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .li-sub{font-size:12px; color:var(--text-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .empty-hint{color:var(--text-muted); font-size:13px; text-align:center; padding:30px 10px; line-height:1.7;}
+  .add-row{display:flex; gap:6px; padding:10px; border-top:1px solid var(--border);}
+  .add-row input{flex:1; padding:9px 12px; border-radius:10px; border:1px solid var(--border); background:var(--card); font-family:inherit; font-size:13px;}
+  .add-row button{padding:9px 14px; border-radius:10px; border:none; background:var(--primary); color:#fff; font-family:inherit; font-weight:700; font-size:13px; cursor:pointer; white-space:nowrap;}
+  .add-row button:hover{background:var(--primary-hover);}
+  .chk-row{display:flex; align-items:center; gap:8px; padding:8px 6px; font-size:14px;}
+  .chk-row input{width:16px; height:16px; accent-color:var(--primary);}
+
+  .chat-area{flex:1; display:flex; flex-direction:column; background:var(--bg); min-width:0;}
+  .chat-header{padding:14px 18px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:10px; background:var(--card);}
+  .chat-header .li-name{font-size:15px;}
+  .messages{flex:1; overflow-y:auto; padding:18px; display:flex; flex-direction:column; gap:10px;}
+  .msg-row{display:flex; flex-direction:column; max-width:70%;}
+  .msg-row.mine{align-self:flex-start; align-items:flex-start;}
+  .msg-row.theirs{align-self:flex-end; align-items:flex-end;}
+  .msg-sender{font-size:11px; color:var(--text-muted); margin-bottom:2px; padding:0 4px;}
+  .bubble{padding:10px 14px; border-radius:16px; font-size:14px; line-height:1.5; word-break:break-word;}
+  .msg-row.mine .bubble{background:var(--bubble-mine); color:#fff; border-bottom-left-radius:4px;}
+  .msg-row.theirs .bubble{background:var(--bubble-theirs); color:var(--text); border-bottom-right-radius:4px;}
+  .msg-time{font-size:10px; color:var(--text-muted); margin-top:2px; padding:0 4px;}
+  .composer{display:flex; gap:8px; padding:14px; border-top:1px solid var(--border); background:var(--card);}
+  .composer input{flex:1; padding:12px 16px; border-radius:14px; border:1px solid var(--border); background:var(--bg-soft); font-family:inherit; font-size:14px;}
+  .composer input:focus{border-color:var(--primary);}
+  .composer button{padding:0 20px; border-radius:14px; border:none; background:var(--primary); color:#fff; font-weight:700; cursor:pointer; font-family:inherit;}
+  .composer button:hover{background:var(--primary-hover);}
+  .no-chat-selected{flex:1; display:flex; align-items:center; justify-content:center; color:var(--text-muted); font-size:14px; text-align:center; padding:20px;}
+
+  .modal-overlay{position:fixed; inset:0; background:rgba(60,42,30,.4); display:none; align-items:center; justify-content:center; z-index:50; padding:20px;}
+  .modal-overlay.show{display:flex;}
+  .modal-box{background:var(--card); border-radius:18px; padding:24px; width:100%; max-width:340px; box-shadow:var(--shadow);}
+  .modal-box h3{font-size:17px; margin-bottom:14px;}
+  .modal-actions{display:flex; gap:8px; margin-top:16px;}
+  .modal-actions button{flex:1; padding:10px; border-radius:10px; border:none; font-family:inherit; font-weight:700; cursor:pointer;}
+  .modal-actions .cancel{background:var(--bg-soft); color:var(--text-soft);}
+  .modal-actions .confirm{background:var(--primary); color:#fff;}
+  .friend-picker{max-height:180px; overflow-y:auto; border:1px solid var(--border); border-radius:10px; padding:6px; margin-top:10px;}
+
+  @media (max-width:700px){
+    #appScreen{max-width:100%;}
+    .app-layout{position:relative;}
+    .sidebar{position:absolute; inset:0; z-index:5; width:100%;}
+    .sidebar.hidden-mobile{display:none;}
+    .chat-area.hidden-mobile{display:none;}
+    .back-btn{display:inline-flex !important;}
+    .switch-user select{max-width:90px;}
   }
-  ::-webkit-scrollbar { width:6px; }
-  ::-webkit-scrollbar-thumb { background: var(--border); border-radius:10px; }
-
-  /* ---------- Topbar ---------- */
-  .topbar { width:100%; background: var(--bg-soft); border-bottom:1px solid var(--border); display:flex; justify-content:center; flex-shrink:0; }
-  .bar-container { width:100%; max-width:1000px; padding:12px 16px; display:flex; align-items:center; gap:8px; }
-  .brand { display:flex; align-items:center; gap:8px; text-decoration:none !important; }
-  .brand-name { font-weight:800; font-size:18px; color:var(--text); }
-  .brand-logo { width:36px; height:36px; border-radius:50%; background:var(--bg); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; }
-  .brand-logo svg { width:20px; height:20px; }
-  .spacer { flex-grow:1; }
-  .topbar-user { font-size:14px; color:var(--text-soft); font-weight:600; display:flex; align-items:center; gap:10px; }
-  .logout-btn { background:transparent; border:1px solid var(--border); color:var(--text-soft); padding:6px 14px; border-radius:10px; font-family:inherit; font-size:13px; cursor:pointer; transition:.2s; }
-  .logout-btn:hover { background:var(--primary-light); border-color:var(--primary); color:var(--primary); }
-
-  /* ---------- Auth screen ---------- */
-  #authScreen { flex:1; display:flex; align-items:flex-start; justify-content:center; padding:20px; overflow-y:auto; }
-  .login-card {
-    background: var(--card); padding:35px 25px; width:100%; max-width:380px;
-    margin-top:40px; border:1px solid var(--border); border-radius:var(--radius-lg);
-    text-align:center; box-shadow:var(--shadow);
-  }
-  .main-logo { width:90px; height:90px; margin:-70px auto 20px; border-radius:50%; background:var(--bg-soft); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; box-shadow:0 8px 25px rgba(107,62,46,.1); }
-  .main-logo svg { width:50%; height:50%; }
-  .login-title { font-size:24px; font-weight:800; margin-bottom:6px; }
-  .login-sub { color:var(--text-muted); font-size:14px; margin-bottom:24px; }
-
-  .tabs { display:flex; background:var(--bg-soft); border-radius:12px; padding:4px; margin-bottom:24px; border:1px solid var(--border); }
-  .tab-btn { flex:1; padding:9px; border:none; background:transparent; border-radius:9px; font-family:inherit; font-weight:700; font-size:14px; color:var(--text-muted); cursor:pointer; transition:.2s; }
-  .tab-btn.active { background:var(--primary); color:#fff; }
-
-  .form-group { margin-bottom:16px; text-align:right; }
-  .form-group label { display:block; font-size:13px; font-weight:600; color:var(--text-soft); margin-bottom:6px; }
-  .input-wrapper { position:relative; display:flex; align-items:center; background:var(--bg-soft); border:1px solid var(--border); border-radius:12px; transition:.3s; }
-  .input-wrapper:focus-within { border-color:var(--primary); box-shadow:0 0 0 4px var(--primary-light); }
-  .input-wrapper input { width:100%; padding:13px 16px; background:transparent; border:none; color:var(--text); font-size:14px; font-family:inherit; }
-
-  .btn-primary { width:100%; padding:14px; background:var(--primary); color:#fff; border:none; border-radius:12px; font-size:16px; font-weight:700; cursor:pointer; transition:.2s; font-family:inherit; }
-  .btn-primary:hover { background:var(--primary-hover); }
-  .btn-primary:disabled { opacity:.6; cursor:not-allowed; }
-
-  .auth-msg { font-size:13px; margin-top:14px; min-height:16px; }
-  .auth-msg.error { color:#B3261E; }
-  .auth-msg.ok { color:#2E7D32; }
-
-  .disabled-social { display:flex; align-items:center; gap:10px; padding:12px; background:var(--bg-soft); border:1px dashed var(--border); border-radius:12px; margin-top:22px; font-size:12.5px; color:var(--text-muted); text-align:right; line-height:1.6; }
-
-  /* ---------- App screen ---------- */
-  #appScreen { flex:1; display:none; width:100%; max-width:1000px; margin:0 auto; overflow:hidden; }
-  .app-layout { display:flex; height:100%; width:100%; border-right:1px solid var(--border); border-left:1px solid var(--border); }
-
-  .sidebar { width:300px; flex-shrink:0; background:var(--bg-soft); border-left:1px solid var(--border); display:flex; flex-direction:column; }
-  .sidebar-tabs { display:flex; border-bottom:1px solid var(--border); }
-  .sidebar-tab { flex:1; padding:12px 4px; text-align:center; font-size:13px; font-weight:700; color:var(--text-muted); background:transparent; border:none; cursor:pointer; border-bottom:2px solid transparent; font-family:inherit; }
-  .sidebar-tab.active { color:var(--primary); border-bottom:2px solid var(--primary); }
-  .sidebar-body { flex:1; overflow-y:auto; padding:10px; }
-
-  .list-item { display:flex; align-items:center; gap:10px; padding:10px; border-radius:12px; cursor:pointer; margin-bottom:4px; transition:.15s; }
-  .list-item:hover { background:var(--card); }
-  .list-item.active { background:var(--card); box-shadow:var(--shadow); }
-  .avatar { width:40px; height:40px; border-radius:50%; background:var(--primary); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:15px; flex-shrink:0; }
-  .avatar.group { background:var(--text-soft); }
-  .li-text { flex:1; min-width:0; text-align:right; }
-  .li-name { font-size:14px; font-weight:700; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .li-sub { font-size:12px; color:var(--text-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .empty-hint { color:var(--text-muted); font-size:13px; text-align:center; padding:30px 10px; line-height:1.7; }
-
-  .add-row { display:flex; gap:6px; padding:10px; border-top:1px solid var(--border); }
-  .add-row input { flex:1; padding:9px 12px; border-radius:10px; border:1px solid var(--border); background:var(--card); font-family:inherit; font-size:13px; }
-  .add-row button { padding:9px 14px; border-radius:10px; border:none; background:var(--primary); color:#fff; font-family:inherit; font-weight:700; font-size:13px; cursor:pointer; white-space:nowrap; }
-  .add-row button:hover { background:var(--primary-hover); }
-
-  .chk-row { display:flex; align-items:center; gap:8px; padding:8px 6px; font-size:14px; }
-  .chk-row input { width:16px; height:16px; accent-color:var(--primary); }
-
-  /* ---------- Chat area ---------- */
-  .chat-area { flex:1; display:flex; flex-direction:column; background:var(--bg); min-width:0; }
-  .chat-header { padding:14px 18px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:10px; background:var(--card); }
-  .chat-header .li-name { font-size:15px; }
-  .messages { flex:1; overflow-y:auto; padding:18px; display:flex; flex-direction:column; gap:10px; }
-  .msg-row { display:flex; flex-direction:column; max-width:70%; }
-  .msg-row.mine { align-self:flex-start; align-items:flex-start; }
-  .msg-row.theirs { align-self:flex-end; align-items:flex-end; }
-  .msg-sender { font-size:11px; color:var(--text-muted); margin-bottom:2px; padding:0 4px; }
-  .bubble { padding:10px 14px; border-radius:16px; font-size:14px; line-height:1.5; word-break:break-word; }
-  .msg-row.mine .bubble { background:var(--bubble-mine); color:#fff; border-bottom-left-radius:4px; }
-  .msg-row.theirs .bubble { background:var(--bubble-theirs); color:var(--text); border-bottom-right-radius:4px; }
-  .msg-time { font-size:10px; color:var(--text-muted); margin-top:2px; padding:0 4px; }
-
-  .composer { display:flex; gap:8px; padding:14px; border-top:1px solid var(--border); background:var(--card); }
-  .composer input { flex:1; padding:12px 16px; border-radius:14px; border:1px solid var(--border); background:var(--bg-soft); font-family:inherit; font-size:14px; }
-  .composer input:focus { border-color:var(--primary); }
-  .composer button { padding:0 20px; border-radius:14px; border:none; background:var(--primary); color:#fff; font-weight:700; cursor:pointer; font-family:inherit; }
-  .composer button:hover { background:var(--primary-hover); }
-
-  .no-chat-selected { flex:1; display:flex; align-items:center; justify-content:center; color:var(--text-muted); font-size:14px; text-align:center; padding:20px; }
-
-  .modal-overlay { position:fixed; inset:0; background:rgba(60,42,30,.4); display:none; align-items:center; justify-content:center; z-index:50; padding:20px; }
-  .modal-overlay.show { display:flex; }
-  .modal-box { background:var(--card); border-radius:18px; padding:24px; width:100%; max-width:340px; box-shadow:var(--shadow); }
-  .modal-box h3 { font-size:17px; margin-bottom:14px; }
-  .modal-actions { display:flex; gap:8px; margin-top:16px; }
-  .modal-actions button { flex:1; padding:10px; border-radius:10px; border:none; font-family:inherit; font-weight:700; cursor:pointer; }
-  .modal-actions .cancel { background:var(--bg-soft); color:var(--text-soft); }
-  .modal-actions .confirm { background:var(--primary); color:#fff; }
-  .friend-picker { max-height:180px; overflow-y:auto; border:1px solid var(--border); border-radius:10px; padding:6px; margin-top:10px; }
-
-  @media (max-width:700px) {
-    #appScreen { max-width:100%; }
-    .app-layout { position:relative; }
-    .sidebar { position:absolute; inset:0; z-index:5; width:100%; }
-    .sidebar.hidden-mobile { display:none; }
-    .chat-area.hidden-mobile { display:none; }
-    .back-btn { display:inline-flex !important; }
-  }
-  .back-btn { display:none; background:transparent; border:none; color:var(--primary); font-size:20px; cursor:pointer; padding:4px 8px; }
+  .back-btn{display:none; background:transparent; border:none; color:var(--primary); font-size:20px; cursor:pointer; padding:4px 8px;}
 </style>
 </head>
 <body>
@@ -153,75 +121,47 @@
   <div class="bar-container">
     <a href="#" class="brand">
       <span class="brand-name">شاتات</span>
-      <span class="brand-logo">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#6B3E2E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M8 6 L2 12 L8 18"/><path d="M12 6 L12 18"/><path d="M16 6 L22 12 L16 18"/>
-        </svg>
-      </span>
+      <span class="brand-logo"><svg viewBox="0 0 24 24" fill="none" stroke="#6B3E2E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6 L2 12 L8 18"/><path d="M12 6 L12 18"/><path d="M16 6 L22 12 L16 18"/></svg></span>
     </a>
+    <span class="demo-badge">نسخة تجريبية</span>
     <div class="spacer"></div>
-    <div class="topbar-user" id="topbarUser" style="display:none;">
-      <span id="topbarUserName"></span>
+    <div class="switch-user" id="topbarUser" style="display:none;">
+      <select id="userSwitcher"></select>
       <button class="logout-btn" id="logoutBtn">خروج</button>
     </div>
   </div>
 </header>
 
-<!-- ================= AUTH SCREEN ================= -->
 <div id="authScreen">
   <div class="login-card">
-    <div class="main-logo">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#6B3E2E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M8 6 L2 12 L8 18"/><path d="M12 6 L12 18"/><path d="M16 6 L22 12 L16 18"/>
-      </svg>
-    </div>
+    <div class="main-logo"><svg viewBox="0 0 24 24" fill="none" stroke="#6B3E2E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6 L2 12 L8 18"/><path d="M12 6 L12 18"/><path d="M16 6 L22 12 L16 18"/></svg></div>
     <h1 class="login-title">أهلاً بيك في شاتات</h1>
-    <p class="login-sub">اتكلم مع صحابك في الخاص أو في جروب</p>
+    <p class="login-sub">نسخة تجريبية — اكتب أي اسم وادخل على طول، من غير باسورد</p>
 
-    <div class="tabs">
-      <button class="tab-btn active" id="tabLogin">تسجيل دخول</button>
-      <button class="tab-btn" id="tabRegister">حساب جديد</button>
-    </div>
-
-    <!-- Login form -->
     <form id="loginForm">
       <div class="form-group">
-        <label>اسم المستخدم</label>
-        <div class="input-wrapper"><input type="text" id="loginUsername" placeholder="مثلاً: ahmed" required /></div>
-      </div>
-      <div class="form-group">
-        <label>كلمة المرور</label>
-        <div class="input-wrapper"><input type="password" id="loginPassword" placeholder="••••••••" required /></div>
-      </div>
-      <button type="submit" class="btn-primary" id="loginBtn">تسجيل دخول</button>
-    </form>
-
-    <!-- Register form -->
-    <form id="registerForm" style="display:none;">
-      <div class="form-group">
         <label>اسمك</label>
-        <div class="input-wrapper"><input type="text" id="regDisplayName" placeholder="مثلاً: أحمد" required /></div>
+        <div class="input-wrapper"><input type="text" id="displayNameInput" placeholder="مثلاً: أحمد" required /></div>
       </div>
       <div class="form-group">
-        <label>اسم المستخدم (يوزر نيم)</label>
-        <div class="input-wrapper"><input type="text" id="regUsername" placeholder="حروف إنجليزي وأرقام بس" required /></div>
+        <label>يوزر نيم مميز (بيتفرق بيه صحابك عنك)</label>
+        <div class="input-wrapper"><input type="text" id="usernameInput" placeholder="مثلاً: ahmed" required /></div>
       </div>
-      <div class="form-group">
-        <label>كلمة المرور</label>
-        <div class="input-wrapper"><input type="password" id="regPassword" placeholder="6 أحرف على الأقل" required /></div>
-      </div>
-      <button type="submit" class="btn-primary" id="registerBtn">إنشاء الحساب</button>
+      <button type="submit" class="btn-primary">دخول</button>
     </form>
-
     <div class="auth-msg" id="authMsg"></div>
 
-    <div class="disabled-social">
-      ⚠️ تسجيل الدخول بجوجل مش شغال دلوقتي — استخدم يوزر نيم وباسورد للتسجيل.
+    <div class="existing-users" id="existingUsersWrap" style="display:none;">
+      <div class="existing-users-title">أو ادخل بحساب اتعمل قبل كده:</div>
+      <div id="existingUsersList"></div>
+    </div>
+
+    <div class="demo-note">
+      ⚠️ دي نسخة تجريبية: التسجيل وهمي (من غير باسورد حقيقي)، والبيانات محفوظة في المتصفح ده بس على الجهاز ده، ومش بتتشارك تلقائي مع صحابك لو فتحوا الملف من عندهم. استخدم زرار "بدّل المستخدم" فوق عشان تجرب أكتر من حساب وتشوف شكل المحادثة بينهم.
     </div>
   </div>
 </div>
 
-<!-- ================= APP SCREEN ================= -->
 <div id="appScreen">
   <div class="app-layout">
     <div class="sidebar" id="sidebar">
@@ -230,41 +170,27 @@
         <button class="sidebar-tab" data-tab="friends">الأصدقاء</button>
         <button class="sidebar-tab" data-tab="groups">الجروبات</button>
       </div>
-
-      <!-- Chats list -->
-      <div class="sidebar-body" id="panelChats">
-        <div id="chatsList"></div>
-      </div>
-
-      <!-- Friends panel -->
+      <div class="sidebar-body" id="panelChats"><div id="chatsList"></div></div>
       <div class="sidebar-body" id="panelFriends" style="display:none;">
         <div id="friendsList"></div>
         <div class="add-row" style="border-top:none; padding:10px 0;">
-          <input type="text" id="addFriendInput" placeholder="اسم مستخدم الصديق" />
+          <input type="text" id="addFriendInput" placeholder="اسم مستخدم صديق موجود في النسخة دي" />
           <button id="addFriendBtn">إضافة</button>
         </div>
       </div>
-
-      <!-- Groups panel -->
       <div class="sidebar-body" id="panelGroups" style="display:none;">
         <div id="groupsList"></div>
-        <div style="padding:10px 0;">
-          <button class="btn-primary" id="newGroupBtn" style="padding:11px;">+ إنشاء جروب جديد</button>
-        </div>
+        <div style="padding:10px 0;"><button class="btn-primary" id="newGroupBtn" style="padding:11px;">+ إنشاء جروب جديد</button></div>
       </div>
     </div>
 
     <div class="chat-area" id="chatArea">
       <div class="no-chat-selected" id="noChatSelected">اختار محادثة أو صديق أو جروب من القائمة عشان تبدأ الكلام 💬</div>
-
-      <div id="activeChatWrap" style="display:none; flex:1; display:none; flex-direction:column;">
+      <div id="activeChatWrap" style="display:none; flex-direction:column;">
         <div class="chat-header">
           <button class="back-btn" id="backBtn">→</button>
           <div class="avatar" id="chatHeaderAvatar"></div>
-          <div class="li-text">
-            <div class="li-name" id="chatHeaderName"></div>
-            <div class="li-sub" id="chatHeaderSub"></div>
-          </div>
+          <div class="li-text"><div class="li-name" id="chatHeaderName"></div><div class="li-sub" id="chatHeaderSub"></div></div>
         </div>
         <div class="messages" id="messagesBox"></div>
         <form class="composer" id="composerForm">
@@ -276,20 +202,13 @@
   </div>
 </div>
 
-<!-- New group modal -->
 <div class="modal-overlay" id="groupModal">
   <div class="modal-box">
     <h3>إنشاء جروب جديد</h3>
-    <div class="form-group">
-      <label>اسم الجروب</label>
-      <div class="input-wrapper"><input type="text" id="newGroupName" placeholder="مثلاً: شلة المدرسة" /></div>
-    </div>
+    <div class="form-group"><label>اسم الجروب</label><div class="input-wrapper"><input type="text" id="newGroupName" placeholder="مثلاً: شلة المدرسة" /></div></div>
     <label style="font-size:13px; font-weight:600; color:var(--text-soft);">اختار الأعضاء من أصدقائك</label>
     <div class="friend-picker" id="groupFriendPicker"></div>
-    <div class="modal-actions">
-      <button class="cancel" id="groupCancelBtn">إلغاء</button>
-      <button class="confirm" id="groupConfirmBtn">إنشاء</button>
-    </div>
+    <div class="modal-actions"><button class="cancel" id="groupCancelBtn">إلغاء</button><button class="confirm" id="groupConfirmBtn">إنشاء</button></div>
   </div>
 </div>
 
@@ -297,64 +216,33 @@
 (function(){
   "use strict";
 
-  // ---------------- Utilities ----------------
-  async function sha256(text){
-    const enc = new TextEncoder().encode(text);
-    const buf = await crypto.subtle.digest('SHA-256', enc);
-    return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
-  }
+  // ---------------- In-memory "fake" database (resets on page reload) ----------------
+  const DB = {
+    users: {},        // username -> {username, displayName}
+    friends: {},       // username -> [usernames]
+    groups: {},         // groupId -> {id, name, members:[], owner}
+    privateMsgs: {},    // pairKey -> [ {from, text, ts} ]
+    groupMsgs: {}        // groupId -> [ {from, text, ts} ]
+  };
 
-  async function storeGet(key){
-    try{
-      const res = await window.storage.get(key, true);
-      return res ? JSON.parse(res.value) : null;
-    }catch(e){ return null; }
-  }
-  async function storeSet(key, value){
-    try{
-      await window.storage.set(key, JSON.stringify(value), true);
-      return true;
-    }catch(e){ console.error('storage set failed', key, e); return false; }
-  }
+  let currentUser = null;
+  let activeChat = null;
 
-  function escapeHtml(str){
-    const d = document.createElement('div');
-    d.textContent = str;
-    return d.innerHTML;
-  }
-
-  function pairKey(a,b){
-    return [a,b].sort().join('__');
-  }
-
-  function fmtTime(ts){
-    const d = new Date(ts);
-    return d.toLocaleTimeString('ar-EG', {hour:'2-digit', minute:'2-digit'});
-  }
-
-  function initials(name){
-    return (name || '?').trim().charAt(0).toUpperCase();
-  }
-
-  // ---------------- State ----------------
-  let currentUser = null;      // {username, displayName}
-  let friends = [];            // array of usernames
-  let groups = [];             // array of group objects
-  let activeChat = null;       // {type:'private'|'group', id, name}
-  let pollTimer = null;
-  let userCache = {};          // username -> {displayName}
+  function escapeHtml(str){ const d=document.createElement('div'); d.textContent=str; return d.innerHTML; }
+  function pairKey(a,b){ return [a,b].sort().join('__'); }
+  function fmtTime(ts){ return new Date(ts).toLocaleTimeString('ar-EG',{hour:'2-digit',minute:'2-digit'}); }
+  function initials(name){ return (name||'?').trim().charAt(0).toUpperCase(); }
 
   // ---------------- DOM refs ----------------
   const authScreen = document.getElementById('authScreen');
   const appScreen = document.getElementById('appScreen');
-  const tabLogin = document.getElementById('tabLogin');
-  const tabRegister = document.getElementById('tabRegister');
   const loginForm = document.getElementById('loginForm');
-  const registerForm = document.getElementById('registerForm');
   const authMsg = document.getElementById('authMsg');
   const topbarUser = document.getElementById('topbarUser');
-  const topbarUserName = document.getElementById('topbarUserName');
+  const userSwitcher = document.getElementById('userSwitcher');
   const logoutBtn = document.getElementById('logoutBtn');
+  const existingUsersWrap = document.getElementById('existingUsersWrap');
+  const existingUsersList = document.getElementById('existingUsersList');
 
   const sidebarTabs = document.querySelectorAll('.sidebar-tab');
   const panelChats = document.getElementById('panelChats');
@@ -385,120 +273,81 @@
   const groupCancelBtn = document.getElementById('groupCancelBtn');
   const groupConfirmBtn = document.getElementById('groupConfirmBtn');
 
-  // ---------------- Auth tabs ----------------
-  tabLogin.addEventListener('click', ()=>{
-    tabLogin.classList.add('active'); tabRegister.classList.remove('active');
-    loginForm.style.display='block'; registerForm.style.display='none';
-    authMsg.textContent=''; authMsg.className='auth-msg';
-  });
-  tabRegister.addEventListener('click', ()=>{
-    tabRegister.classList.add('active'); tabLogin.classList.remove('active');
-    registerForm.style.display='block'; loginForm.style.display='none';
-    authMsg.textContent=''; authMsg.className='auth-msg';
-  });
-
-  function setAuthMsg(text, isError){
-    authMsg.textContent = text;
-    authMsg.className = 'auth-msg ' + (isError ? 'error' : 'ok');
+  // ---------------- Fake login (no password, instant) ----------------
+  function refreshExistingUsersUI(){
+    const usernames = Object.keys(DB.users);
+    if(usernames.length === 0){ existingUsersWrap.style.display='none'; return; }
+    existingUsersWrap.style.display='block';
+    existingUsersList.innerHTML='';
+    usernames.forEach(u=>{
+      const chip = document.createElement('span');
+      chip.className='existing-user-chip';
+      chip.textContent = DB.users[u].displayName + ' (@' + u + ')';
+      chip.addEventListener('click', ()=>{ currentUser = DB.users[u]; enterApp(); });
+      existingUsersList.appendChild(chip);
+    });
   }
 
-  // ---------------- Register ----------------
-  registerForm.addEventListener('submit', async (e)=>{
+  loginForm.addEventListener('submit', (e)=>{
     e.preventDefault();
-    const displayName = document.getElementById('regDisplayName').value.trim();
-    const usernameRaw = document.getElementById('regUsername').value.trim();
-    const username = usernameRaw.toLowerCase();
-    const password = document.getElementById('regPassword').value;
-    const btn = document.getElementById('registerBtn');
+    const displayName = document.getElementById('displayNameInput').value.trim();
+    const usernameRaw = document.getElementById('usernameInput').value.trim();
+    const username = usernameRaw.toLowerCase().replace(/[^a-z0-9_]/g,'');
 
-    if(!/^[a-z0-9_]{3,20}$/.test(username)){
-      setAuthMsg('اسم المستخدم لازم يكون حروف إنجليزي/أرقام فقط، 3 لـ20 حرف', true); return;
+    if(!displayName){ authMsg.textContent='اكتب اسمك'; return; }
+    if(username.length < 2){ authMsg.textContent='اكتب يوزر نيم بحروف إنجليزي/أرقام على الأقل حرفين'; return; }
+
+    authMsg.textContent='';
+    if(!DB.users[username]){
+      DB.users[username] = { username, displayName };
+      DB.friends[username] = [];
+    } else {
+      // logging back into an existing fake account keeps its data, just refresh display name
+      DB.users[username].displayName = displayName;
     }
-    if(password.length < 6){
-      setAuthMsg('كلمة المرور لازم تكون 6 أحرف على الأقل', true); return;
-    }
-    if(!displayName){
-      setAuthMsg('اكتب اسمك', true); return;
-    }
-
-    btn.disabled = true;
-    setAuthMsg('جاري إنشاء الحساب...', false);
-
-    const existing = await storeGet('user_' + username);
-    if(existing){
-      setAuthMsg('اسم المستخدم ده متاخد، جرب اسم تاني', true);
-      btn.disabled = false;
-      return;
-    }
-
-    const passHash = await sha256(password);
-    const userObj = { username, displayName, passHash, createdAt: Date.now() };
-    await storeSet('user_' + username, userObj);
-
-    // update users index
-    const idx = (await storeGet('usersindex')) || [];
-    if(!idx.includes(username)){ idx.push(username); await storeSet('usersindex', idx); }
-
-    btn.disabled = false;
-    setAuthMsg('تم إنشاء الحساب! سجل دخولك دلوقتي', false);
-    tabLogin.click();
-    document.getElementById('loginUsername').value = username;
-  });
-
-  // ---------------- Login ----------------
-  loginForm.addEventListener('submit', async (e)=>{
-    e.preventDefault();
-    const username = document.getElementById('loginUsername').value.trim().toLowerCase();
-    const password = document.getElementById('loginPassword').value;
-    const btn = document.getElementById('loginBtn');
-    btn.disabled = true;
-    setAuthMsg('جاري الدخول...', false);
-
-    const userObj = await storeGet('user_' + username);
-    if(!userObj){
-      setAuthMsg('اسم المستخدم مش موجود', true);
-      btn.disabled = false; return;
-    }
-    const passHash = await sha256(password);
-    if(passHash !== userObj.passHash){
-      setAuthMsg('كلمة المرور غلط', true);
-      btn.disabled = false; return;
-    }
-
-    currentUser = { username: userObj.username, displayName: userObj.displayName };
-    btn.disabled = false;
+    currentUser = DB.users[username];
     enterApp();
   });
 
-  // ---------------- Logout ----------------
   logoutBtn.addEventListener('click', ()=>{
     currentUser = null;
     activeChat = null;
-    if(pollTimer) clearInterval(pollTimer);
-    appScreen.style.display = 'none';
-    authScreen.style.display = 'flex';
-    topbarUser.style.display = 'none';
-    loginForm.reset(); registerForm.reset();
-    setAuthMsg('', false);
+    appScreen.style.display='none';
+    authScreen.style.display='flex';
+    topbarUser.style.display='none';
+    loginForm.reset();
+    authMsg.textContent='';
+    refreshExistingUsersUI();
   });
 
-  // ---------------- Enter app ----------------
-  async function enterApp(){
-    authScreen.style.display = 'none';
-    appScreen.style.display = 'block';
-    topbarUser.style.display = 'flex';
-    topbarUserName.textContent = currentUser.displayName + ' (@' + currentUser.username + ')';
+  userSwitcher.addEventListener('change', ()=>{
+    const u = userSwitcher.value;
+    if(DB.users[u]){ currentUser = DB.users[u]; enterApp(); }
+  });
 
-    await refreshFriends();
-    await refreshGroups();
+  function refreshUserSwitcher(){
+    userSwitcher.innerHTML='';
+    Object.values(DB.users).forEach(u=>{
+      const opt = document.createElement('option');
+      opt.value = u.username;
+      opt.textContent = u.displayName + ' (@' + u.username + ')';
+      if(currentUser && u.username === currentUser.username) opt.selected = true;
+      userSwitcher.appendChild(opt);
+    });
+  }
+
+  // ---------------- Enter app ----------------
+  function enterApp(){
+    authScreen.style.display='none';
+    appScreen.style.display='block';
+    topbarUser.style.display='flex';
+    refreshUserSwitcher();
+    activeChat = null;
+    noChatSelected.style.display='flex';
+    activeChatWrap.style.display='none';
     renderChatsList();
     renderFriendsList();
     renderGroupsList();
-
-    if(pollTimer) clearInterval(pollTimer);
-    pollTimer = setInterval(async ()=>{
-      if(activeChat) await loadAndRenderMessages(false);
-    }, 3000);
   }
 
   // ---------------- Sidebar tabs ----------------
@@ -507,167 +356,125 @@
       sidebarTabs.forEach(t=>t.classList.remove('active'));
       tabBtn.classList.add('active');
       const tab = tabBtn.dataset.tab;
-      panelChats.style.display = tab==='chats' ? 'block' : 'none';
-      panelFriends.style.display = tab==='friends' ? 'block' : 'none';
-      panelGroups.style.display = tab==='groups' ? 'block' : 'none';
+      panelChats.style.display = tab==='chats' ? 'block':'none';
+      panelFriends.style.display = tab==='friends' ? 'block':'none';
+      panelGroups.style.display = tab==='groups' ? 'block':'none';
     });
   });
 
   // ---------------- Friends ----------------
-  async function refreshFriends(){
-    friends = (await storeGet('friends_' + currentUser.username)) || [];
-  }
-
-  async function getUserInfo(username){
-    if(userCache[username]) return userCache[username];
-    const u = await storeGet('user_' + username);
-    const info = u ? {displayName: u.displayName} : {displayName: username};
-    userCache[username] = info;
-    return info;
-  }
-
   function renderFriendsList(){
-    friendsList.innerHTML = '';
-    if(friends.length === 0){
-      friendsList.innerHTML = '<div class="empty-hint">لسه معندكش أصدقاء.<br>ضيف صحابك بيوزر نيمهم تحت 👇</div>';
+    const friends = DB.friends[currentUser.username] || [];
+    friendsList.innerHTML='';
+    if(friends.length===0){
+      friendsList.innerHTML='<div class="empty-hint">لسه معندكش أصدقاء.<br>ضيف بيوزر نيم صاحب اتعمله حساب في النسخة دي 👇</div>';
       return;
     }
-    friends.forEach(async (fUsername)=>{
-      const info = await getUserInfo(fUsername);
+    friends.forEach(fUsername=>{
+      const info = DB.users[fUsername];
+      if(!info) return;
       const el = document.createElement('div');
-      el.className = 'list-item';
-      el.innerHTML = `
-        <div class="avatar">${escapeHtml(initials(info.displayName))}</div>
-        <div class="li-text">
-          <div class="li-name">${escapeHtml(info.displayName)}</div>
-          <div class="li-sub">@${escapeHtml(fUsername)}</div>
-        </div>`;
+      el.className='list-item';
+      el.innerHTML = `<div class="avatar">${escapeHtml(initials(info.displayName))}</div>
+        <div class="li-text"><div class="li-name">${escapeHtml(info.displayName)}</div><div class="li-sub">@${escapeHtml(fUsername)}</div></div>`;
       el.addEventListener('click', ()=> openPrivateChat(fUsername, info.displayName));
       friendsList.appendChild(el);
     });
   }
 
-  addFriendBtn.addEventListener('click', async ()=>{
+  addFriendBtn.addEventListener('click', ()=>{
     const uname = addFriendInput.value.trim().toLowerCase();
     if(!uname) return;
     if(uname === currentUser.username){ alert('متقدرش تضيف نفسك 😅'); return; }
-    const userObj = await storeGet('user_' + uname);
-    if(!userObj){ alert('مفيش يوزر بالاسم ده. اتأكد إن صاحبك عمل حساب الأول.'); return; }
-    if(friends.includes(uname)){ alert('هو أصلاً في قائمة أصدقائك'); return; }
-
-    friends.push(uname);
-    await storeSet('friends_' + currentUser.username, friends);
-
-    // also add reciprocally so both see each other
-    const theirFriends = (await storeGet('friends_' + uname)) || [];
-    if(!theirFriends.includes(currentUser.username)){
-      theirFriends.push(currentUser.username);
-      await storeSet('friends_' + uname, theirFriends);
-    }
-
-    addFriendInput.value = '';
+    if(!DB.users[uname]){ alert('مفيش يوزر بالاسم ده. لازم أول حاجة تعمل حساب وهمي بالاسم ده من زرار "بدّل المستخدم" أو خروج ودخول باسمه، لأن النسخة دي كل الحسابات بتتعمل على نفس الجهاز.'); return; }
+    if(!DB.friends[currentUser.username]) DB.friends[currentUser.username]=[];
+    if(DB.friends[currentUser.username].includes(uname)){ alert('هو أصلاً في قائمة أصدقائك'); return; }
+    DB.friends[currentUser.username].push(uname);
+    if(!DB.friends[uname]) DB.friends[uname]=[];
+    if(!DB.friends[uname].includes(currentUser.username)) DB.friends[uname].push(currentUser.username);
+    addFriendInput.value='';
     renderFriendsList();
     renderChatsList();
   });
 
   // ---------------- Groups ----------------
-  async function refreshGroups(){
-    const allIds = (await storeGet('groupsindex')) || [];
-    const loaded = [];
-    for(const gid of allIds){
-      const g = await storeGet('group_' + gid);
-      if(g && g.members.includes(currentUser.username)) loaded.push(g);
-    }
-    groups = loaded;
+  function myGroups(){
+    return Object.values(DB.groups).filter(g=> g.members.includes(currentUser.username));
   }
 
   function renderGroupsList(){
-    groupsList.innerHTML = '';
-    if(groups.length === 0){
-      groupsList.innerHTML = '<div class="empty-hint">لسه مش في أي جروب.<br>اعمل جروب جديد تحت 👇</div>';
+    const groups = myGroups();
+    groupsList.innerHTML='';
+    if(groups.length===0){
+      groupsList.innerHTML='<div class="empty-hint">لسه مش في أي جروب.<br>اعمل جروب جديد تحت 👇</div>';
       return;
     }
     groups.forEach(g=>{
       const el = document.createElement('div');
-      el.className = 'list-item';
-      el.innerHTML = `
-        <div class="avatar group">#</div>
-        <div class="li-text">
-          <div class="li-name">${escapeHtml(g.name)}</div>
-          <div class="li-sub">${g.members.length} أعضاء</div>
-        </div>`;
+      el.className='list-item';
+      el.innerHTML = `<div class="avatar group">#</div>
+        <div class="li-text"><div class="li-name">${escapeHtml(g.name)}</div><div class="li-sub">${g.members.length} أعضاء</div></div>`;
       el.addEventListener('click', ()=> openGroupChat(g));
       groupsList.appendChild(el);
     });
   }
 
-  newGroupBtn.addEventListener('click', async ()=>{
-    if(friends.length === 0){ alert('لازم يكون عندك صديق واحد على الأقل عشان تعمل جروب'); return; }
-    newGroupName.value = '';
-    groupFriendPicker.innerHTML = '';
-    for(const fUsername of friends){
-      const info = await getUserInfo(fUsername);
+  newGroupBtn.addEventListener('click', ()=>{
+    const friends = DB.friends[currentUser.username] || [];
+    if(friends.length===0){ alert('لازم يكون عندك صديق واحد على الأقل عشان تعمل جروب'); return; }
+    newGroupName.value='';
+    groupFriendPicker.innerHTML='';
+    friends.forEach(fUsername=>{
+      const info = DB.users[fUsername];
+      if(!info) return;
       const row = document.createElement('label');
-      row.className = 'chk-row';
+      row.className='chk-row';
       row.innerHTML = `<input type="checkbox" value="${escapeHtml(fUsername)}" /> ${escapeHtml(info.displayName)} (@${escapeHtml(fUsername)})`;
       groupFriendPicker.appendChild(row);
-    }
+    });
     groupModal.classList.add('show');
   });
 
   groupCancelBtn.addEventListener('click', ()=> groupModal.classList.remove('show'));
 
-  groupConfirmBtn.addEventListener('click', async ()=>{
+  groupConfirmBtn.addEventListener('click', ()=>{
     const name = newGroupName.value.trim();
     if(!name){ alert('اكتب اسم للجروب'); return; }
     const checked = Array.from(groupFriendPicker.querySelectorAll('input[type=checkbox]:checked')).map(c=>c.value);
-    if(checked.length === 0){ alert('اختار عضو واحد على الأقل'); return; }
-
+    if(checked.length===0){ alert('اختار عضو واحد على الأقل'); return; }
     const gid = 'g_' + Date.now() + '_' + Math.random().toString(36).slice(2,8);
     const members = Array.from(new Set([currentUser.username, ...checked]));
-    const groupObj = { id: gid, name, members, owner: currentUser.username, createdAt: Date.now() };
-    await storeSet('group_' + gid, groupObj);
-
-    const idx = (await storeGet('groupsindex')) || [];
-    idx.push(gid);
-    await storeSet('groupsindex', idx);
-
+    DB.groups[gid] = { id:gid, name, members, owner: currentUser.username };
     groupModal.classList.remove('show');
-    await refreshGroups();
     renderGroupsList();
     renderChatsList();
-    openGroupChat(groupObj);
+    openGroupChat(DB.groups[gid]);
   });
 
-  // ---------------- Chats list (combined) ----------------
+  // ---------------- Chats list ----------------
   function renderChatsList(){
-    chatsList.innerHTML = '';
-    if(friends.length === 0 && groups.length === 0){
-      chatsList.innerHTML = '<div class="empty-hint">مفيش محادثات لسه.<br>ضيف أصدقاء أو اعمل جروب عشان تبدأ 💬</div>';
+    const friends = DB.friends[currentUser.username] || [];
+    const groups = myGroups();
+    chatsList.innerHTML='';
+    if(friends.length===0 && groups.length===0){
+      chatsList.innerHTML='<div class="empty-hint">مفيش محادثات لسه.<br>ضيف أصدقاء أو اعمل جروب عشان تبدأ 💬</div>';
       return;
     }
-    friends.forEach(async (fUsername)=>{
-      const info = await getUserInfo(fUsername);
+    friends.forEach(fUsername=>{
+      const info = DB.users[fUsername];
+      if(!info) return;
       const el = document.createElement('div');
-      el.className = 'list-item';
-      el.innerHTML = `
-        <div class="avatar">${escapeHtml(initials(info.displayName))}</div>
-        <div class="li-text">
-          <div class="li-name">${escapeHtml(info.displayName)}</div>
-          <div class="li-sub">محادثة خاصة</div>
-        </div>`;
+      el.className='list-item';
+      el.innerHTML = `<div class="avatar">${escapeHtml(initials(info.displayName))}</div>
+        <div class="li-text"><div class="li-name">${escapeHtml(info.displayName)}</div><div class="li-sub">محادثة خاصة</div></div>`;
       el.addEventListener('click', ()=> openPrivateChat(fUsername, info.displayName));
       chatsList.appendChild(el);
     });
     groups.forEach(g=>{
       const el = document.createElement('div');
-      el.className = 'list-item';
-      el.innerHTML = `
-        <div class="avatar group">#</div>
-        <div class="li-text">
-          <div class="li-name">${escapeHtml(g.name)}</div>
-          <div class="li-sub">جروب - ${g.members.length} أعضاء</div>
-        </div>`;
+      el.className='list-item';
+      el.innerHTML = `<div class="avatar group">#</div>
+        <div class="li-text"><div class="li-name">${escapeHtml(g.name)}</div><div class="li-sub">جروب - ${g.members.length} أعضاء</div></div>`;
       el.addEventListener('click', ()=> openGroupChat(g));
       chatsList.appendChild(el);
     });
@@ -675,95 +482,76 @@
 
   // ---------------- Open chat ----------------
   function openPrivateChat(otherUsername, otherDisplayName){
-    activeChat = { type:'private', id: pairKey(currentUser.username, otherUsername), name: otherDisplayName, otherUsername };
+    activeChat = { type:'private', id: pairKey(currentUser.username, otherUsername), name: otherDisplayName };
     showChatUI(otherDisplayName, 'محادثة خاصة', initials(otherDisplayName), false);
-    loadAndRenderMessages(true);
+    renderMessages();
   }
-
   function openGroupChat(groupObj){
     activeChat = { type:'group', id: groupObj.id, name: groupObj.name };
-    showChatUI(groupObj.name, groupObj.members.length + ' أعضاء', '#', true);
-    loadAndRenderMessages(true);
+    showChatUI(groupObj.name, groupObj.members.length+' أعضاء', '#', true);
+    renderMessages();
   }
-
   function showChatUI(name, sub, avatarText, isGroup){
-    noChatSelected.style.display = 'none';
-    activeChatWrap.style.display = 'flex';
+    noChatSelected.style.display='none';
+    activeChatWrap.style.display='flex';
     chatHeaderName.textContent = name;
     chatHeaderSub.textContent = sub;
     chatHeaderAvatar.textContent = avatarText;
-    chatHeaderAvatar.className = 'avatar' + (isGroup ? ' group' : '');
-    if(window.innerWidth <= 700){
-      sidebar.classList.add('hidden-mobile');
-      chatArea.classList.remove('hidden-mobile');
+    chatHeaderAvatar.className = 'avatar' + (isGroup?' group':'');
+    if(window.innerWidth<=700){ sidebar.classList.add('hidden-mobile'); chatArea.classList.remove('hidden-mobile'); }
+  }
+  backBtn.addEventListener('click', ()=>{ sidebar.classList.remove('hidden-mobile'); chatArea.classList.add('hidden-mobile'); });
+
+  // ---------------- Messages ----------------
+  function currentMsgArray(){
+    if(!activeChat) return [];
+    if(activeChat.type==='private'){
+      if(!DB.privateMsgs[activeChat.id]) DB.privateMsgs[activeChat.id]=[];
+      return DB.privateMsgs[activeChat.id];
+    } else {
+      if(!DB.groupMsgs[activeChat.id]) DB.groupMsgs[activeChat.id]=[];
+      return DB.groupMsgs[activeChat.id];
     }
   }
 
-  backBtn.addEventListener('click', ()=>{
-    sidebar.classList.remove('hidden-mobile');
-    chatArea.classList.add('hidden-mobile');
-  });
-
-  // ---------------- Messages ----------------
-  function msgStorageKey(){
-    if(!activeChat) return null;
-    return activeChat.type === 'private' ? 'chat_priv_' + activeChat.id : 'chat_group_' + activeChat.id;
-  }
-
-  let lastRenderedCount = -1;
-
-  async function loadAndRenderMessages(forceScroll){
-    const key = msgStorageKey();
-    if(!key) return;
-    const msgs = (await storeGet(key)) || [];
-    if(msgs.length === lastRenderedCount && !forceScroll) return;
-    lastRenderedCount = msgs.length;
-
-    const wasNearBottom = messagesBox.scrollHeight - messagesBox.scrollTop - messagesBox.clientHeight < 80;
-
-    messagesBox.innerHTML = '';
-    if(msgs.length === 0){
-      messagesBox.innerHTML = '<div class="empty-hint">مفيش رسائل لسه، ابدأ الكلام! 👋</div>';
+  function renderMessages(){
+    const msgs = currentMsgArray();
+    messagesBox.innerHTML='';
+    if(msgs.length===0){
+      messagesBox.innerHTML='<div class="empty-hint">مفيش رسائل لسه، ابدأ الكلام! 👋</div>';
     } else {
-      for(const m of msgs){
+      msgs.forEach(m=>{
         const mine = m.from === currentUser.username;
         const row = document.createElement('div');
-        row.className = 'msg-row ' + (mine ? 'mine' : 'theirs');
-        let senderLabel = '';
-        if(activeChat.type === 'group' && !mine){
-          const info = await getUserInfo(m.from);
-          senderLabel = `<div class="msg-sender">${escapeHtml(info.displayName)}</div>`;
+        row.className = 'msg-row ' + (mine?'mine':'theirs');
+        let senderLabel='';
+        if(activeChat.type==='group' && !mine){
+          const info = DB.users[m.from];
+          senderLabel = `<div class="msg-sender">${escapeHtml(info?info.displayName:m.from)}</div>`;
         }
         row.innerHTML = `${senderLabel}<div class="bubble">${escapeHtml(m.text)}</div><div class="msg-time">${fmtTime(m.ts)}</div>`;
         messagesBox.appendChild(row);
-      }
+      });
     }
-    if(forceScroll || wasNearBottom){
-      messagesBox.scrollTop = messagesBox.scrollHeight;
-    }
+    messagesBox.scrollTop = messagesBox.scrollHeight;
   }
 
-  composerForm.addEventListener('submit', async (e)=>{
+  composerForm.addEventListener('submit', (e)=>{
     e.preventDefault();
     const text = messageInput.value.trim();
     if(!text || !activeChat) return;
-    messageInput.value = '';
-
-    const key = msgStorageKey();
-    const msgs = (await storeGet(key)) || [];
+    messageInput.value='';
+    const msgs = currentMsgArray();
     msgs.push({ from: currentUser.username, text, ts: Date.now() });
-    await storeSet(key, msgs);
-    lastRenderedCount = -1;
-    await loadAndRenderMessages(true);
+    renderMessages();
   });
 
   window.addEventListener('resize', ()=>{
-    if(window.innerWidth > 700){
-      sidebar.classList.remove('hidden-mobile');
-      chatArea.classList.remove('hidden-mobile');
-    }
+    if(window.innerWidth>700){ sidebar.classList.remove('hidden-mobile'); chatArea.classList.remove('hidden-mobile'); }
   });
 
+  // init
+  refreshExistingUsersUI();
 })();
 </script>
 </body>
